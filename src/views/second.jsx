@@ -1,159 +1,114 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-const SecondPlywalniaAGHView = () => {
-  const [laneStatus, setLaneStatus] = useState([]);
-
-  useEffect(() => {
-    // Simulate fetching real-time data
-    const fetchLaneStatus = () => {
-      const statuses = [
-        { id: 1, name: 'Tor 1', status: 'Wolny', occupancy: 2 },
-        { id: 2, name: 'Tor 2', status: 'Lekcje', occupancy: 8 },
-        { id: 3, name: 'Tor 3', status: 'Wolny', occupancy: 3 },
-        { id: 4, name: 'Tor 4', status: 'Zajęty', occupancy: 6 },
-        { id: 5, name: 'Tor 5', status: 'Wolny', occupancy: 1 },
-        { id: 6, name: 'Tor 6', status: 'Zajęty', occupancy: 5 },
-      ];
-      setLaneStatus(statuses);
-    };
-
-    fetchLaneStatus();
-    // Można dodać interwał do odświeżania danych co jakiś czas:
-    // const interval = setInterval(fetchLaneStatus, 60000);
-    // return () => clearInterval(interval);
-  }, []);
-
-  const containerStyle = {
-    fontFamily: 'Arial, sans-serif',
-    padding: '20px',
-    maxWidth: '700px',
-    margin: '30px auto',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    backgroundColor: '#fff',
-  };
-
-  const titleStyle = {
-    color: '#0056b3',
-    textAlign: 'center',
-    marginBottom: '25px',
-    fontSize: '2em',
-  };
-
-  const legendStyle = {
+function SecondView() {
+  const headerStyle = {
+    backgroundColor: '#8B4513', // SaddleBrown
+    color: '#FFD700', // Gold
+    padding: '15px 20px',
     display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
-    marginBottom: '25px',
-    flexWrap: 'wrap',
-  };
-
-  const legendItemStyle = {
-    display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    fontSize: '0.9em',
+    fontFamily: 'Arial, sans-serif'
   };
 
-  const colorBoxStyle = (color) => ({
-    width: '20px',
-    height: '20px',
-    backgroundColor: color,
-    marginRight: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-  });
-
-  const lanesGridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-    gap: '20px',
-    marginTop: '20px',
+  const navStyle = {
+    display: 'flex',
+    gap: '25px',
   };
 
-  const laneCardStyle = (status) => {
-    let backgroundColor = '#f8f8f8';
-    let borderColor = '#ccc';
-    let textColor = '#333';
-    switch (status) {
-      case 'Wolny':
-        backgroundColor = '#e6ffe6'; // Jasnozielony
-        borderColor = '#4CAF50';
-        textColor = '#1e7e34';
-        break;
-      case 'Zajęty':
-        backgroundColor = '#fff3cd'; // Jasnożółty
-        borderColor = '#ffc107';
-        textColor = '#856404';
-        break;
-      case 'Lekcje':
-        backgroundColor = '#cfe2ff'; // Jasnoniebieski
-        borderColor = '#007bff';
-        textColor = '#004085';
-        break;
-      default:
-        break;
-    }
-    return {
-      padding: '15px',
-      border: `1px solid ${borderColor}`,
-      borderRadius: '8px',
-      backgroundColor: backgroundColor,
-      textAlign: 'center',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-      color: textColor,
-    };
-  };
-
-  const statusTextStyle = {
-    fontWeight: 'bold',
+  const linkStyle = {
+    color: '#FFFFFF', // White
+    textDecoration: 'none',
     fontSize: '1.1em',
-    marginTop: '5px',
+    fontWeight: 'bold',
+    transition: 'color 0.3s ease'
   };
 
-  const occupancyTextStyle = {
-    fontSize: '0.9em',
-    color: '#666',
-    marginTop: '5px',
+  const mainContainerStyle = {
+    padding: '40px 20px',
+    backgroundColor: '#FDF5E6', // OldLace
+    fontFamily: 'Georgia, serif',
+    color: '#5A2D0C'
   };
+
+  const sectionTitleStyle = {
+    textAlign: 'center',
+    fontSize: '2.5em',
+    marginBottom: '50px',
+    color: '#8B4513'
+  };
+
+  const productGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '30px',
+    maxWidth: '1200px',
+    margin: '0 auto'
+  };
+
+  const productCardStyle = {
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #D2B48C', // Tan
+    borderRadius: '8px',
+    overflow: 'hidden',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+    paddingBottom: '20px'
+  };
+
+  const productImageStyle = {
+    width: '100%',
+    height: '200px',
+    objectFit: 'cover',
+    marginBottom: '15px'
+  };
+
+  const productNameStyle = {
+    fontSize: '1.8em',
+    color: '#A0522D', // Sienna
+    marginBottom: '10px'
+  };
+
+  const productDescriptionStyle = {
+    fontSize: '1em',
+    color: '#696969', // DimGray
+    padding: '0 15px'
+  };
+
+  const products = [
+    { name: 'Chleb Wiejski', desc: 'Tradycyjny chleb na zakwasie, pieczony w piecu opalanym drewnem.', img: 'https://via.placeholder.com/300x200?text=Chleb+Wiejski' },
+    { name: 'Bułki Kajzerki', desc: 'Puszyste i chrupiące bułki, idealne na śniadanie.', img: 'https://via.placeholder.com/300x200?text=Bulki+Kajzerki' },
+    { name: 'Ciasto Drożdżowe', desc: 'Słodkie ciasto z kruszonką i sezonowymi owocami.', img: 'https://via.placeholder.com/300x200?text=Ciasto+Drozdzowe' },
+    { name: 'Sernik Limanowski', desc: 'Aksamitny sernik na kruchym spodzie, według babcinej receptury.', img: 'https://via.placeholder.com/300x200?text=Sernik+Limanowski' },
+    { name: 'Rogaliki Maślane', desc: 'Delikatne rogaliki z marmoladą lub czekoladą.', img: 'https://via.placeholder.com/300x200?text=Rogaliki+Maslane' },
+    { name: 'Pączki Tradycyjne', desc: 'Puszyste pączki z różą, smażone na złoto.', img: 'https://via.placeholder.com/300x200?text=Paczki+Tradycyjne' },
+  ];
 
   return (
-    <div style={containerStyle}>
-      <h2 style={titleStyle}>Pływalnia AGH - Dostępność Torów</h2>
-
-      <div style={legendStyle}>
-        <div style={legendItemStyle}>
-          <div style={colorBoxStyle('#e6ffe6')}></div>
-          <span>Wolny</span>
-        </div>
-        <div style={legendItemStyle}>
-          <div style={colorBoxStyle('#fff3cd')}></div>
-          <span>Zajęty / Duże obłożenie</span>
-        </div>
-        <div style={legendItemStyle}>
-          <div style={colorBoxStyle('#cfe2ff')}></div>
-          <span>Lekcje / Rezerwacja</span>
-        </div>
-      </div>
-
-      <div style={lanesGridStyle}>
-        {laneStatus.length > 0 ? (
-          laneStatus.map((lane) => (
-            <div key={lane.id} style={laneCardStyle(lane.status)}>
-              <h3>{lane.name}</h3>
-              <p style={statusTextStyle}>{lane.status}</p>
-              {lane.status === 'Wolny' && <p style={occupancyTextStyle}>Obłożenie: {lane.occupancy} os.</p>}
+    <div style={{ minHeight: '100vh', backgroundColor: '#FDF5E6' }}>
+      <header style={headerStyle}>
+        <h1 style={{ margin: 0, fontSize: '1.8em' }}>Piekarnia Szymona z Limanowej</h1>
+        <nav style={navStyle}>
+          <a href="#" style={linkStyle}>Strona Główna</a>
+          <a href="#" style={linkStyle}>Oferta</a>
+          <a href="#" style={linkStyle}>O Nas</a>
+          <a href="#" style={linkStyle}>Kontakt</a>
+        </nav>
+      </header>
+      <div style={mainContainerStyle}>
+        <h2 style={sectionTitleStyle}>Nasza Wyjątkowa Oferta Wypieków</h2>
+        <div style={productGridStyle}>
+          {products.map((product, index) => (
+            <div key={index} style={productCardStyle}>
+              <img src={product.img} alt={product.name} style={productImageStyle} />
+              <h3 style={productNameStyle}>{product.name}</h3>
+              <p style={productDescriptionStyle}>{product.desc}</p>
             </div>
-          ))
-        ) : (
-          <p style={{ textAlign: 'center', gridColumn: '1 / -1' }}>Ładowanie statusu torów...</p>
-        )}
+          ))}
+        </div>
       </div>
-      <p style={{ textAlign: 'center', marginTop: '25px', fontSize: '0.9em', color: '#777' }}>
-        *Dane o dostępności torów są aktualizowane w czasie rzeczywistym (symulacja).
-      </p>
     </div>
   );
-};
+}
 
-export default SecondPlywalniaAGHView;
+export default SecondView;

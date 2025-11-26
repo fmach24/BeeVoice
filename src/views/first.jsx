@@ -1,67 +1,82 @@
 import React from 'react';
 
-const FirstPlywalniaAGHView = () => {
-  const containerStyle = {
-    fontFamily: 'Arial, sans-serif',
-    padding: '20px',
-    maxWidth: '600px',
-    margin: '30px auto',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    backgroundColor: '#fff',
+function FirstView() {
+  const headerStyle = {
+    backgroundColor: '#8B4513', // SaddleBrown
+    color: '#FFD700', // Gold
+    padding: '15px 20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontFamily: 'Arial, sans-serif'
   };
 
-  const titleStyle = {
-    color: '#0056b3',
-    textAlign: 'center',
-    marginBottom: '25px',
-    fontSize: '2em',
+  const navStyle = {
+    display: 'flex',
+    gap: '25px',
   };
 
-  const sectionStyle = {
-    marginBottom: '15px',
-    borderBottom: '1px solid #eee',
-    paddingBottom: '10px',
-  };
-
-  const labelStyle = {
+  const linkStyle = {
+    color: '#FFFFFF', // White
+    textDecoration: 'none',
+    fontSize: '1.1em',
     fontWeight: 'bold',
-    color: '#333',
-    marginRight: '10px',
+    transition: 'color 0.3s ease'
   };
 
-  const textStyle = {
-    color: '#555',
-    lineHeight: '1.6',
+  const heroSectionStyle = {
+    textAlign: 'center',
+    padding: '80px 20px',
+    backgroundColor: '#F5DEB3', // Wheat
+    color: '#5A2D0C', // Dark brown for text
+    fontFamily: 'Georgia, serif',
+    lineHeight: '1.6'
+  };
+
+  const sloganStyle = {
+    fontSize: '2.5em',
+    marginBottom: '20px',
+    color: '#8B4513'
+  };
+
+  const descriptionStyle = {
+    fontSize: '1.2em',
+    maxWidth: '800px',
+    margin: '0 auto 30px auto'
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#A0522D', // Sienna
+    color: 'white',
+    padding: '12px 25px',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '1.1em',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease'
   };
 
   return (
-    <div style={containerStyle}>
-      <h2 style={titleStyle}>Pływalnia AGH - Informacje Ogólne</h2>
-
-      <div style={sectionStyle}>
-        <p><span style={labelStyle}>Adres:</span> <span style={textStyle}>ul. Piastowska 26a, 30-070 Kraków</span></p>
-        <p><span style={labelStyle}>Telefon:</span> <span style={textStyle}>+48 12 617 38 64</span></p>
-        <p><span style={labelStyle}>E-mail:</span> <span style={textStyle}>plywalnia@agh.edu.pl</span></p>
-      </div>
-
-      <div style={sectionStyle}>
-        <h3 style={{ ...labelStyle, fontSize: '1.2em', marginBottom: '10px', borderBottom: 'none' }}>Godziny otwarcia:</h3>
-        <p style={textStyle}><span style={labelStyle}>Poniedziałek - Piątek:</span> 6:00 - 22:00</p>
-        <p style={textStyle}><span style={labelStyle}>Sobota - Niedziela:</span> 8:00 - 22:00</p>
-        <p style={{ ...textStyle, fontSize: '0.9em', marginTop: '10px' }}>*Prosimy o sprawdzenie aktualnych godzin na stronie internetowej.</p>
-      </div>
-
-      <div>
-        <h3 style={{ ...labelStyle, fontSize: '1.2em', marginBottom: '10px', borderBottom: 'none' }}>Krótki opis:</h3>
-        <p style={textStyle}>
-          Pływalnia AGH to nowoczesny obiekt sportowy oferujący szeroki zakres usług dla studentów, pracowników oraz mieszkańców Krakowa.
-          Dysponujemy basenem sportowym, rekreacyjnym oraz strefą wellness. Zapraszamy!
+    <div style={{ minHeight: '100vh', backgroundColor: '#FDF5E6' }}>
+      <header style={headerStyle}>
+        <h1 style={{ margin: 0, fontSize: '1.8em' }}>Piekarnia Szymona z Limanowej</h1>
+        <nav style={navStyle}>
+          <a href="#" style={linkStyle}>Strona Główna</a>
+          <a href="#" style={linkStyle}>Oferta</a>
+          <a href="#" style={linkStyle}>O Nas</a>
+          <a href="#" style={linkStyle}>Kontakt</a>
+        </nav>
+      </header>
+      <section style={heroSectionStyle}>
+        <h2 style={sloganStyle}>Tradycja i Smak Prosto z Serca Limanowej</h2>
+        <p style={descriptionStyle}>
+          Od pokoleń pieczemy dla Państwa najsmaczniejsze chleby, bułki i ciasta, bazując na sprawdzonych recepturach i lokalnych składnikach.
+          Doświadcz prawdziwego smaku domowych wypieków.
         </p>
-      </div>
+        <button style={buttonStyle}>Zobacz Naszą Ofertę</button>
+      </section>
     </div>
   );
-};
+}
 
-export default FirstPlywalniaAGHView;
+export default FirstView;

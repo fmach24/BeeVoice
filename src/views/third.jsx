@@ -1,88 +1,130 @@
 import React from 'react';
 
-const ThirdPlywalniaAGHView = () => {
-  const containerStyle = {
-    fontFamily: 'Arial, sans-serif',
-    padding: '20px',
-    maxWidth: '650px',
-    margin: '30px auto',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    backgroundColor: '#fff',
+function ThirdView() {
+  const headerStyle = {
+    backgroundColor: '#8B4513', // SaddleBrown
+    color: '#FFD700', // Gold
+    padding: '15px 20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontFamily: 'Arial, sans-serif'
   };
 
-  const titleStyle = {
-    color: '#0056b3',
-    textAlign: 'center',
-    marginBottom: '25px',
-    fontSize: '2em',
+  const navStyle = {
+    display: 'flex',
+    gap: '25px',
   };
 
-  const sectionStyle = {
-    marginBottom: '20px',
-    paddingBottom: '10px',
-    borderBottom: '1px solid #eee',
-  };
-
-  const listStyle = {
-    listStyleType: 'disc',
-    marginLeft: '20px',
-    color: '#555',
-    lineHeight: '1.8',
-  };
-
-  const listItemStyle = {
-    marginBottom: '8px',
-  };
-
-  const rulesListStyle = {
-    listStyleType: 'decimal',
-    marginLeft: '20px',
-    color: '#555',
-    lineHeight: '1.8',
-  };
-
-  const emphasisStyle = {
+  const linkStyle = {
+    color: '#FFFFFF', // White
+    textDecoration: 'none',
+    fontSize: '1.1em',
     fontWeight: 'bold',
-    color: '#333',
+    transition: 'color 0.3s ease'
+  };
+
+  const mainContainerStyle = {
+    padding: '40px 20px',
+    backgroundColor: '#FDF5E6', // OldLace
+    fontFamily: 'Georgia, serif',
+    color: '#5A2D0C',
+    maxWidth: '900px',
+    margin: '0 auto'
+  };
+
+  const sectionTitleStyle = {
+    textAlign: 'center',
+    fontSize: '2.5em',
+    marginBottom: '50px',
+    color: '#8B4513'
+  };
+
+  const contentSectionStyle = {
+    marginBottom: '40px',
+    backgroundColor: '#FFFFFF',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+  };
+
+  const subTitleStyle = {
+    fontSize: '1.8em',
+    color: '#A0522D', // Sienna
+    marginBottom: '15px',
+    borderBottom: '1px solid #D2B48C',
+    paddingBottom: '10px'
+  };
+
+  const paragraphStyle = {
+    fontSize: '1.1em',
+    lineHeight: '1.7',
+    marginBottom: '15px'
+  };
+
+  const contactInfoStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    fontSize: '1.1em'
+  };
+
+  const mapPlaceholderStyle = {
+    width: '100%',
+    height: '300px',
+    backgroundColor: '#D2B48C', // Tan
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+    fontSize: '1.5em',
+    borderRadius: '8px',
+    marginTop: '20px'
   };
 
   return (
-    <div style={containerStyle}>
-      <h2 style={titleStyle}>Pływalnia AGH - Udogodnienia i Zasady</h2>
+    <div style={{ minHeight: '100vh', backgroundColor: '#FDF5E6' }}>
+      <header style={headerStyle}>
+        <h1 style={{ margin: 0, fontSize: '1.8em' }}>Piekarnia Szymona z Limanowej</h1>
+        <nav style={navStyle}>
+          <a href="#" style={linkStyle}>Strona Główna</a>
+          <a href="#" style={linkStyle}>Oferta</a>
+          <a href="#" style={linkStyle}>O Nas</a>
+          <a href="#" style={linkStyle}>Kontakt</a>
+        </nav>
+      </header>
+      <div style={mainContainerStyle}>
+        <h2 style={sectionTitleStyle}>O Nas i Jak Się z Nami Skontaktować</h2>
 
-      <div style={sectionStyle}>
-        <h3 style={{ color: '#333', marginBottom: '15px' }}>Dostępne Udogodnienia:</h3>
-        <ul style={listStyle}>
-          <li style={listItemStyle}><span style={emphasisStyle}>Basen sportowy:</span> 25-metrowy, 6 torów, głębokość od 1.2m do 1.8m.</li>
-          <li style={listItemStyle}><span style={emphasisStyle}>Basen rekreacyjny:</span> Z hydromasażami, gejzerami, sztuczną rzeką.</li>
-          <li style={listItemStyle}><span style={emphasisStyle}>Strefa wellness:</span> Sauna fińska, łaźnia parowa, jacuzzi.</li>
-          <li style={listItemStyle}><span style={emphasisStyle}>Siłownia:</span> Nowoczesny sprzęt do ćwiczeń siłowych i cardio.</li>
-          <li style={listItemStyle}><span style={emphasisStyle}>Kawiarnia:</span> Oferująca napoje i przekąski.</li>
-          <li style={listItemStyle}><span style={emphasisStyle}>Sklepik:</span> Z akcesoriami pływackimi.</li>
-        </ul>
-      </div>
+        <div style={contentSectionStyle}>
+          <h3 style={subTitleStyle}>Nasza Historia</h3>
+          <p style={paragraphStyle}>
+            Piekarnia Szymona to rodzinna firma z długimi tradycjami, która od ponad 50 lat karmi mieszkańców Limanowej i okolic.
+            Zaczynaliśmy od małego pieca w sercu miasta, a dziś, choć rozwinęliśmy się, niezmiennie pielęgnujemy sztukę tradycyjnego pieczenia.
+            Wierzymy, że prawdziwy smak wypływa z pasji, najlepszych składników i szacunku dla rzemiosła.
+          </p>
+          <p style={paragraphStyle}>
+            Każdy bochenek chleba, każda bułka i ciasto są dla nas wyrazem miłości do tego, co robimy.
+            Nasze receptury, przekazywane z pokolenia na pokolenie, łączą w sobie klasykę z nutą nowoczesności,
+            zawsze z dbałością o najwyższą jakość i świeżość.
+          </p>
+        </div>
 
-      <div style={sectionStyle}>
-        <h3 style={{ color: '#333', marginBottom: '15px' }}>Ważne Zasady:</h3>
-        <ol style={rulesListStyle}>
-          <li style={listItemStyle}>Na terenie pływalni obowiązuje <span style={emphasisStyle}>czepek kąpielowy</span>.</li>
-          <li style={listItemStyle}>Obuwie zmienne (klapki) jest <span style={emphasisStyle}>obowiązkowe</span>.</li>
-          <li style={listItemStyle}>Dzieci do lat 7 mogą przebywać na basenie <span style={emphasisStyle}>wyłącznie pod opieką osób pełnoletnich</span>.</li>
-          <li style={listItemStyle}>Przed wejściem do wody należy skorzystać z prysznica.</li>
-          <li style={listItemStyle}>Zabrania się biegania po obiekcie.</li>
-          <li style={listItemStyle}>Należy zapoznać się z pełnym regulaminem obiektu dostępnym przy kasie.</li>
-        </ol>
-      </div>
-
-      <div>
-        <p style={{ textAlign: 'center', fontSize: '0.9em', color: '#777', marginTop: '20px' }}>
-          Dbamy o komfort i bezpieczeństwo wszystkich użytkowników.
-        </p>
+        <div style={contentSectionStyle}>
+          <h3 style={subTitleStyle}>Skontaktuj Się z Nami</h3>
+          <div style={contactInfoStyle}>
+            <p><strong>Adres:</strong> ul. Krakowska 12, 34-600 Limanowa</p>
+            <p><strong>Telefon:</strong> <a href="tel:+48123456789" style={{ color: '#A0522D', textDecoration: 'none' }}>+48 123 456 789</a></p>
+            <p><strong>Email:</strong> <a href="mailto:kontakt@piekarniaszymona.pl" style={{ color: '#A0522D', textDecoration: 'none' }}>kontakt@piekarniaszymona.pl</a></p>
+            <p><strong>Godziny otwarcia:</strong> Poniedziałek - Sobota: 6:00 - 18:00, Niedziela: Nieczynne</p>
+          </div>
+          <div style={mapPlaceholderStyle}>
+            Mapa dojazdu (Limanowa)
+          </div>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default ThirdPlywalniaAGHView;
+export default ThirdView;

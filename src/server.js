@@ -62,6 +62,7 @@ app.post('/api/generate', async (req, res) => {
 
         // Wysłanie odpowiedzi z powrotem do frontendu
         // Gemini zwraca TYLKO kod, zgodnie z promptem
+        console.log("Otrzymany kod z Gemini:", response.text);
         res.json({ newCode: response.text }); 
 
     } catch (error) {

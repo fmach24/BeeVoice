@@ -1,228 +1,330 @@
 import React, { useState, useMemo } from 'react';
 
-function ProductCarouselView() {
-  const [hoveredCardId, setHoveredCardId] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+function VibrantFeedbackForm() {
+  const [formData, setFormData] = useState({
+    rating: null,
+    comments: '',
+    email: '',
+    optIn: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
+  const [hoveredButton, setHoveredButton] = useState(false);
 
-  // Color palette for this view
-  const primaryColor = '#6A0572'; // Deep Purple
-  const accentColor = '#AB83A1'; // Muted Pink
-  const lightBgColor = '#2C0735'; // Dark Purple-Blue
-  const cardBgColor = '#4B0A5A'; // Medium Purple
-  const textColor = '#E0BBE4'; // Light Purple
-  const lightTextColor = '#957DAD'; // Gray-Purple
-  const buttonHoverColor = '#500860'; // Darker Purple
-  const shadowColor = 'rgba(0, 0, 0, 0.25)';
+  // Vibrant & Playful Color Palette
+  const bgColorGradient = 'linear-gradient(135deg, #FFD700 0%, #FF6347 100%)'; // Gold to Tomato
+  const cardBg = '#FFFFFF';
+  const primaryText = '#34495E'; // Dark Blue-Gray
+  const secondaryText = '#7F8C8D'; // Medium Gray
+  const accentColor = '#3498DB'; // Bright Blue
+  const buttonHoverColor = '#2980B9'; // Darker Blue
+  const borderColor = '#DCDCDC'; // Light Gray
+  const inputBg = '#FDFDFD';
+  const shadowColor = 'rgba(0,0,0,0.15)';
+  const radioCheckedColor = accentColor;
+  const focusBorderColor = '#5DADE2';
 
-  const products = useMemo(() => [
-    { id: 1, name: 'Artisan Sourdough', price: '12.99 PLN', image: 'https://via.placeholder.com/400x300/87CEEB/FFFFFF?text=Sourdough', description: 'Hand-crafted with a tangy zest and a perfect crust, ideal for gourmet sandwiches.' },
-    { id: 2, name: 'Chocolate Croissant', price: '7.50 PLN', image: 'https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Croissant', description: 'Flaky pastry filled with rich dark chocolate, a perfect morning treat.' },
-    { id: 3, name: 'Rye Bread', price: '10.00 PLN', image: 'https://via.placeholder.com/400x300/D2B48C/FFFFFF?text=Rye', description: 'Hearty and wholesome, packed with nutrients, great with savory dishes.' },
-    { id: 4, name: 'Blueberry Muffin', price: '5.99 PLN', image: 'https://via.placeholder.com/400x300/ADD8E6/FFFFFF?text=Muffin', description: 'Bursting with fresh blueberries and a delightful crumble topping.' },
-    { id: 5, name: 'Ciabatta Loaf', price: '9.50 PLN', image: 'https://via.placeholder.com/400x300/B0E0E6/FFFFFF?text=Ciabatta', description: 'Light, airy, and rustic, excellent for dipping or as a side to pasta.' },
-    { id: 6, name: 'Apple Pie Slice', price: '15.00 PLN', image: 'https://via.placeholder.com/400x300/F08080/FFFFFF?text=Apple+Pie', description: 'Classic comfort in every bite, warm apples with cinnamon in a buttery crust.' },
-  ], []);
-
-  const productsPerPage = 1; // Display one product at a time in the "carousel"
-
-  const nextProduct = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    if (submitMessage) setSubmitMessage('');
   };
 
-  const prevProduct = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage('');
+
+    setTimeout(() => {
+      console.log('Survey Data Submitted (Vibrant):', formData);
+      setIsSubmitting(false);
+      setSubmitMessage('Awesome! Thanks for your feedback!');
+      setFormData({ rating: null, comments: '', email: '', optIn: false });
+    }, 1500);
   };
 
   // Styles
   const containerStyle = useMemo(() => ({
     minHeight: '100vh',
-    backgroundColor: lightBgColor,
+    background: bgColorGradient,
     padding: '40px 20px',
-    fontFamily: 'Montserrat, sans-serif',
-    color: textColor,
+    fontFamily: "'Poppins', sans-serif",
+    color: primaryText,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-  }), [lightBgColor, textColor]);
+  }), [bgColorGradient, primaryText]);
 
-  const headerStyle = useMemo(() => ({
+  const formCardStyle = useMemo(() => ({
+    maxWidth: '580px',
+    width: '100%',
+    backgroundColor: cardBg,
+    borderRadius: '15px',
+    boxShadow: `0 15px 35px ${shadowColor}`,
+    padding: '45px',
+    border: `1px solid ${borderColor}`,
     textAlign: 'center',
-    marginBottom: '40px',
-    maxWidth: '800px',
-  }), []);
+  }), [cardBg, shadowColor, borderColor]);
 
   const titleStyle = useMemo(() => ({
-    fontSize: '3.2em',
-    color: primaryColor,
-    marginBottom: '10px',
-  }), [primaryColor]);
+    fontSize: '2.6em',
+    color: primaryText,
+    marginBottom: '15px',
+    fontWeight: '800',
+    letterSpacing: '-0.5px',
+  }), [primaryText]);
 
   const subtitleStyle = useMemo(() => ({
-    fontSize: '1.1em',
-    color: lightTextColor,
-    margin: '0 auto',
-  }), [lightTextColor]);
+    fontSize: '1.15em',
+    color: secondaryText,
+    marginBottom: '35px',
+    lineHeight: '1.6',
+  }), [secondaryText]);
 
-  const carouselWrapperStyle = useMemo(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    maxWidth: '700px',
+  const sectionTitleStyle = useMemo(() => ({
+    fontSize: '1.6em',
+    color: primaryText,
+    marginBottom: '25px',
+    marginTop: '40px',
+    textAlign: 'left',
+    fontWeight: '700',
+    borderBottom: `2px solid ${accentColor}20`,
+    paddingBottom: '10px',
+  }), [primaryText, accentColor]);
+
+  const formGroupStyle = useMemo(() => ({
+    marginBottom: '30px',
+    textAlign: 'left',
+  }), []);
+
+  const labelStyle = useMemo(() => ({
+    display: 'block',
+    marginBottom: '10px',
+    fontWeight: '600',
+    color: primaryText,
+    fontSize: '1em',
+  }), [primaryText]);
+
+  const inputBaseStyle = useMemo(() => ({
     width: '100%',
-    position: 'relative',
+    padding: '14px 18px',
+    border: `2px solid ${borderColor}`,
+    borderRadius: '10px',
+    backgroundColor: inputBg,
+    color: primaryText,
+    fontSize: '1em',
+    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit',
+    '&:focus': {
+      borderColor: focusBorderColor,
+      boxShadow: `0 0 0 4px ${focusBorderColor}30`,
+      outline: 'none',
+    },
+  }), [borderColor, inputBg, primaryText, focusBorderColor]);
+
+  const textareaStyle = useMemo(() => ({
+    ...inputBaseStyle,
+    resize: 'vertical',
+    minHeight: '130px',
+  }), [inputBaseStyle]);
+
+  const radioGroupStyle = useMemo(() => ({
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+    gap: '15px',
+    marginTop: '15px',
+    justifyItems: 'center',
   }), []);
 
-  const navButtonStyle = useMemo(() => ({
-    backgroundColor: primaryColor,
-    color: textColor,
-    border: 'none',
-    borderRadius: '50%',
-    width: '45px',
-    height: '45px',
-    fontSize: '1.5em',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'background-color 0.3s ease, transform 0.2s ease',
-    zIndex: 10,
-    position: 'absolute',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    boxShadow: `0 2px 8px ${shadowColor}`,
-  }), [primaryColor, textColor, shadowColor]);
-
-  const prevButtonStyle = useMemo(() => ({
-    ...navButtonStyle,
-    left: '-25px',
-  }), [navButtonStyle]);
-
-  const nextButtonStyle = useMemo(() => ({
-    ...navButtonStyle,
-    right: '-25px',
-  }), [navButtonStyle]);
-
-  const carouselContentStyle = useMemo(() => ({
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    overflow: 'hidden',
-    padding: '0 50px', // Space for navigation buttons
-  }), []);
-
-  const cardBaseStyle = useMemo(() => ({
-    backgroundColor: cardBgColor,
-    borderRadius: '15px',
-    padding: '30px',
-    boxShadow: `0 8px 20px ${shadowColor}`,
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  const radioLabelStyle = useMemo(() => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center',
-    width: `calc(100% / ${productsPerPage} - 40px)`, // Adjust width based on productsPerPage
-    margin: '0 20px',
-    border: `2px solid ${primaryColor}`,
-  }), [cardBgColor, shadowColor, productsPerPage, primaryColor]);
-
-  const cardHoverStyle = useMemo(() => ({
-    transform: 'scale(1.03)',
-    boxShadow: `0 12px 25px ${shadowColor}`,
-  }), [shadowColor]);
-
-  const productImageStyle = useMemo(() => ({
-    width: '100%',
-    maxWidth: '400px',
-    height: '250px',
-    objectFit: 'cover',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    userSelect: 'none',
+    minWidth: '80px',
+    padding: '10px',
     borderRadius: '10px',
-    marginBottom: '20px',
-    border: `1px solid ${accentColor}`,
-  }), [accentColor]);
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+      backgroundColor: '#F5F5F5',
+    }
+  }), []);
 
-  const productNameStyle = useMemo(() => ({
-    fontSize: '2.5em',
-    color: primaryColor,
-    marginBottom: '10px',
-  }), [primaryColor]);
+  const customRadioStyle = useMemo(() => (isChecked) => ({
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    border: `3px solid ${isChecked ? radioCheckedColor : borderColor}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '8px',
+    transition: 'background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease',
+    backgroundColor: isChecked ? radioCheckedColor : inputBg,
+    transform: isChecked ? 'scale(1.05)' : 'scale(1)',
+  }), [radioCheckedColor, borderColor, inputBg]);
 
-  const productDescriptionStyle = useMemo(() => ({
-    fontSize: '1em',
-    color: lightTextColor,
-    marginBottom: '20px',
-    flexGrow: 1,
-    lineHeight: '1.6',
-    maxWidth: '90%',
-  }), [lightTextColor]);
+  const innerRadioDotStyle = useMemo(() => ({
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    backgroundColor: cardBg,
+    transition: 'opacity 0.2s ease, transform 0.2s ease',
+  }), [cardBg]);
 
-  const productPriceStyle = useMemo(() => ({
-    fontSize: '2em',
+  const customCheckboxStyle = useMemo(() => (isChecked) => ({
+    width: '24px',
+    height: '24px',
+    borderRadius: '8px',
+    border: `3px solid ${isChecked ? accentColor : borderColor}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: '12px',
+    transition: 'background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease',
+    backgroundColor: isChecked ? accentColor : inputBg,
+    color: cardBg,
+    fontSize: '16px',
     fontWeight: 'bold',
-    color: accentColor,
-    marginBottom: '25px',
-  }), [accentColor]);
+    transform: isChecked ? 'scale(1.05)' : 'scale(1)',
+  }), [accentColor, borderColor, inputBg, cardBg]);
 
   const buttonStyle = useMemo(() => ({
-    backgroundColor: accentColor,
-    color: cardBgColor,
+    background: `linear-gradient(45deg, ${accentColor}, ${buttonHoverColor})`,
+    color: cardBg,
     border: 'none',
-    padding: '14px 30px',
+    padding: '16px 35px',
     borderRadius: '10px',
     cursor: 'pointer',
-    fontSize: '1.1em',
-    fontWeight: 'bold',
-    transition: 'background-color 0.3s ease',
-  }), [accentColor, cardBgColor]);
+    fontSize: '1.2em',
+    fontWeight: '700',
+    transition: 'all 0.3s ease',
+    width: '100%',
+    marginTop: '40px',
+    outline: 'none',
+    boxShadow: `0 8px 20px ${accentColor}60`,
+    letterSpacing: '0.5px',
+  }), [accentColor, buttonHoverColor, cardBg]);
+
+  const buttonActiveHoverStyle = useMemo(() => ({
+    background: `linear-gradient(45deg, ${buttonHoverColor}, ${accentColor})`,
+    transform: 'translateY(-3px) scale(1.02)',
+    boxShadow: `0 12px 25px ${accentColor}80`,
+  }), [buttonHoverColor, accentColor]);
+
+  const submitMessageStyle = useMemo(() => ({
+    marginTop: '30px',
+    fontSize: '1.2em',
+    fontWeight: '700',
+    textAlign: 'center',
+    width: '100%',
+    color: accentColor,
+  }), [accentColor]);
 
   return (
     <div style={containerStyle}>
-      <header style={headerStyle}>
-        <h1 style={titleStyle}>Discover Our Featured Delights</h1>
+      <div style={formCardStyle}>
+        <h2 style={titleStyle}>Your Voice Matters!</h2>
         <p style={subtitleStyle}>
-          Indulge in our exquisite collection of fresh-baked goods, each a masterpiece of flavor and craft.
+          We'd love to hear about your experience. Your feedback helps us grow.
         </p>
-      </header>
-      <div style={carouselWrapperStyle}>
-        <button
-          style={{ ...prevButtonStyle, '&:hover': { transform: 'translateY(-50%) scale(1.1)' } }}
-          onClick={prevProduct}
-        >
-          &lt;
-        </button>
-        <div style={carouselContentStyle}>
-          {products.slice(currentIndex, currentIndex + productsPerPage).map(product => (
-            <div
-              key={product.id}
-              style={{ ...cardBaseStyle, ...(hoveredCardId === product.id ? cardHoverStyle : {}) }}
-              onMouseEnter={() => setHoveredCardId(product.id)}
-              onMouseLeave={() => setHoveredCardId(null)}
-            >
-              <img src={product.image} alt={product.name} style={productImageStyle} />
-              <h2 style={productNameStyle}>{product.name}</h2>
-              <p style={productDescriptionStyle}>{product.description}</p>
-              <span style={productPriceStyle}>{product.price}</span>
-              <button
-                style={{
-                  ...buttonStyle,
-                  ...(hoveredCardId === product.id && { backgroundColor: buttonHoverColor })
-                }}
-              >
-                Learn More
-              </button>
+        <form onSubmit={handleSubmit}>
+          <h3 style={sectionTitleStyle}>Rate Your Experience</h3>
+          <div style={formGroupStyle}>
+            <label style={labelStyle}>How was your overall experience?</label>
+            <div style={radioGroupStyle}>
+              {[1, 2, 3, 4, 5].map(rating => (
+                <label key={`rating-vibrant-${rating}`} style={radioLabelStyle}>
+                  <input
+                    type="radio"
+                    name="rating"
+                    value={rating}
+                    checked={formData.rating === String(rating)}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    style={{ display: 'none' }}
+                  />
+                  <div style={customRadioStyle(formData.rating === String(rating))}>
+                    <div style={{ ...innerRadioDotStyle, opacity: formData.rating === String(rating) ? 1 : 0, transform: formData.rating === String(rating) ? 'scale(1)' : 'scale(0)' }}></div>
+                  </div>
+                  <span style={{color: formData.rating === String(rating) ? primaryText : secondaryText}}>{rating} Star{rating > 1 ? 's' : ''}</span>
+                </label>
+              ))}
             </div>
-          ))}
-        </div>
-        <button
-          style={{ ...nextButtonStyle, '&:hover': { transform: 'translateY(-50%) scale(1.1)' } }}
-          onClick={nextProduct}
-        >
-          &gt;
-        </button>
+          </div>
+
+          <div style={formGroupStyle}>
+            <label htmlFor="comments-2" style={labelStyle}>Tell us more!</label>
+            <textarea
+              id="comments-2"
+              name="comments"
+              value={formData.comments}
+              onChange={handleChange}
+              style={textareaStyle}
+              rows="6"
+              disabled={isSubmitting}
+              placeholder="What made your day, or what could be even better?"
+            ></textarea>
+          </div>
+
+          <h3 style={sectionTitleStyle}>Stay in Touch (Optional)</h3>
+          <div style={formGroupStyle}>
+            <label htmlFor="email-2" style={labelStyle}>Email Address</label>
+            <input
+              type="email"
+              id="email-2"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              style={inputBaseStyle}
+              disabled={isSubmitting}
+              placeholder="hello@example.com"
+            />
+          </div>
+
+          <div style={{ ...formGroupStyle, display: 'flex', alignItems: 'center', marginTop: '25px' }}>
+            <label htmlFor="optIn-2" style={{ ...labelStyle, marginBottom: '0', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              <input
+                type="checkbox"
+                id="optIn-2"
+                name="optIn"
+                checked={formData.optIn}
+                onChange={handleChange}
+                disabled={isSubmitting}
+                style={{ display: 'none' }}
+              />
+              <div style={customCheckboxStyle(formData.optIn)}>
+                {formData.optIn && '✔'}
+              </div>
+              <span style={{color: primaryText}}>Yes, keep me updated!</span>
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            style={{ ...buttonStyle, ...(hoveredButton && !isSubmitting ? buttonActiveHoverStyle : {}) }}
+            onMouseEnter={() => setHoveredButton(true)}
+            onMouseLeave={() => setHoveredButton(false)}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Sending Smiles...' : 'Submit Feedback'}
+          </button>
+        </form>
+        {submitMessage && (
+          <p style={submitMessageStyle}>
+            {submitMessage}
+          </p>
+        )}
       </div>
     </div>
   );
 }
 
-export default ProductCarouselView;
+export default VibrantFeedbackForm;

@@ -12,10 +12,11 @@ const views = [
 ];
 
 const containerStyle = {
-  minHeight: '100vh',
+  maxHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
-  fontFamily: 'Arial, sans-serif'
+  fontFamily: 'Arial, sans-serif',
+  overflow:'hidden'
 };
 
 const navigationStyle = {
@@ -61,8 +62,9 @@ export default function App() {
       body: JSON.stringify({ comment: comment, bestView: currentViewIndex }),
       method: "POST",
       headers: { "Content-Type": "application/json" }
-    }).then(()=>{
+    }).then(res=>{
       setIsLoading(false);
+      console.log("Poprawka wysłana")
     });
     setHasUserSelectedBest(false);
   }
@@ -80,8 +82,16 @@ export default function App() {
 
   return (
     <div style={containerStyle}>
-      <div style={{ flexGrow: 1, paddingBottom: '80px' }}>
-        <CurrentViewComponent />
+      <div style={{ display:"flex", flexDirection:"row", paddingBottom: '80px', flexGrow: 1 }}>
+        <div style={{overflowY:"scroll"}}>
+          <FirstView />
+        </div>
+                <div style={{overflowY:"scroll"}}>
+          <SecondView />
+        </div>
+        <div style={{overflowY:"scroll"}}>
+          <ThirdView />
+        </div>
       </div>
 
       <div style={navigationStyle}>

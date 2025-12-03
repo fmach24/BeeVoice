@@ -35,17 +35,6 @@ const allowedOrigins = ["http://localhost:3000","http://localhost:8080"];
 // Pamiętaj: Upewnij się, że to jest poprawna ścieżka do Twojego projektu!
 const REACT_COMPONENTS_DIR = path.join(__dirname, 'src', 'views');
 
-// --- Zmienne do historii ---
-// Stan przechowujący kontekst najlepszego widoku i ostatniego prompta
-let refinementContext = {
-    bestPrompt: "",
-    lastPrompt: "",
-    bestViewIndex: 0,
-    refinementNotes: ""
-};
-
-// --- Funkcje pomocnicze ---
-
 /**
  * Zwraca ustrukturyzowany prompt systemowy dla Gemini, uwzględniający kontekst udoskonaleń.
  */

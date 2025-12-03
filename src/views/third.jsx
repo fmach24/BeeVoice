@@ -1,231 +1,164 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
-function ThirdView() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionStatus, setSubmissionStatus] = useState('');
+function ProductMinimalGrid() {
+  const [hoveredCardId, setHoveredCardId] = useState(null);
 
-  const primaryColor = '#1976D2'; // Blue
-  const accentColor = '#64B5F6'; // Light Blue
-  const bgColor = '#E3F2FD'; // Even Lighter Blue
-  const textColor = '#212121'; // Dark Grey
-  const formBgColor = '#FFFFFF';
-  const successColor = '#4CAF50';
-  const errorColor = '#F44336';
+  // Color palette for this view
+  const primaryColor = '#5F9EA0'; // Cadet Blue
+  const accentColor = '#FFC0CB'; // Pink
+  const lightBgColor = '#F8F8F8'; // Very Light Gray
+  const cardBgColor = '#FFFFFF'; // White
+  const textColor = '#4682B4'; // Steel Blue
+  const lightTextColor = '#778899'; // Light Slate Gray
+  const buttonHoverColor = '#467B9E'; // Darker Cadet Blue
+  const shadowColor = 'rgba(0, 0, 0, 0.05)';
 
-  const containerStyle = {
+  const products = useMemo(() => [
+    { id: 1, name: 'Artisan Sourdough', price: '12.99 PLN', image: 'https://via.placeholder.com/180x130/87CEEB/FFFFFF?text=Sourdough' },
+    { id: 2, name: 'Chocolate Croissant', price: '7.50 PLN', image: 'https://via.placeholder.com/180x130/FFD700/FFFFFF?text=Croissant' },
+    { id: 3, name: 'Rye Bread', price: '10.00 PLN', image: 'https://via.placeholder.com/180x130/D2B48C/FFFFFF?text=Rye' },
+    { id: 4, name: 'Blueberry Muffin', price: '5.99 PLN', image: 'https://via.placeholder.com/180x130/ADD8E6/FFFFFF?text=Muffin' },
+    { id: 5, name: 'Ciabatta Loaf', price: '9.50 PLN', image: 'https://via.placeholder.com/180x130/B0E0E6/FFFFFF?text=Ciabatta' },
+    { id: 6, name: 'Apple Pie Slice', price: '15.00 PLN', image: 'https://via.placeholder.com/180x130/F08080/FFFFFF?text=Apple+Pie' },
+    { id: 7, name: 'Whole Wheat Bread', price: '11.50 PLN', image: 'https://via.placeholder.com/180x130/DEB887/FFFFFF?text=Whole+Wheat' },
+    { id: 8, name: 'Lemon Tart', price: '14.00 PLN', image: 'https://via.placeholder.com/180x130/FFFACD/FFFFFF?text=Lemon+Tart' },
+  ], []);
+
+  // Styles
+  const containerStyle = useMemo(() => ({
+    minHeight: '100vh',
+    backgroundColor: lightBgColor,
+    padding: '30px 15px',
+    fontFamily: 'Open Sans, sans-serif',
+    color: textColor,
+  }), [lightBgColor, textColor]);
+
+  const headerStyle = useMemo(() => ({
+    textAlign: 'center',
+    marginBottom: '40px',
+  }), []);
+
+  const titleStyle = useMemo(() => ({
+    fontSize: '2.8em',
+    color: primaryColor,
+    marginBottom: '10px',
+  }), [primaryColor]);
+
+  const subtitleStyle = useMemo(() => ({
+    fontSize: '1.1em',
+    color: lightTextColor,
+    maxWidth: '600px',
+    margin: '0 auto',
+  }), [lightTextColor]);
+
+  const gridContainerStyle = useMemo(() => ({
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: '20px',
+    maxWidth: '1000px',
+    margin: '0 auto',
+  }), []);
+
+  const cardBaseStyle = useMemo(() => ({
+    backgroundColor: cardBgColor,
+    borderRadius: '10px',
+    padding: '15px',
+    boxShadow: `0 2px 5px ${shadowColor}`,
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
-    backgroundColor: bgColor,
-    fontFamily: 'Lato, sans-serif',
-    color: textColor
-  };
-
-  const headerStyle = {
-    backgroundColor: primaryColor,
-    color: '#FFFFFF',
-    padding: '20px 30px',
-    textAlign: 'center',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-  };
-
-  const mainStyle = {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: '40px 20px'
-  };
-
-  const formContainerStyle = {
-    backgroundColor: formBgColor,
-    padding: '40px',
-    borderRadius: '10px',
-    boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
-    maxWidth: '600px',
-    width: '100%'
-  };
-
-  const titleStyle = {
-    fontSize: '2.2em',
-    marginBottom: '25px',
-    color: primaryColor,
-    textAlign: 'center'
-  };
-
-  const formGroupStyle = {
-    marginBottom: '20px'
-  };
-
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '8px',
-    fontWeight: 'bold',
-    color: textColor
-  };
-
-  const inputBaseStyle = {
-    width: '100%',
-    padding: '12px',
-    border: `1px solid ${accentColor}`,
-    borderRadius: '5px',
-    fontSize: '1em',
-    boxSizing: 'border-box',
-    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-    outline: 'none'
-  };
-
-  const inputFocusStyle = {
-    borderColor: primaryColor,
-    boxShadow: `0 0 0 3px ${accentColor}`
-  };
-
-  const textareaStyle = {
-    ...inputBaseStyle,
-    resize: 'vertical',
-    minHeight: '120px'
-  };
-
-  const submitButtonBaseStyle = {
-    backgroundColor: primaryColor,
-    color: 'white',
-    padding: '15px 25px',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '1.1em',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.2s ease',
-    width: '100%',
-    fontWeight: 'bold'
-  };
-
-  const submitButtonHoverStyle = {
-    backgroundColor: '#0D47A1', // Darker Blue
-    transform: 'translateY(-2px)'
-  };
-
-  const submitButtonDisabledStyle = {
-    backgroundColor: accentColor,
-    cursor: 'not-allowed'
-  };
-
-  const statusMessageStyle = {
     textAlign: 'center',
-    marginTop: '20px',
-    padding: '10px',
-    borderRadius: '5px',
-    fontWeight: 'bold'
-  };
+    border: `1px solid ${lightBgColor}`,
+    position: 'relative',
+    overflow: 'hidden',
+  }), [cardBgColor, shadowColor, lightBgColor]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const cardHoverStyle = useMemo(() => ({
+    transform: 'translateY(-3px)',
+    boxShadow: `0 5px 10px ${shadowColor}`,
+  }), [shadowColor]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmissionStatus('');
+  const productImageStyle = useMemo(() => ({
+    width: '100%',
+    height: '140px',
+    objectFit: 'cover',
+    borderRadius: '8px',
+    marginBottom: '10px',
+  }), []);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+  const productNameStyle = useMemo(() => ({
+    fontSize: '1.4em',
+    color: primaryColor,
+    marginBottom: '5px',
+    minHeight: '2.8em', // Ensure consistent height for names
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }), [primaryColor]);
 
-    if (formData.name && formData.email && formData.message) {
-      setSubmissionStatus('success');
-      setFormData({ name: '', email: '', message: '' }); // Clear form
-    } else {
-      setSubmissionStatus('error');
-    }
-    setIsSubmitting(false);
-  };
+  const productPriceStyle = useMemo(() => ({
+    fontSize: '1.3em',
+    fontWeight: 'bold',
+    color: accentColor,
+    marginBottom: '10px',
+  }), [accentColor]);
 
-  const getStatusMessage = () => {
-    if (submissionStatus === 'success') {
-      return <p style={{ ...statusMessageStyle, backgroundColor: successColor, color: 'white' }}>Wiadomość wysłana pomyślnie!</p>;
-    }
-    if (submissionStatus === 'error') {
-      return <p style={{ ...statusMessageStyle, backgroundColor: errorColor, color: 'white' }}>Wypełnij wszystkie pola, aby wysłać wiadomość.</p>;
-    }
-    return null;
-  };
+  const addToCartButtonStyle = useMemo(() => ({
+    backgroundColor: primaryColor,
+    color: cardBgColor,
+    border: 'none',
+    padding: '8px 18px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '0.9em',
+    fontWeight: 'bold',
+    transition: 'background-color 0.2s ease, opacity 0.2s ease',
+    opacity: 0, // Hidden by default
+    position: 'absolute',
+    bottom: '15px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: 'calc(100% - 30px)',
+  }), [primaryColor, cardBgColor]);
+
+  const addToCartButtonHoverStyle = useMemo(() => ({
+    opacity: 1,
+    backgroundColor: buttonHoverColor,
+  }), [buttonHoverColor]);
 
   return (
     <div style={containerStyle}>
       <header style={headerStyle}>
-        <h1 style={{ margin: 0, fontSize: '2.5em' }}>Skontaktuj się z nami</h1>
+        <h1 style={titleStyle}>Our Minimalist Bakery Collection</h1>
+        <p style={subtitleStyle}>
+          Simple, fresh, and delicious. Find your favorite baked goods with ease.
+        </p>
       </header>
-      <main style={mainStyle}>
-        <div style={formContainerStyle}>
-          <h2 style={titleStyle}>Wyślij do nas wiadomość</h2>
-          <form onSubmit={handleSubmit}>
-            <div style={formGroupStyle}>
-              <label htmlFor="name" style={labelStyle}>Imię i Nazwisko:</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                style={inputBaseStyle}
-                onFocus={(e) => e.target.style = { ...inputBaseStyle, ...inputFocusStyle }}
-                onBlur={(e) => e.target.style = inputBaseStyle}
-                required
-              />
-            </div>
-            <div style={formGroupStyle}>
-              <label htmlFor="email" style={labelStyle}>Adres E-mail:</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                style={inputBaseStyle}
-                onFocus={(e) => e.target.style = { ...inputBaseStyle, ...inputFocusStyle }}
-                onBlur={(e) => e.target.style = inputBaseStyle}
-                required
-              />
-            </div>
-            <div style={formGroupStyle}>
-              <label htmlFor="message" style={labelStyle}>Wiadomość:</label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                style={textareaStyle}
-                onFocus={(e) => e.target.style = { ...textareaStyle, ...inputFocusStyle }}
-                onBlur={(e) => e.target.style = textareaStyle}
-                required
-              ></textarea>
-            </div>
+      <div style={gridContainerStyle}>
+        {products.map(product => (
+          <div
+            key={product.id}
+            style={{ ...cardBaseStyle, ...(hoveredCardId === product.id ? cardHoverStyle : {}) }}
+            onMouseEnter={() => setHoveredCardId(product.id)}
+            onMouseLeave={() => setHoveredCardId(null)}
+          >
+            <img src={product.image} alt={product.name} style={productImageStyle} />
+            <h2 style={productNameStyle}>{product.name}</h2>
+            <span style={productPriceStyle}>{product.price}</span>
             <button
-              type="submit"
               style={{
-                ...submitButtonBaseStyle,
-                ...(isSubmitting ? submitButtonDisabledStyle : {}),
-                ...(!isSubmitting && { ...submitButtonBaseStyle, ...(formData.name && formData.email && formData.message ? submitButtonHoverStyle : {}) })
+                ...addToCartButtonStyle,
+                ...(hoveredCardId === product.id ? addToCartButtonHoverStyle : {})
               }}
-              disabled={isSubmitting}
-              onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = submitButtonHoverStyle.backgroundColor; e.currentTarget.style.transform = submitButtonHoverStyle.transform; }}
-              onMouseLeave={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = submitButtonBaseStyle.backgroundColor; e.currentTarget.style.transform = 'none'; }}
             >
-              {isSubmitting ? 'Wysyłanie...' : 'Wyślij Wiadomość'}
+              Add to Cart
             </button>
-          </form>
-          {getStatusMessage()}
-        </div>
-      </main>
-      <footer style={{ backgroundColor: primaryColor, color: '#FFFFFF', textAlign: 'center', padding: '15px', fontSize: '0.9em' }}>
-        <p>&copy; {new Date().getFullYear()} Firma Kontaktowa. Wszelkie prawa zastrzeżone.</p>
-      </footer>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default ThirdView;
+export default ProductMinimalGrid;

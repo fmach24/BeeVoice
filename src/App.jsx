@@ -38,6 +38,7 @@ export default function App() {
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
   const CurrentViewComponent = views[currentViewIndex].component;
   const [hasUserSelectedBest, setHasUserSelectedBest] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const goToNext = () => {
     setCurrentViewIndex((prev) => (prev + 1) % views.length);
   };
@@ -55,10 +56,13 @@ export default function App() {
 
   const sendComment=()=>{
     const comment = document.querySelector('input[type="text"]').value;
+    setIsLoading(true);
     fetch("http://localhost:4000/edit", {
       body: JSON.stringify({ comment: comment, bestView: currentViewIndex }),
       method: "POST",
       headers: { "Content-Type": "application/json" }
+    }).then(()=>{
+      setIsLoading(false);
     });
     setHasUserSelectedBest(false);
   }
@@ -105,6 +109,10 @@ export default function App() {
 
         <button onClick={goToNext} style={{ padding: '10px 20px', fontSize: '16px' }}> Następny &gt; </button>
         <RenderButtonConditionally hasUserSelectedBest={hasUserSelectedBest} />
+        {isLoading && <label style={{ marginLeft: '15px', fontStyle: 'italic' }}>
+            Laduje sie...
+        </label>}
+
       </div>
       
     </div>

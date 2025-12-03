@@ -173,7 +173,7 @@ app.post('/edit', async (req,res)=>{
     }
     const prompt = getSystemPrompt(comment,code);
     await callGeminiAndSave(prompt)
-    return "ok"
+    res.json({ status: "success" });
 });
 
 app.listen(4000, () => {

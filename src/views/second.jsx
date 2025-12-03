@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function SecondView() {
+  const [cartCount, setCartCount] = useState(0);
+
+  const primaryColor = '#4CAF50'; // Green
+  const accentColor = '#FFC107'; // Amber
+  const bgColor = '#E8F5E9'; // Light Green
+  const textColor = '#388E3C'; // Darker Green
+  const cardBgColor = '#FFFFFF';
+
   const headerStyle = {
-    backgroundColor: '#8B4513', // SaddleBrown
-    color: '#FFD700', // Gold
+    backgroundColor: primaryColor,
+    color: '#FFFFFF',
     padding: '15px 20px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    fontFamily: 'Arial, sans-serif'
+    fontFamily: 'Arial, sans-serif',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
   };
 
   const navStyle = {
@@ -17,25 +26,26 @@ function SecondView() {
   };
 
   const linkStyle = {
-    color: '#FFFFFF', // White
+    color: '#FFFFFF',
     textDecoration: 'none',
-    fontSize: '1.1em',
+    fontSize: '1em',
     fontWeight: 'bold',
     transition: 'color 0.3s ease'
   };
 
-  const mainContainerStyle = {
+  const mainStyle = {
+    flexGrow: 1,
     padding: '40px 20px',
-    backgroundColor: '#FDF5E6', // OldLace
-    fontFamily: 'Georgia, serif',
-    color: '#5A2D0C'
+    backgroundColor: bgColor,
+    color: textColor,
+    fontFamily: 'Verdana, sans-serif'
   };
 
-  const sectionTitleStyle = {
+  const titleStyle = {
     textAlign: 'center',
     fontSize: '2.5em',
-    marginBottom: '50px',
-    color: '#8B4513'
+    marginBottom: '40px',
+    color: primaryColor
   };
 
   const productGridStyle = {
@@ -46,67 +56,136 @@ function SecondView() {
     margin: '0 auto'
   };
 
-  const productCardStyle = {
-    backgroundColor: '#FFFFFF',
-    border: '1px solid #D2B48C', // Tan
-    borderRadius: '8px',
+  const cardStyle = {
+    backgroundColor: cardBgColor,
+    borderRadius: '10px',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
     overflow: 'hidden',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    textAlign: 'center',
-    paddingBottom: '20px'
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    display: 'flex',
+    flexDirection: 'column'
   };
 
-  const productImageStyle = {
+  const cardHoverStyle = {
+    transform: 'translateY(-5px)',
+    boxShadow: '0 6px 12px rgba(0,0,0,0.15)'
+  };
+
+  const cardImageStyle = {
     width: '100%',
     height: '200px',
     objectFit: 'cover',
+    backgroundColor: '#CFD8DC' // Light blue-grey placeholder
+  };
+
+  const cardContentStyle = {
+    padding: '20px',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  };
+
+  const cardTitleStyle = {
+    fontSize: '1.5em',
+    marginBottom: '10px',
+    color: primaryColor
+  };
+
+  const cardDescriptionStyle = {
+    fontSize: '0.9em',
+    color: '#607D8B', // Blue Grey
     marginBottom: '15px'
   };
 
-  const productNameStyle = {
-    fontSize: '1.8em',
-    color: '#A0522D', // Sienna
-    marginBottom: '10px'
+  const cardPriceStyle = {
+    fontSize: '1.2em',
+    fontWeight: 'bold',
+    color: '#E65100', // Deep Orange
+    marginBottom: '15px'
   };
 
-  const productDescriptionStyle = {
+  const addButtonBaseStyle = {
+    backgroundColor: primaryColor,
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
     fontSize: '1em',
-    color: '#696969', // DimGray
-    padding: '0 15px'
+    transition: 'background-color 0.3s ease'
+  };
+
+  const addButtonHoverStyle = {
+    backgroundColor: '#66BB6A' // Lighter Green
+  };
+
+  const footerStyle = {
+    backgroundColor: primaryColor,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    padding: '15px',
+    fontSize: '0.8em',
+    fontFamily: 'Arial, sans-serif',
+    boxShadow: '0 -2px 4px rgba(0,0,0,0.1)'
   };
 
   const products = [
-    { name: 'Chleb Wiejski', desc: 'Tradycyjny chleb na zakwasie, pieczony w piecu opalanym drewnem.', img: 'https://via.placeholder.com/300x200?text=Chleb+Wiejski' },
-    { name: 'Bułki Kajzerki', desc: 'Puszyste i chrupiące bułki, idealne na śniadanie.', img: 'https://via.placeholder.com/300x200?text=Bulki+Kajzerki' },
-    { name: 'Ciasto Drożdżowe', desc: 'Słodkie ciasto z kruszonką i sezonowymi owocami.', img: 'https://via.placeholder.com/300x200?text=Ciasto+Drozdzowe' },
-    { name: 'Sernik Limanowski', desc: 'Aksamitny sernik na kruchym spodzie, według babcinej receptury.', img: 'https://via.placeholder.com/300x200?text=Sernik+Limanowski' },
-    { name: 'Rogaliki Maślane', desc: 'Delikatne rogaliki z marmoladą lub czekoladą.', img: 'https://via.placeholder.com/300x200?text=Rogaliki+Maslane' },
-    { name: 'Pączki Tradycyjne', desc: 'Puszyste pączki z różą, smażone na złoto.', img: 'https://via.placeholder.com/300x200?text=Paczki+Tradycyjne' },
+    { id: 1, name: 'Ekologiczny Chleb', description: 'Wypiekany z pełnoziarnistej mąki, na naturalnym zakwasie.', price: '12.50 zł' },
+    { id: 2, name: 'Ciastka Owocowe', description: 'Świeże owoce sezonowe, kruche ciasto.', price: '8.00 zł' },
+    { id: 3, name: 'Rogaliki Maślane', description: 'Puszyste i aromatyczne, idealne na śniadanie.', price: '3.50 zł' },
+    { id: 4, name: 'Sernik Klasyczny', description: 'Tradycyjny sernik z domowego sera, pieczony według babcinej receptury.', price: '45.00 zł' },
   ];
 
+  const [hoveredCard, setHoveredCard] = useState(null);
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FDF5E6' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: bgColor }}>
       <header style={headerStyle}>
-        <h1 style={{ margin: 0, fontSize: '1.8em' }}>Piekarnia Szymona z Limanowej</h1>
+        <h1 style={{ margin: 0, fontSize: '1.8em' }}>EcoPiekarnia</h1>
         <nav style={navStyle}>
-          <a href="#" style={linkStyle}>Strona Główna</a>
-          <a href="#" style={linkStyle}>Oferta</a>
-          <a href="#" style={linkStyle}>O Nas</a>
-          <a href="#" style={linkStyle}>Kontakt</a>
+          <a href="#" style={linkStyle}>Produkty</a>
+          <a href="#" style={linkStyle}>Promocje</a>
+          <a href="#" style={linkStyle}>O nas</a>
+          <a href="#" style={linkStyle}>Koszyk ({cartCount})</a>
         </nav>
       </header>
-      <div style={mainContainerStyle}>
-        <h2 style={sectionTitleStyle}>Nasza Wyjątkowa Oferta Wypieków</h2>
+      <main style={mainStyle}>
+        <h2 style={titleStyle}>Nasze Ekologiczne Wypieki</h2>
         <div style={productGridStyle}>
-          {products.map((product, index) => (
-            <div key={index} style={productCardStyle}>
-              <img src={product.img} alt={product.name} style={productImageStyle} />
-              <h3 style={productNameStyle}>{product.name}</h3>
-              <p style={productDescriptionStyle}>{product.desc}</p>
+          {products.map(product => (
+            <div
+              key={product.id}
+              style={{ ...cardStyle, ...(hoveredCard === product.id ? cardHoverStyle : {}) }}
+              onMouseEnter={() => setHoveredCard(product.id)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              <div style={cardImageStyle}></div> {/* Placeholder for image */}
+              <div style={cardContentStyle}>
+                <div>
+                  <h3 style={cardTitleStyle}>{product.name}</h3>
+                  <p style={cardDescriptionStyle}>{product.description}</p>
+                </div>
+                <div>
+                  <p style={cardPriceStyle}>{product.price}</p>
+                  <button
+                    style={{
+                      ...addButtonBaseStyle,
+                      ...(hoveredCard === product.id ? addButtonHoverStyle : {})
+                    }}
+                    onClick={() => setCartCount(cartCount + 1)}
+                  >
+                    Dodaj do koszyka
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-      </div>
+      </main>
+      <footer style={footerStyle}>
+        <p>&copy; {new Date().getFullYear()} EcoPiekarnia. Smacznego!</p>
+      </footer>
     </div>
   );
 }

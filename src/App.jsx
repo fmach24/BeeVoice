@@ -32,23 +32,45 @@ const navigationStyle = {
   boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
 };
 
+
+
 export default function App() {
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
   const CurrentViewComponent = views[currentViewIndex].component;
-
+  const [hasUserSelectedBest, setHasUserSelectedBest] = useState(false);
   const goToNext = () => {
     setCurrentViewIndex((prev) => (prev + 1) % views.length);
   };
 
+  const RenderButtonConditionally = ({hasUserSelectedBest})=>{
+    if(hasUserSelectedBest){
+      return (<div>
+
+          <input type="text" placeholder="Wpisz coś..." style={{ width: '100%', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc' }} />
+          <button onClick={sendComment} style={{ width: '100%', padding: '10px', backgroundColor: '#008CBA', color: 'white', border: 'none', cursor: 'pointer' }}>Poprawka</button>
+        </div>)
+    }
+    return null;
+  }
+
+  const sendComment=()=>{
+    const comment = document.querySelector('input[type="text"]').value;
+    fetch("http://localhost:4000/edit", {
+      body: JSON.stringify({ comment: comment, bestView: currentViewIndex }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    setHasUserSelectedBest(false);
+  }
   const goToPrev = () => {
     setCurrentViewIndex((prev) => (prev - 1 + views.length) % views.length);
   };
 
   const selectView = () => {
     const selectedName = views[currentViewIndex].name;
-    alert(`🎉 WYBRANO: ${selectedName}
-    
-    Teraz możesz skopiować kod z pliku ${selectedName.match(/\((.*?)\)/)[1]} i użyć go w swoim projekcie.`);
+    setHasUserSelectedBest(true);
+    //fetch("http://localhost:4000/edit", {body: JSON.stringify({ selectedView: selectedName }), method: "POST", headers: { "Content-Type": "application/json" }})
+
     console.log(`Użytkownik wybrał: ${selectedName}`);
   };
 
@@ -80,9 +102,11 @@ export default function App() {
             WYBIERZ TEN PROJEKT 
           </button>
         </div>
-        
+
         <button onClick={goToNext} style={{ padding: '10px 20px', fontSize: '16px' }}> Następny &gt; </button>
+        <RenderButtonConditionally hasUserSelectedBest={hasUserSelectedBest} />
       </div>
+      
     </div>
   );
 }

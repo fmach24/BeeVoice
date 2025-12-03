@@ -1,128 +1,229 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function ThirdView() {
-  const headerStyle = {
-    backgroundColor: '#8B4513', // SaddleBrown
-    color: '#FFD700', // Gold
-    padding: '15px 20px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontFamily: 'Arial, sans-serif'
-  };
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState('');
 
-  const navStyle = {
-    display: 'flex',
-    gap: '25px',
-  };
+  const primaryColor = '#1976D2'; // Blue
+  const accentColor = '#64B5F6'; // Light Blue
+  const bgColor = '#E3F2FD'; // Even Lighter Blue
+  const textColor = '#212121'; // Dark Grey
+  const formBgColor = '#FFFFFF';
+  const successColor = '#4CAF50';
+  const errorColor = '#F44336';
 
-  const linkStyle = {
-    color: '#FFFFFF', // White
-    textDecoration: 'none',
-    fontSize: '1.1em',
-    fontWeight: 'bold',
-    transition: 'color 0.3s ease'
-  };
-
-  const mainContainerStyle = {
-    padding: '40px 20px',
-    backgroundColor: '#FDF5E6', // OldLace
-    fontFamily: 'Georgia, serif',
-    color: '#5A2D0C',
-    maxWidth: '900px',
-    margin: '0 auto'
-  };
-
-  const sectionTitleStyle = {
-    textAlign: 'center',
-    fontSize: '2.5em',
-    marginBottom: '50px',
-    color: '#8B4513'
-  };
-
-  const contentSectionStyle = {
-    marginBottom: '40px',
-    backgroundColor: '#FFFFFF',
-    padding: '30px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-  };
-
-  const subTitleStyle = {
-    fontSize: '1.8em',
-    color: '#A0522D', // Sienna
-    marginBottom: '15px',
-    borderBottom: '1px solid #D2B48C',
-    paddingBottom: '10px'
-  };
-
-  const paragraphStyle = {
-    fontSize: '1.1em',
-    lineHeight: '1.7',
-    marginBottom: '15px'
-  };
-
-  const contactInfoStyle = {
+  const containerStyle = {
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px',
-    fontSize: '1.1em'
+    minHeight: '100vh',
+    backgroundColor: bgColor,
+    fontFamily: 'Lato, sans-serif',
+    color: textColor
   };
 
-  const mapPlaceholderStyle = {
-    width: '100%',
-    height: '300px',
-    backgroundColor: '#D2B48C', // Tan
+  const headerStyle = {
+    backgroundColor: primaryColor,
+    color: '#FFFFFF',
+    padding: '20px 30px',
+    textAlign: 'center',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+  };
+
+  const mainStyle = {
+    flexGrow: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: '40px 20px'
+  };
+
+  const formContainerStyle = {
+    backgroundColor: formBgColor,
+    padding: '40px',
+    borderRadius: '10px',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
+    maxWidth: '600px',
+    width: '100%'
+  };
+
+  const titleStyle = {
+    fontSize: '2.2em',
+    marginBottom: '25px',
+    color: primaryColor,
+    textAlign: 'center'
+  };
+
+  const formGroupStyle = {
+    marginBottom: '20px'
+  };
+
+  const labelStyle = {
+    display: 'block',
+    marginBottom: '8px',
+    fontWeight: 'bold',
+    color: textColor
+  };
+
+  const inputBaseStyle = {
+    width: '100%',
+    padding: '12px',
+    border: `1px solid ${accentColor}`,
+    borderRadius: '5px',
+    fontSize: '1em',
+    boxSizing: 'border-box',
+    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+    outline: 'none'
+  };
+
+  const inputFocusStyle = {
+    borderColor: primaryColor,
+    boxShadow: `0 0 0 3px ${accentColor}`
+  };
+
+  const textareaStyle = {
+    ...inputBaseStyle,
+    resize: 'vertical',
+    minHeight: '120px'
+  };
+
+  const submitButtonBaseStyle = {
+    backgroundColor: primaryColor,
     color: 'white',
-    fontSize: '1.5em',
+    padding: '15px 25px',
+    border: 'none',
     borderRadius: '8px',
-    marginTop: '20px'
+    fontSize: '1.1em',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.2s ease',
+    width: '100%',
+    fontWeight: 'bold'
+  };
+
+  const submitButtonHoverStyle = {
+    backgroundColor: '#0D47A1', // Darker Blue
+    transform: 'translateY(-2px)'
+  };
+
+  const submitButtonDisabledStyle = {
+    backgroundColor: accentColor,
+    cursor: 'not-allowed'
+  };
+
+  const statusMessageStyle = {
+    textAlign: 'center',
+    marginTop: '20px',
+    padding: '10px',
+    borderRadius: '5px',
+    fontWeight: 'bold'
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmissionStatus('');
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    if (formData.name && formData.email && formData.message) {
+      setSubmissionStatus('success');
+      setFormData({ name: '', email: '', message: '' }); // Clear form
+    } else {
+      setSubmissionStatus('error');
+    }
+    setIsSubmitting(false);
+  };
+
+  const getStatusMessage = () => {
+    if (submissionStatus === 'success') {
+      return <p style={{ ...statusMessageStyle, backgroundColor: successColor, color: 'white' }}>Wiadomość wysłana pomyślnie!</p>;
+    }
+    if (submissionStatus === 'error') {
+      return <p style={{ ...statusMessageStyle, backgroundColor: errorColor, color: 'white' }}>Wypełnij wszystkie pola, aby wysłać wiadomość.</p>;
+    }
+    return null;
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FDF5E6' }}>
+    <div style={containerStyle}>
       <header style={headerStyle}>
-        <h1 style={{ margin: 0, fontSize: '1.8em' }}>Piekarnia Szymona z Limanowej</h1>
-        <nav style={navStyle}>
-          <a href="#" style={linkStyle}>Strona Główna</a>
-          <a href="#" style={linkStyle}>Oferta</a>
-          <a href="#" style={linkStyle}>O Nas</a>
-          <a href="#" style={linkStyle}>Kontakt</a>
-        </nav>
+        <h1 style={{ margin: 0, fontSize: '2.5em' }}>Skontaktuj się z nami</h1>
       </header>
-      <div style={mainContainerStyle}>
-        <h2 style={sectionTitleStyle}>O Nas i Jak Się z Nami Skontaktować</h2>
-
-        <div style={contentSectionStyle}>
-          <h3 style={subTitleStyle}>Nasza Historia</h3>
-          <p style={paragraphStyle}>
-            Piekarnia Szymona to rodzinna firma z długimi tradycjami, która od ponad 50 lat karmi mieszkańców Limanowej i okolic.
-            Zaczynaliśmy od małego pieca w sercu miasta, a dziś, choć rozwinęliśmy się, niezmiennie pielęgnujemy sztukę tradycyjnego pieczenia.
-            Wierzymy, że prawdziwy smak wypływa z pasji, najlepszych składników i szacunku dla rzemiosła.
-          </p>
-          <p style={paragraphStyle}>
-            Każdy bochenek chleba, każda bułka i ciasto są dla nas wyrazem miłości do tego, co robimy.
-            Nasze receptury, przekazywane z pokolenia na pokolenie, łączą w sobie klasykę z nutą nowoczesności,
-            zawsze z dbałością o najwyższą jakość i świeżość.
-          </p>
+      <main style={mainStyle}>
+        <div style={formContainerStyle}>
+          <h2 style={titleStyle}>Wyślij do nas wiadomość</h2>
+          <form onSubmit={handleSubmit}>
+            <div style={formGroupStyle}>
+              <label htmlFor="name" style={labelStyle}>Imię i Nazwisko:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                style={inputBaseStyle}
+                onFocus={(e) => e.target.style = { ...inputBaseStyle, ...inputFocusStyle }}
+                onBlur={(e) => e.target.style = inputBaseStyle}
+                required
+              />
+            </div>
+            <div style={formGroupStyle}>
+              <label htmlFor="email" style={labelStyle}>Adres E-mail:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                style={inputBaseStyle}
+                onFocus={(e) => e.target.style = { ...inputBaseStyle, ...inputFocusStyle }}
+                onBlur={(e) => e.target.style = inputBaseStyle}
+                required
+              />
+            </div>
+            <div style={formGroupStyle}>
+              <label htmlFor="message" style={labelStyle}>Wiadomość:</label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                style={textareaStyle}
+                onFocus={(e) => e.target.style = { ...textareaStyle, ...inputFocusStyle }}
+                onBlur={(e) => e.target.style = textareaStyle}
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              style={{
+                ...submitButtonBaseStyle,
+                ...(isSubmitting ? submitButtonDisabledStyle : {}),
+                ...(!isSubmitting && { ...submitButtonBaseStyle, ...(formData.name && formData.email && formData.message ? submitButtonHoverStyle : {}) })
+              }}
+              disabled={isSubmitting}
+              onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = submitButtonHoverStyle.backgroundColor; e.currentTarget.style.transform = submitButtonHoverStyle.transform; }}
+              onMouseLeave={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = submitButtonBaseStyle.backgroundColor; e.currentTarget.style.transform = 'none'; }}
+            >
+              {isSubmitting ? 'Wysyłanie...' : 'Wyślij Wiadomość'}
+            </button>
+          </form>
+          {getStatusMessage()}
         </div>
-
-        <div style={contentSectionStyle}>
-          <h3 style={subTitleStyle}>Skontaktuj Się z Nami</h3>
-          <div style={contactInfoStyle}>
-            <p><strong>Adres:</strong> ul. Krakowska 12, 34-600 Limanowa</p>
-            <p><strong>Telefon:</strong> <a href="tel:+48123456789" style={{ color: '#A0522D', textDecoration: 'none' }}>+48 123 456 789</a></p>
-            <p><strong>Email:</strong> <a href="mailto:kontakt@piekarniaszymona.pl" style={{ color: '#A0522D', textDecoration: 'none' }}>kontakt@piekarniaszymona.pl</a></p>
-            <p><strong>Godziny otwarcia:</strong> Poniedziałek - Sobota: 6:00 - 18:00, Niedziela: Nieczynne</p>
-          </div>
-          <div style={mapPlaceholderStyle}>
-            Mapa dojazdu (Limanowa)
-          </div>
-        </div>
-      </div>
+      </main>
+      <footer style={{ backgroundColor: primaryColor, color: '#FFFFFF', textAlign: 'center', padding: '15px', fontSize: '0.9em' }}>
+        <p>&copy; {new Date().getFullYear()} Firma Kontaktowa. Wszelkie prawa zastrzeżone.</p>
+      </footer>
     </div>
   );
 }

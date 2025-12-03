@@ -1,5 +1,5 @@
 
-
+//NIE DZIALA!!!
 // Pobranie klucza API ze zmiennej środowiskowej serwera
 // UWAGA: Klucz musi być ustawiony w konsoli przed uruchomieniem serwera!
 const SERVER_API_KEY = "AIzaSyDa81vOaJdhalEbaVxJkNkCkM6kFBYq4fk"

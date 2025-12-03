@@ -47,7 +47,7 @@ export default function App() {
   const RenderButtonConditionally = ({hasUserSelectedBest})=>{
     if(hasUserSelectedBest){
       return (<div>
-
+     
           <input type="text" placeholder="Wpisz coś..." style={{ width: '100%', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc' }} />
           <button onClick={sendComment} style={{ width: '100%', padding: '10px', backgroundColor: '#008CBA', color: 'white', border: 'none', cursor: 'pointer' }}>Poprawka</button>
         </div>)

@@ -1,324 +1,273 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
-function DarkProfessionalFeedbackForm() {
-  const [formData, setFormData] = useState({
-    rating: null,
-    comments: '',
-    email: '',
-    optIn: false,
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState('');
-  const [hoveredButton, setHoveredButton] = useState(false);
-
-  // Dark Mode & Professional Color Palette
-  const bgColor = '#2C3E50'; // Deep blue-gray
-  const cardBg = '#34495E'; // Slightly lighter blue-gray for card
-  const primaryText = '#ECF0F1'; // Off-white
-  const secondaryText = '#BDC3C7'; // Muted light gray
-  const accentColor = '#F39C12'; // Bright Orange/Gold
-  const buttonHoverColor = '#E67E22'; // Darker Orange
-  const borderColor = '#495E70'; // Muted border for elements
-  const inputBg = '#3F5468'; // Input background
-  const shadowColor = 'rgba(0,0,0,0.4)';
-  const radioCheckedColor = accentColor;
-  const focusBorderColor = '#F1C40F'; // Brighter gold for focus
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-    if (submitMessage) setSubmitMessage('');
+function ThirdBasenAGHContactInfo() {
+  const palette = {
+    background: '#f9fafb',
+    card: '#ffffff',
+    primaryText: '#2d3748',
+    secondaryText: '#718096',
+    accentRed: '#e53e3e',
+    hoverRed: '#c53030',
+    borderColor: '#e2e8f0',
+    shadow: 'rgba(0,0,0,0.05)',
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitMessage('');
-
-    setTimeout(() => {
-      console.log('Survey Data Submitted (Dark Professional):', formData);
-      setIsSubmitting(false);
-      setSubmitMessage('Feedback received. Thank you!');
-      setFormData({ rating: null, comments: '', email: '', optIn: false });
-    }, 1500);
-  };
-
-  // Styles
-  const containerStyle = useMemo(() => ({
+  const mainContainerStyle = useMemo(() => ({
     minHeight: '100vh',
-    backgroundColor: bgColor,
-    padding: '40px 20px',
-    fontFamily: "'Lato', sans-serif",
-    color: primaryText,
+    background: palette.background,
+    fontFamily: "'Inter', sans-serif",
+    color: palette.primaryText,
+    display: 'flex',
+  }), [palette.background, palette.primaryText]);
+
+  const sidebarStyle = useMemo(() => ({
+    width: '250px',
+    minWidth: '200px',
+    backgroundColor: palette.card,
+    padding: '30px 20px',
+    boxShadow: `0 2px 10px ${palette.shadow}`,
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }), [bgColor, primaryText]);
+    alignItems: 'flex-start',
+    borderRight: `1px solid ${palette.borderColor}`,
+    position: 'sticky',
+    top: 0,
+    height: '100vh',
+    boxSizing: 'border-box',
+  }), [palette.card, palette.shadow, palette.borderColor]);
 
-  const formCardStyle = useMemo(() => ({
-    maxWidth: '680px',
-    width: '100%',
-    backgroundColor: cardBg,
-    borderRadius: '10px',
-    boxShadow: `0 10px 30px ${shadowColor}`,
-    padding: '45px',
-    border: `1px solid ${borderColor}`,
+  const sidebarTitleStyle = useMemo(() => ({
+    fontSize: '1.5em',
+    fontWeight: '700',
+    color: palette.accentRed,
+    marginBottom: '30px',
     textAlign: 'left',
-  }), [cardBg, shadowColor, borderColor]);
+    width: '100%',
+    textDecoration: 'none',
+  }), [palette.accentRed]);
+
+  const sidebarNavContainerStyle = useMemo(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  }), []);
+
+  const sidebarLinkStyle = useMemo(() => ({
+    color: palette.primaryText,
+    textDecoration: 'none',
+    fontWeight: '500',
+    padding: '12px 10px',
+    marginBottom: '10px',
+    borderRadius: '8px',
+    width: '100%',
+    textAlign: 'left',
+    transition: 'background-color 0.2s ease, color 0.2s ease',
+    boxSizing: 'border-box',
+  }), [palette.primaryText]);
+
+  const sidebarLinkHoverStyle = useMemo(() => ({
+    backgroundColor: 'rgba(229, 62, 62, 0.1)',
+    color: palette.accentRed,
+  }), [palette.accentRed]);
+
+  const contentAreaStyle = useMemo(() => ({
+    flexGrow: 1,
+    padding: '40px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    boxSizing: 'border-box',
+  }), []);
+
+  const cardStyle = useMemo(() => ({
+    maxWidth: '600px',
+    width: '100%',
+    backgroundColor: palette.card,
+    borderRadius: '16px',
+    boxShadow: `0 8px 20px ${palette.shadow}`,
+    padding: '40px',
+    border: `1px solid ${palette.borderColor}`,
+    textAlign: 'center',
+    boxSizing: 'border-box',
+  }), [palette.card, palette.shadow, palette.borderColor]);
 
   const titleStyle = useMemo(() => ({
-    fontSize: '2.8em',
-    color: primaryText,
-    marginBottom: '10px',
-    textAlign: 'center',
+    fontSize: '2.2em',
+    color: palette.primaryText,
+    marginBottom: '15px',
     fontWeight: '700',
-    letterSpacing: '-0.8px',
-  }), [primaryText]);
+  }), [palette.primaryText]);
 
   const subtitleStyle = useMemo(() => ({
-    fontSize: '1.1em',
-    color: secondaryText,
-    marginBottom: '40px',
-    lineHeight: '1.7',
-    textAlign: 'center',
-  }), [secondaryText]);
+    fontSize: '1.05em',
+    color: palette.secondaryText,
+    marginBottom: '35px',
+    lineHeight: '1.6',
+  }), [palette.secondaryText]);
 
   const sectionTitleStyle = useMemo(() => ({
     fontSize: '1.5em',
-    color: accentColor,
+    color: palette.accentRed,
     marginBottom: '20px',
-    marginTop: '35px',
-    fontWeight: '600',
-    borderBottom: `1px solid ${borderColor}`,
-    paddingBottom: '10px',
-  }), [accentColor, borderColor]);
-
-  const formGroupStyle = useMemo(() => ({
-    marginBottom: '28px',
-  }), []);
-
-  const labelStyle = useMemo(() => ({
-    display: 'block',
-    marginBottom: '10px',
-    fontWeight: '600',
-    color: primaryText,
-    fontSize: '1em',
-  }), [primaryText]);
-
-  const inputBaseStyle = useMemo(() => ({
-    width: '100%',
-    padding: '13px 16px',
-    border: `1px solid ${borderColor}`,
-    borderRadius: '6px',
-    backgroundColor: inputBg,
-    color: primaryText,
-    fontSize: '1em',
-    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit',
-    '&::placeholder': {
-      color: secondaryText,
-      opacity: 0.7,
-    },
-    '&:focus': {
-      borderColor: focusBorderColor,
-      boxShadow: `0 0 0 3px ${focusBorderColor}40`,
-      outline: 'none',
-    },
-  }), [borderColor, inputBg, primaryText, secondaryText, focusBorderColor]);
-
-  const textareaStyle = useMemo(() => ({
-    ...inputBaseStyle,
-    resize: 'vertical',
-    minHeight: '110px',
-  }), [inputBaseStyle]);
-
-  const radioGroupStyle = useMemo(() => ({
-    display: 'flex',
-    gap: '25px',
-    flexWrap: 'wrap',
-    marginTop: '15px',
-    justifyContent: 'flex-start',
-  }), []);
-
-  const radioLabelStyle = useMemo(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-    userSelect: 'none',
-    fontSize: '0.95em',
-    color: secondaryText,
-  }), [secondaryText]);
-
-  const customRadioStyle = useMemo(() => (isChecked) => ({
-    width: '20px',
-    height: '20px',
-    borderRadius: '50%',
-    border: `2px solid ${isChecked ? radioCheckedColor : borderColor}`,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: '10px',
-    transition: 'background-color 0.2s ease, border-color 0.2s ease',
-    backgroundColor: isChecked ? radioCheckedColor : inputBg,
-  }), [radioCheckedColor, borderColor, inputBg]);
-
-  const innerRadioDotStyle = useMemo(() => ({
-    width: '10px',
-    height: '10px',
-    borderRadius: '50%',
-    backgroundColor: primaryText,
-    transition: 'opacity 0.2s ease, transform 0.2s ease',
-  }), [primaryText]);
-
-  const customCheckboxStyle = useMemo(() => (isChecked) => ({
-    width: '20px',
-    height: '20px',
-    borderRadius: '4px',
-    border: `2px solid ${isChecked ? accentColor : borderColor}`,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: '10px',
-    transition: 'background-color 0.2s ease, border-color 0.2s ease',
-    backgroundColor: isChecked ? accentColor : inputBg,
-    color: cardBg,
-    fontSize: '14px',
-    fontWeight: 'bold',
-  }), [accentColor, borderColor, inputBg, cardBg]);
-
-  const buttonStyle = useMemo(() => ({
-    backgroundColor: accentColor,
-    color: primaryText,
-    border: 'none',
-    padding: '15px 30px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '1.15em',
-    fontWeight: '700',
-    transition: 'background-color 0.2s ease, transform 0.1s ease',
-    width: '100%',
-    marginTop: '35px',
-    outline: 'none',
-    boxShadow: `0 5px 15px ${accentColor}40`,
-  }), [accentColor, primaryText]);
-
-  const buttonActiveHoverStyle = useMemo(() => ({
-    backgroundColor: buttonHoverColor,
-    transform: 'translateY(-2px)',
-    boxShadow: `0 8px 18px ${buttonHoverColor}50`,
-  }), [buttonHoverColor]);
-
-  const submitMessageStyle = useMemo(() => ({
     marginTop: '30px',
-    fontSize: '1.1em',
     fontWeight: '600',
-    textAlign: 'center',
+  }), [palette.accentRed]);
+
+  const contactGridStyle = useMemo(() => ({
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '15px',
+    marginBottom: '30px',
+  }), []);
+
+  const contactItemStyle = useMemo(() => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.05em',
+    color: palette.primaryText,
+  }), [palette.primaryText]);
+
+  const contactIconStyle = useMemo(() => ({
+    fontSize: '1.2em',
+    color: palette.accentRed,
+    marginRight: '15px',
+    width: '30px',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    backgroundColor: 'rgba(229, 62, 62, 0.1)',
+  }), [palette.accentRed]);
+
+  const linkStyle = useMemo(() => ({
+    color: palette.accentRed,
+    textDecoration: 'none',
+    fontWeight: '500',
+    transition: 'color 0.2s ease, text-decoration 0.2s ease',
+  }), [palette.accentRed]);
+
+  const hoverLinkStyle = useMemo(() => ({
+    color: palette.hoverRed,
+    textDecoration: 'underline',
+  }), [palette.hoverRed]);
+
+  const mapFrameStyle = useMemo(() => ({
     width: '100%',
-    color: accentColor,
-  }), [accentColor]);
+    height: '350px',
+    border: `1px solid ${palette.borderColor}`,
+    borderRadius: '10px',
+    marginTop: '30px',
+    marginBottom: '15px',
+    boxShadow: `0 4px 10px ${palette.shadow}`,
+  }), [palette.borderColor, palette.shadow]);
+
+  const [isPhoneHovered, setIsPhoneHovered] = useState(false);
+  const [isEmailHovered, setIsEmailHovered] = useState(false);
+  const [isMapsLinkHovered, setIsMapsLinkHovered] = useState(false);
+  const [isSidebarHomeHovered, setIsSidebarHomeHovered] = useState(false);
+  const [isSidebarAboutHovered, setIsSidebarAboutHovered] = useState(false);
+  const [isSidebarContactHovered, setIsSidebarContactHovered] = useState(false);
+
+  const applyHoverStyle = (baseStyle, hoverStyle, isHovered) => ({
+    ...baseStyle,
+    ...(isHovered ? hoverStyle : {}),
+  });
 
   return (
-    <div style={containerStyle}>
-      <div style={formCardStyle}>
-        <h2 style={titleStyle}>Professional Feedback</h2>
-        <p style={subtitleStyle}>
-          Your insights are invaluable. Please take a moment to provide your feedback.
-        </p>
-        <form onSubmit={handleSubmit}>
-          <h3 style={sectionTitleStyle}>Service Evaluation</h3>
-          <div style={formGroupStyle}>
-            <label style={labelStyle}>Rate your satisfaction:</label>
-            <div style={radioGroupStyle}>
-              {[1, 2, 3, 4, 5].map(rating => (
-                <label key={`rating-dark-${rating}`} style={radioLabelStyle}>
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={rating}
-                    checked={formData.rating === String(rating)}
-                    onChange={handleChange}
-                    disabled={isSubmitting}
-                    style={{ display: 'none' }}
-                  />
-                  <div style={customRadioStyle(formData.rating === String(rating))}>
-                    <div style={{ ...innerRadioDotStyle, opacity: formData.rating === String(rating) ? 1 : 0, transform: formData.rating === String(rating) ? 'scale(0.8)' : 'scale(0)' }}></div>
-                  </div>
-                  <span style={{color: formData.rating === String(rating) ? primaryText : secondaryText}}>{rating} / 5</span>
-                </label>
-              ))}
+    <div style={mainContainerStyle}>
+      <div style={sidebarStyle}>
+        <a href="#" style={sidebarTitleStyle}>Basen AGH</a>
+        <div style={sidebarNavContainerStyle}>
+          <a
+            href="#"
+            style={applyHoverStyle(sidebarLinkStyle, sidebarLinkHoverStyle, isSidebarHomeHovered)}
+            onMouseEnter={() => setIsSidebarHomeHovered(true)}
+            onMouseLeave={() => setIsSidebarHomeHovered(false)}
+          >
+            Home
+          </a>
+          <a
+            href="#"
+            style={applyHoverStyle(sidebarLinkStyle, sidebarLinkHoverStyle, isSidebarAboutHovered)}
+            onMouseEnter={() => setIsSidebarAboutHovered(true)}
+            onMouseLeave={() => setIsSidebarAboutHovered(false)}
+          >
+            About
+          </a>
+          <a
+            href="#"
+            style={applyHoverStyle(sidebarLinkStyle, sidebarLinkHoverStyle, isSidebarContactHovered)}
+            onMouseEnter={() => setIsSidebarContactHovered(true)}
+            onMouseLeave={() => setIsSidebarContactHovered(false)}
+          >
+            Contact
+          </a>
+        </div>
+      </div>
+      <div style={contentAreaStyle}>
+        <div style={cardStyle}>
+          <h2 style={titleStyle}>Kontakt: Basen AGH</h2>
+          <p style={subtitleStyle}>
+            Nasz zespół chętnie odpowie na Twoje pytania. Poniżej znajdziesz wszystkie niezbędne dane kontaktowe oraz mapę dojazdu.
+          </p>
+
+          <h3 style={sectionTitleStyle}>Dane Kontaktowe</h3>
+          <div style={contactGridStyle}>
+            <div style={contactItemStyle}>
+              <div style={contactIconStyle}>📞</div>
+              <span>Telefon: <a
+                href="tel:+48126173000"
+                style={applyHoverStyle(linkStyle, hoverLinkStyle, isPhoneHovered)}
+                onMouseEnter={() => setIsPhoneHovered(true)}
+                onMouseLeave={() => setIsPhoneHovered(false)}
+              >+48 12 617 30 00</a></span>
+            </div>
+            <div style={contactItemStyle}>
+              <div style={contactIconStyle}>✉️</div>
+              <span>E-mail: <a
+                href="mailto:basen@agh.edu.pl"
+                style={applyHoverStyle(linkStyle, hoverLinkStyle, isEmailHovered)}
+                onMouseEnter={() => setIsEmailHovered(true)}
+                onMouseLeave={() => setIsEmailHovered(false)}
+              >basen@agh.edu.pl</a></span>
+            </div>
+            <div style={contactItemStyle}>
+              <div style={contactIconStyle}>📍</div>
+              <span>Adres: Reymonta 17, 30-059 Kraków</span>
             </div>
           </div>
 
-          <div style={formGroupStyle}>
-            <label htmlFor="comments-3" style={labelStyle}>Suggestions or Comments</label>
-            <textarea
-              id="comments-3"
-              name="comments"
-              value={formData.comments}
-              onChange={handleChange}
-              style={textareaStyle}
-              rows="5"
-              disabled={isSubmitting}
-              placeholder="Provide any feedback or areas for improvement here..."
-            ></textarea>
-          </div>
-
-          <h3 style={sectionTitleStyle}>Contact Details (Optional)</h3>
-          <div style={formGroupStyle}>
-            <label htmlFor="email-3" style={labelStyle}>Email Address</label>
-            <input
-              type="email"
-              id="email-3"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              style={inputBaseStyle}
-              disabled={isSubmitting}
-              placeholder="contact@yourcompany.com"
-            />
-          </div>
-
-          <div style={{ ...formGroupStyle, display: 'flex', alignItems: 'center', marginTop: '20px' }}>
-            <label htmlFor="optIn-3" style={{ ...labelStyle, marginBottom: '0', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-              <input
-                type="checkbox"
-                id="optIn-3"
-                name="optIn"
-                checked={formData.optIn}
-                onChange={handleChange}
-                disabled={isSubmitting}
-                style={{ display: 'none' }}
-              />
-              <div style={customCheckboxStyle(formData.optIn)}>
-                {formData.optIn && '✔'}
-              </div>
-              <span style={{color: primaryText}}>Subscribe to our newsletter for updates.</span>
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            style={{ ...buttonStyle, ...(hoveredButton && !isSubmitting ? buttonActiveHoverStyle : {}) }}
-            onMouseEnter={() => setHoveredButton(true)}
-            onMouseLeave={() => setHoveredButton(false)}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Submitting securely...' : 'Submit Feedback'}
-          </button>
-        </form>
-        {submitMessage && (
-          <p style={submitMessageStyle}>
-            {submitMessage}
+          <h3 style={sectionTitleStyle}>Nasza Lokalizacja</h3>
+          <p style={subtitleStyle}>
+            Basen znajduje się na terenie kampusu AGH, w dogodnej lokalizacji blisko centrum.
           </p>
-        )}
+
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2560.852904834898!2d19.91185591571732!3d50.06526977942436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47165bb0d9a6c9d5%3A0x6b8d7c4b7b3b9b4d!2sBasen%20AGH!5e0!3m2!1spl!2spl!4v1678901234567!5m2!1spl!2spl"
+            width="600"
+            height="450"
+            style={mapFrameStyle}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Lokalizacja Basenu AGH"
+          ></iframe>
+          <a
+            href="https://www.google.com/maps/place/Basen+AGH/@50.06527,19.9118559,17z/data=!3m1!4b1!4m6!3m5!1s0x47165bb0d9a6c9d5:0x6b8d7c4b7b3b9b4d!8m2!3d50.06527!4d19.9144308!16s%2Fg%2F1tdw1v42?entry=ttu"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={applyHoverStyle(linkStyle, hoverLinkStyle, isMapsLinkHovered)}
+            onMouseEnter={() => setIsMapsLinkHovered(true)}
+            onMouseLeave={() => setIsMapsLinkHovered(false)}
+          >
+            Otwórz w Google Maps
+          </a>
+        </div>
       </div>
     </div>
   );
 }
 
-export default DarkProfessionalFeedbackForm;
+export default ThirdBasenAGHContactInfo;

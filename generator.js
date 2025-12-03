@@ -161,8 +161,8 @@ app.post('/edit', async (req,res)=>{
     console.error(err);
     }
     const prompt = getSystemPrompt(comment,code);
-    await callGeminiAndSave(prompt)
-    return "ok"
+    await callGeminiAndSave(prompt);
+    return res.sendStatus(200);
 });
 
 app.listen(4000, () => {

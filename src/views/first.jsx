@@ -1,209 +1,170 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
-function FirstView() {
-  const [buttonHover, setButtonHover] = useState(false);
-  const [productCardHover, setProductCardHover] = useState(null);
+function ProductHorizontalListView() {
+  const [hoveredCardId, setHoveredCardId] = useState(null);
 
-  const primaryColor = '#8B4513'; // SaddleBrown
-  const accentColor = '#FFD700'; // Gold
-  const lightBgColor = '#FDF5E6'; // OldLace
-  const midBgColor = '#F5DEB3'; // Wheat
-  const darkTextColor = '#5A2D0C'; // Dark brown for text
-  const textColorAlt = '#6e3e1f';
+  // Color palette for this view
+  const primaryColor = '#3A86FF'; // Vibrant Blue
+  const accentColor = '#FF006E'; // Pink
+  const lightBgColor = '#F0F4F8'; // Lighter Gray-Blue
+  const cardBgColor = '#FFFFFF'; // White
+  const textColor = '#2C3E50'; // Dark Blue-Gray
+  const lightTextColor = '#7F8C8D'; // Medium Gray
+  const buttonHoverColor = '#2A6FDD'; // Darker Blue
+  const shadowColor = 'rgba(0, 0, 0, 0.08)';
 
-  const headerStyle = {
-    backgroundColor: primaryColor,
-    color: accentColor,
-    padding: '15px 25px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontFamily: 'Roboto, sans-serif',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-  };
+  const products = useMemo(() => [
+    { id: 1, name: 'Artisan Sourdough', price: '12.99 PLN', image: 'https://via.placeholder.com/200x150/87CEEB/FFFFFF?text=Sourdough', description: 'Hand-crafted with a tangy zest and perfect crust.' },
+    { id: 2, name: 'Chocolate Croissant', price: '7.50 PLN', image: 'https://via.placeholder.com/200x150/FFD700/FFFFFF?text=Croissant', description: 'Flaky pastry with rich, melted dark chocolate filling.' },
+    { id: 3, name: 'Rye Bread', price: '10.00 PLN', image: 'https://via.placeholder.com/200x150/D2B48C/FFFFFF?text=Rye', description: 'Hearty and wholesome, perfect for any meal, rich in fiber.' },
+    { id: 4, name: 'Blueberry Muffin', price: '5.99 PLN', image: 'https://via.placeholder.com/200x150/ADD8E6/FFFFFF?text=Muffin', description: 'Bursting with fresh blueberries and a crunchy top.' },
+    { id: 5, name: 'Ciabatta Loaf', price: '9.50 PLN', image: 'https://via.placeholder.com/200x150/B0E0E6/FFFFFF?text=Ciabatta', description: 'Light, airy, and perfect for sandwiches or dipping in olive oil.' },
+    { id: 6, name: 'Apple Pie Slice', price: '15.00 PLN', image: 'https://via.placeholder.com/200x150/F08080/FFFFFF?text=Apple+Pie', description: 'Classic comfort in every bite, with cinnamon-spiced apples.' },
+  ], []);
 
-  const navStyle = {
-    display: 'flex',
-    gap: '30px',
-  };
-
-  const linkBaseStyle = {
-    color: '#FFFFFF', // White by default
-    textDecoration: 'none',
-    fontSize: '1.1em',
-    fontWeight: 'bold',
-    transition: 'color 0.3s ease, transform 0.3s ease',
-  };
-
-  const heroSectionStyle = {
-    textAlign: 'center',
-    padding: '100px 20px',
-    backgroundColor: midBgColor,
-    color: darkTextColor,
-    fontFamily: 'Georgia, serif',
-    lineHeight: '1.6',
-    borderBottom: `1px solid ${primaryColor}`
-  };
-
-  const sloganStyle = {
-    fontSize: '3em',
-    marginBottom: '25px',
-    color: primaryColor,
-    fontWeight: 'bold'
-  };
-
-  const descriptionStyle = {
-    fontSize: '1.3em',
-    maxWidth: '850px',
-    margin: '0 auto 40px auto',
-    color: textColorAlt
-  };
-
-  const buttonBaseStyle = {
-    backgroundColor: primaryColor,
-    color: 'white',
-    padding: '15px 30px',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '1.2em',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.2s ease',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-  };
-
-  const buttonHoverStyle = {
-    backgroundColor: '#A0522D', // Sienna
-    transform: 'translateY(-2px)'
-  };
-
-  const productShowcaseSectionStyle = {
+  // Styles
+  const containerStyle = useMemo(() => ({
+    minHeight: '100vh',
     backgroundColor: lightBgColor,
-    padding: '60px 20px',
-    textAlign: 'center',
+    padding: '40px 20px',
     fontFamily: 'Roboto, sans-serif',
-    borderBottom: `1px solid ${primaryColor}`
-  };
-
-  const productShowcaseTitleStyle = {
-    fontSize: '2.5em',
-    color: primaryColor,
-    marginBottom: '50px'
-  };
-
-  const productGridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '30px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  };
-
-  const productCardBaseStyle = {
-    backgroundColor: 'white',
-    borderRadius: '10px',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-    padding: '20px',
+    color: textColor,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  }), [lightBgColor, textColor]);
+
+  const headerStyle = useMemo(() => ({
     textAlign: 'center',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    cursor: 'pointer',
-    border: `1px solid ${midBgColor}`
-  };
+    marginBottom: '50px',
+    maxWidth: '900px',
+  }), []);
 
-  const productCardHoverEffectStyle = {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 8px 15px rgba(0,0,0,0.15)'
-  };
-
-  const productTitleStyle = {
+  const titleStyle = useMemo(() => ({
+    fontSize: '3em',
     color: primaryColor,
-    fontSize: '1.4em',
-    margin: '15px 0 10px 0'
-  };
+    marginBottom: '15px',
+  }), [primaryColor]);
 
-  const productDescriptionStyle = {
-    color: darkTextColor,
-    fontSize: '0.95em',
-    lineHeight: '1.5'
-  };
+  const subtitleStyle = useMemo(() => ({
+    fontSize: '1.2em',
+    color: lightTextColor,
+    margin: '0 auto',
+  }), [lightTextColor]);
 
-  const productImageStyle = {
+  const listContainerStyle = useMemo(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '25px',
+    maxWidth: '900px',
     width: '100%',
-    maxWidth: '150px',
-    height: 'auto',
-    borderRadius: '5px',
-    marginBottom: '10px'
-  };
+    margin: '0 auto',
+  }), []);
 
-  const footerStyle = {
-    backgroundColor: primaryColor,
-    color: lightBgColor,
-    textAlign: 'center',
+  const cardBaseStyle = useMemo(() => ({
+    backgroundColor: cardBgColor,
+    borderRadius: '12px',
     padding: '20px',
-    fontSize: '0.9em',
-    marginTop: 'auto',
-    fontFamily: 'Roboto, sans-serif'
-  };
+    boxShadow: `0 4px 10px ${shadowColor}`,
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
+    border: `1px solid ${lightBgColor}`,
+  }), [cardBgColor, shadowColor, lightBgColor]);
 
-  const breadItems = [
-    { id: 1, name: 'Chleb Żytni na Zakwasie', description: 'Tradycyjny chleb na naturalnym zakwasie, długo dojrzewający, z chrupiącą skórką.', img: 'https://via.placeholder.com/150/8B4513/FFD700?text=Chleb' },
-    { id: 2, name: 'Bułki Pszenne', description: 'Puszyste i delikatne bułki, idealne na śniadanie.', img: 'https://via.placeholder.com/150/8B4513/FFD700?text=Bułki' },
-    { id: 3, name: 'Chleb Razowy z Ziarnami', description: 'Bogaty w błonnik, z dodatkiem ziaren słonecznika i dyni.', img: 'https://via.placeholder.com/150/8B4513/FFD700?text=Razowy' },
-    { id: 4, name: 'Drożdżówka z Serem', description: 'Słodka drożdżówka z kremowym serem i kruszonką.', img: 'https://via.placeholder.com/150/8B4513/FFD700?text=Drożdżówka' },
-  ];
+  const cardHoverStyle = useMemo(() => ({
+    transform: 'translateY(-5px)',
+    boxShadow: `0 8px 15px ${shadowColor}`,
+  }), [shadowColor]);
+
+  const productImageStyle = useMemo(() => ({
+    width: '150px',
+    height: '110px',
+    objectFit: 'cover',
+    borderRadius: '8px',
+    flexShrink: 0,
+  }), []);
+
+  const productInfoStyle = useMemo(() => ({
+    flexGrow: 1,
+    textAlign: 'left',
+  }), []);
+
+  const productNameStyle = useMemo(() => ({
+    fontSize: '1.7em',
+    color: primaryColor,
+    marginBottom: '5px',
+  }), [primaryColor]);
+
+  const productDescriptionStyle = useMemo(() => ({
+    fontSize: '0.9em',
+    color: lightTextColor,
+    marginBottom: '10px',
+    lineHeight: '1.5',
+  }), [lightTextColor]);
+
+  const productPriceStyle = useMemo(() => ({
+    fontSize: '1.4em',
+    fontWeight: 'bold',
+    color: accentColor,
+  }), [accentColor]);
+
+  const buttonContainerStyle = useMemo(() => ({
+    flexShrink: 0,
+    marginLeft: 'auto',
+  }), []);
+
+  const buttonStyle = useMemo(() => ({
+    backgroundColor: primaryColor,
+    color: cardBgColor,
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '0.95em',
+    fontWeight: 'bold',
+    transition: 'background-color 0.3s ease',
+    whiteSpace: 'nowrap',
+  }), [primaryColor, cardBgColor]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: lightBgColor }}>
+    <div style={containerStyle}>
       <header style={headerStyle}>
-        <h1 style={{ margin: 0, fontSize: '2em' }}>Piekarnia "Złoty Kłos"</h1>
-        <nav style={navStyle}>
-          <a href="#" style={linkBaseStyle}>Strona Główna</a>
-          <a href="#" style={linkBaseStyle}>Nasze Produkty</a>
-          <a href="#" style={linkBaseStyle}>O Nas</a>
-          <a href="#" style={linkBaseStyle}>Kontakt</a>
-        </nav>
+        <h1 style={titleStyle}>Our Delicious Bakery Selection</h1>
+        <p style={subtitleStyle}>
+          Explore our exquisite range of freshly baked delights, crafted with the finest ingredients and passion for quality.
+        </p>
       </header>
-      <main style={{ flexGrow: 1 }}>
-        <section style={heroSectionStyle}>
-          <h2 style={sloganStyle}>Tradycja i Smak Prosto z Serca Limanowej</h2>
-          <p style={descriptionStyle}>
-            Od pokoleń pieczemy dla Państwa najsmaczniejsze chleby, bułki i ciasta, bazując na sprawdzonych recepturach i lokalnych składnikach.
-            Doświadcz prawdziwego smaku domowych wypieków.
-          </p>
-          <button
-            style={{ ...buttonBaseStyle, ...(buttonHover ? buttonHoverStyle : {}) }}
-            onMouseEnter={() => setButtonHover(true)}
-            onMouseLeave={() => setButtonHover(false)}
+      <div style={listContainerStyle}>
+        {products.map(product => (
+          <div
+            key={product.id}
+            style={{ ...cardBaseStyle, ...(hoveredCardId === product.id ? cardHoverStyle : {}) }}
+            onMouseEnter={() => setHoveredCardId(product.id)}
+            onMouseLeave={() => setHoveredCardId(null)}
           >
-            Zobacz Naszą Ofertę
-          </button>
-        </section>
-
-        <section style={productShowcaseSectionStyle}>
-          <h2 style={productShowcaseTitleStyle}>Nasze Wyjątkowe Pieczywo</h2>
-          <div style={productGridStyle}>
-            {breadItems.map((item) => (
-              <div
-                key={item.id}
-                style={{ ...productCardBaseStyle, ...(productCardHover === item.id ? productCardHoverEffectStyle : {}) }}
-                onMouseEnter={() => setProductCardHover(item.id)}
-                onMouseLeave={() => setProductCardHover(null)}
+            <img src={product.image} alt={product.name} style={productImageStyle} />
+            <div style={productInfoStyle}>
+              <h2 style={productNameStyle}>{product.name}</h2>
+              <p style={productDescriptionStyle}>{product.description}</p>
+            </div>
+            <div style={buttonContainerStyle}>
+              <span style={productPriceStyle}>{product.price}</span>
+              <button
+                style={{
+                  ...buttonStyle,
+                  ...(hoveredCardId === product.id && { backgroundColor: buttonHoverColor, marginLeft: '15px' })
+                }}
               >
-                <img src={item.img} alt={item.name} style={productImageStyle} />
-                <h3 style={productTitleStyle}>{item.name}</h3>
-                <p style={productDescriptionStyle}>{item.description}</p>
-              </div>
-            ))}
+                Add to Cart
+              </button>
+            </div>
           </div>
-        </section>
-      </main>
-      <footer style={footerStyle}>
-        <p>&copy; {new Date().getFullYear()} Piekarnia "Złoty Kłos". Wszelkie prawa zastrzeżone.</p>
-      </footer>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default FirstView;
+export default ProductHorizontalListView;

@@ -1,205 +1,228 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
-function SecondView() {
-  const [selectedCategory, setSelectedCategory] = useState('Wszystkie');
-  const [productHover, setProductHover] = useState(null);
+function ProductCarouselView() {
+  const [hoveredCardId, setHoveredCardId] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const primaryColor = '#8B4513'; // SaddleBrown
-  const accentColor = '#DAA520'; // Goldenrod
-  const darkBgColor = '#F5DEB3'; // Wheat
-  const lightBgColor = '#F8F8F8'; // Off-white
-  const cardBgColor = '#FFFFFF';
-  const darkTextColor = '#4A2C0A';
-  const lightTextColor = '#6B4219';
+  // Color palette for this view
+  const primaryColor = '#6A0572'; // Deep Purple
+  const accentColor = '#AB83A1'; // Muted Pink
+  const lightBgColor = '#2C0735'; // Dark Purple-Blue
+  const cardBgColor = '#4B0A5A'; // Medium Purple
+  const textColor = '#E0BBE4'; // Light Purple
+  const lightTextColor = '#957DAD'; // Gray-Purple
+  const buttonHoverColor = '#500860'; // Darker Purple
+  const shadowColor = 'rgba(0, 0, 0, 0.25)';
 
-  const products = [
-    { id: 1, name: 'Chleb Wiejski', category: 'Chleby', price: '12.50 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Chleb' },
-    { id: 2, name: 'Bagietka Francuska', category: 'Bułki', price: '4.00 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Bagietka' },
-    { id: 3, name: 'Sernik Wiedeński', category: 'Ciasta', price: '45.00 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Sernik' },
-    { id: 4, name: 'Chałka Drożdżowa', category: 'Słodkie', price: '9.80 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Chałka' },
-    { id: 5, name: 'Chleb Orzechowy', category: 'Chleby', price: '15.00 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Orzechowy' },
-    { id: 6, name: 'Rogalik Maślany', category: 'Bułki', price: '2.50 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Rogalik' },
-    { id: 7, name: 'Tort Bezowy', category: 'Ciasta', price: '60.00 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Bezowy' },
-    { id: 8, name: 'Bułka Poznańska', category: 'Bułki', price: '2.00 zł', img: 'https://via.placeholder.com/200/8B4513/DAA520?text=Poznańska' },
-  ];
-  const categories = ['Wszystkie', 'Chleby', 'Bułki', 'Ciasta', 'Słodkie'];
+  const products = useMemo(() => [
+    { id: 1, name: 'Artisan Sourdough', price: '12.99 PLN', image: 'https://via.placeholder.com/400x300/87CEEB/FFFFFF?text=Sourdough', description: 'Hand-crafted with a tangy zest and a perfect crust, ideal for gourmet sandwiches.' },
+    { id: 2, name: 'Chocolate Croissant', price: '7.50 PLN', image: 'https://via.placeholder.com/400x300/FFD700/FFFFFF?text=Croissant', description: 'Flaky pastry filled with rich dark chocolate, a perfect morning treat.' },
+    { id: 3, name: 'Rye Bread', price: '10.00 PLN', image: 'https://via.placeholder.com/400x300/D2B48C/FFFFFF?text=Rye', description: 'Hearty and wholesome, packed with nutrients, great with savory dishes.' },
+    { id: 4, name: 'Blueberry Muffin', price: '5.99 PLN', image: 'https://via.placeholder.com/400x300/ADD8E6/FFFFFF?text=Muffin', description: 'Bursting with fresh blueberries and a delightful crumble topping.' },
+    { id: 5, name: 'Ciabatta Loaf', price: '9.50 PLN', image: 'https://via.placeholder.com/400x300/B0E0E6/FFFFFF?text=Ciabatta', description: 'Light, airy, and rustic, excellent for dipping or as a side to pasta.' },
+    { id: 6, name: 'Apple Pie Slice', price: '15.00 PLN', image: 'https://via.placeholder.com/400x300/F08080/FFFFFF?text=Apple+Pie', description: 'Classic comfort in every bite, warm apples with cinnamon in a buttery crust.' },
+  ], []);
 
-  const filteredProducts = selectedCategory === 'Wszystkie'
-    ? products
-    : products.filter(product => product.category === selectedCategory);
+  const productsPerPage = 1; // Display one product at a time in the "carousel"
 
-  const containerStyle = {
-    display: 'flex',
-    flexDirection: 'column',
+  const nextProduct = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+  };
+
+  const prevProduct = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+  };
+
+  // Styles
+  const containerStyle = useMemo(() => ({
     minHeight: '100vh',
     backgroundColor: lightBgColor,
-    fontFamily: 'Roboto, sans-serif',
-    color: darkTextColor,
-  };
-
-  const headerStyle = {
-    backgroundColor: primaryColor,
-    color: 'white',
-    padding: '15px 25px',
-    textAlign: 'center',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-    fontSize: '1.8em',
-    fontWeight: 'bold',
-  };
-
-  const mainContentStyle = {
+    padding: '40px 20px',
+    fontFamily: 'Montserrat, sans-serif',
+    color: textColor,
     display: 'flex',
-    flexGrow: 1,
-    padding: '30px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    width: '100%',
-  };
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }), [lightBgColor, textColor]);
 
-  const sidebarStyle = {
-    width: '250px',
-    paddingRight: '30px',
-    borderRight: `1px solid ${darkBgColor}`,
-    marginRight: '30px',
-  };
+  const headerStyle = useMemo(() => ({
+    textAlign: 'center',
+    marginBottom: '40px',
+    maxWidth: '800px',
+  }), []);
 
-  const categoryTitleStyle = {
+  const titleStyle = useMemo(() => ({
+    fontSize: '3.2em',
     color: primaryColor,
-    fontSize: '1.5em',
-    marginBottom: '20px',
-  };
-
-  const categoryListStyle = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  };
-
-  const categoryItemBaseStyle = {
-    padding: '10px 15px',
     marginBottom: '10px',
-    backgroundColor: cardBgColor,
-    borderRadius: '5px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.2s ease',
-    border: `1px solid ${darkBgColor}`,
+  }), [primaryColor]);
+
+  const subtitleStyle = useMemo(() => ({
+    fontSize: '1.1em',
     color: lightTextColor,
-    fontWeight: 'bold',
-  };
+    margin: '0 auto',
+  }), [lightTextColor]);
 
-  const categoryItemActiveStyle = {
+  const carouselWrapperStyle = useMemo(() => ({
+    display: 'flex',
+    alignItems: 'center',
+    maxWidth: '700px',
+    width: '100%',
+    position: 'relative',
+  }), []);
+
+  const navButtonStyle = useMemo(() => ({
     backgroundColor: primaryColor,
-    color: 'white',
-    transform: 'translateX(5px)',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-  };
+    color: textColor,
+    border: 'none',
+    borderRadius: '50%',
+    width: '45px',
+    height: '45px',
+    fontSize: '1.5em',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'background-color 0.3s ease, transform 0.2s ease',
+    zIndex: 10,
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    boxShadow: `0 2px 8px ${shadowColor}`,
+  }), [primaryColor, textColor, shadowColor]);
 
-  const productsGridStyle = {
+  const prevButtonStyle = useMemo(() => ({
+    ...navButtonStyle,
+    left: '-25px',
+  }), [navButtonStyle]);
+
+  const nextButtonStyle = useMemo(() => ({
+    ...navButtonStyle,
+    right: '-25px',
+  }), [navButtonStyle]);
+
+  const carouselContentStyle = useMemo(() => ({
     flexGrow: 1,
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '30px',
-  };
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    overflow: 'hidden',
+    padding: '0 50px', // Space for navigation buttons
+  }), []);
 
-  const productCardBaseStyle = {
+  const cardBaseStyle = useMemo(() => ({
     backgroundColor: cardBgColor,
-    borderRadius: '10px',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-    padding: '20px',
+    borderRadius: '15px',
+    padding: '30px',
+    boxShadow: `0 8px 20px ${shadowColor}`,
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    cursor: 'pointer',
-    border: `1px solid ${darkBgColor}`,
-  };
+    width: `calc(100% / ${productsPerPage} - 40px)`, // Adjust width based on productsPerPage
+    margin: '0 20px',
+    border: `2px solid ${primaryColor}`,
+  }), [cardBgColor, shadowColor, productsPerPage, primaryColor]);
 
-  const productCardHoverStyle = {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 8px 15px rgba(0,0,0,0.1)',
-  };
+  const cardHoverStyle = useMemo(() => ({
+    transform: 'scale(1.03)',
+    boxShadow: `0 12px 25px ${shadowColor}`,
+  }), [shadowColor]);
 
-  const productImageStyle = {
+  const productImageStyle = useMemo(() => ({
     width: '100%',
-    maxWidth: '200px',
-    height: 'auto',
-    borderRadius: '8px',
-    marginBottom: '15px',
+    maxWidth: '400px',
+    height: '250px',
+    objectFit: 'cover',
+    borderRadius: '10px',
+    marginBottom: '20px',
     border: `1px solid ${accentColor}`,
-  };
+  }), [accentColor]);
 
-  const productNameStyle = {
+  const productNameStyle = useMemo(() => ({
+    fontSize: '2.5em',
     color: primaryColor,
-    fontSize: '1.3em',
-    marginBottom: '8px',
-  };
+    marginBottom: '10px',
+  }), [primaryColor]);
 
-  const productPriceStyle = {
+  const productDescriptionStyle = useMemo(() => ({
+    fontSize: '1em',
     color: lightTextColor,
+    marginBottom: '20px',
+    flexGrow: 1,
+    lineHeight: '1.6',
+    maxWidth: '90%',
+  }), [lightTextColor]);
+
+  const productPriceStyle = useMemo(() => ({
+    fontSize: '2em',
+    fontWeight: 'bold',
+    color: accentColor,
+    marginBottom: '25px',
+  }), [accentColor]);
+
+  const buttonStyle = useMemo(() => ({
+    backgroundColor: accentColor,
+    color: cardBgColor,
+    border: 'none',
+    padding: '14px 30px',
+    borderRadius: '10px',
+    cursor: 'pointer',
     fontSize: '1.1em',
     fontWeight: 'bold',
-  };
-
-  const footerStyle = {
-    backgroundColor: primaryColor,
-    color: 'white',
-    textAlign: 'center',
-    padding: '15px',
-    fontSize: '0.9em',
-    marginTop: 'auto',
-  };
+    transition: 'background-color 0.3s ease',
+  }), [accentColor, cardBgColor]);
 
   return (
     <div style={containerStyle}>
       <header style={headerStyle}>
-        Katalog Produktów Piekarni
+        <h1 style={titleStyle}>Discover Our Featured Delights</h1>
+        <p style={subtitleStyle}>
+          Indulge in our exquisite collection of fresh-baked goods, each a masterpiece of flavor and craft.
+        </p>
       </header>
-
-      <div style={mainContentStyle}>
-        <aside style={sidebarStyle}>
-          <h3 style={categoryTitleStyle}>Kategorie</h3>
-          <ul style={categoryListStyle}>
-            {categories.map(category => (
-              <li
-                key={category}
+      <div style={carouselWrapperStyle}>
+        <button
+          style={{ ...prevButtonStyle, '&:hover': { transform: 'translateY(-50%) scale(1.1)' } }}
+          onClick={prevProduct}
+        >
+          &lt;
+        </button>
+        <div style={carouselContentStyle}>
+          {products.slice(currentIndex, currentIndex + productsPerPage).map(product => (
+            <div
+              key={product.id}
+              style={{ ...cardBaseStyle, ...(hoveredCardId === product.id ? cardHoverStyle : {}) }}
+              onMouseEnter={() => setHoveredCardId(product.id)}
+              onMouseLeave={() => setHoveredCardId(null)}
+            >
+              <img src={product.image} alt={product.name} style={productImageStyle} />
+              <h2 style={productNameStyle}>{product.name}</h2>
+              <p style={productDescriptionStyle}>{product.description}</p>
+              <span style={productPriceStyle}>{product.price}</span>
+              <button
                 style={{
-                  ...categoryItemBaseStyle,
-                  ...(selectedCategory === category ? categoryItemActiveStyle : {})
+                  ...buttonStyle,
+                  ...(hoveredCardId === product.id && { backgroundColor: buttonHoverColor })
                 }}
-                onClick={() => setSelectedCategory(category)}
               >
-                {category}
-              </li>
-            ))}
-          </ul>
-        </aside>
-
-        <section style={productsGridStyle}>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(product => (
-              <div
-                key={product.id}
-                style={{ ...productCardBaseStyle, ...(productHover === product.id ? productCardHoverStyle : {}) }}
-                onMouseEnter={() => setProductHover(product.id)}
-                onMouseLeave={() => setProductHover(null)}
-              >
-                <img src={product.img} alt={product.name} style={productImageStyle} />
-                <h4 style={productNameStyle}>{product.name}</h4>
-                <p style={productPriceStyle}>{product.price}</p>
-              </div>
-            ))
-          ) : (
-            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: lightTextColor }}>Brak produktów w tej kategorii.</p>
-          )}
-        </section>
+                Learn More
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          style={{ ...nextButtonStyle, '&:hover': { transform: 'translateY(-50%) scale(1.1)' } }}
+          onClick={nextProduct}
+        >
+          &gt;
+        </button>
       </div>
-
-      <footer style={footerStyle}>
-        <p>&copy; {new Date().getFullYear()} Piekarnia. Smak Tradycji.</p>
-      </footer>
     </div>
   );
 }
 
-export default SecondView;
+export default ProductCarouselView;

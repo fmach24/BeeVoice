@@ -40,23 +40,107 @@ export default function App() {
   const CurrentViewComponent = views[currentViewIndex].component;
   const [hasUserSelectedBest, setHasUserSelectedBest] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [comment, setComment] = useState('');
+  
   const goToNext = () => {
     setCurrentViewIndex((prev) => (prev + 1) % views.length);
   };
 
+  const startVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+      alert('Twoja przeglądarka nie obsługuje rozpoznawania mowy. Użyj Chrome lub Edge.');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pl-PL';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setComment(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Błąd rozpoznawania mowy:', event.error);
+      alert('Błąd mikrofonu: ' + event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
+
   const RenderButtonConditionally = ({hasUserSelectedBest})=>{
     if(hasUserSelectedBest){
-      return (<div>
-     
-          <input type="text" placeholder="Wpisz coś..." style={{ width: '100%', padding: '10px', boxSizing: 'border-box', borderTop: '1px solid #ccc' }} />
-          <button onClick={sendComment} style={{ width: '100%', padding: '10px', backgroundColor: '#008CBA', color: 'white', border: 'none', cursor: 'pointer' }}>Poprawka</button>
+      return (<div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '10px' }}>
+          <div style={{ display: 'flex', gap: '5px' }}>
+            <input 
+              type="text" 
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Wpisz poprawkę..." 
+              style={{ 
+                flex: 1, 
+                padding: '10px', 
+                boxSizing: 'border-box', 
+                border: isListening ? '2px solid #e74c3c' : '1px solid #ccc',
+                borderRadius: '4px'
+              }} 
+            />
+            <button 
+              onClick={startVoiceInput}
+              disabled={isListening}
+              style={{ 
+                padding: '10px 20px', 
+                backgroundColor: isListening ? '#e74c3c' : '#2ecc71',
+                color: 'white', 
+                border: 'none', 
+                cursor: isListening ? 'not-allowed' : 'pointer',
+                borderRadius: '4px',
+                fontSize: '20px'
+              }}
+              title="Kliknij i mów"
+            >
+              {isListening ? '🔴' : '🎤'}
+            </button>
+          </div>
+          {isListening && <p style={{ margin: 0, color: '#e74c3c', fontSize: '14px' }}>🔴 Słucham... Mów teraz!</p>}
+          <button 
+            onClick={sendComment} 
+            style={{ 
+              width: '100%', 
+              padding: '10px', 
+              backgroundColor: '#008CBA', 
+              color: 'white', 
+              border: 'none', 
+              cursor: 'pointer',
+              borderRadius: '4px'
+            }}
+          >
+            Wyślij Poprawkę
+          </button>
         </div>)
     }
     return null;
   }
 
   const sendComment=()=>{
-    const comment = document.querySelector('input[type="text"]').value;
+    if (!comment.trim()) {
+      alert('Wpisz lub nagraj poprawkę!');
+      return;
+    }
     setIsLoading(true);
     fetch("http://localhost:4000/edit", {
       body: JSON.stringify({ comment: comment, bestView: currentViewIndex }),
@@ -64,7 +148,8 @@ export default function App() {
       headers: { "Content-Type": "application/json" }
     }).then(res=>{
       setIsLoading(false);
-      console.log("Poprawka wysłana")
+      console.log("Poprawka wysłana");
+      setComment('');
     });
     setHasUserSelectedBest(false);
   }

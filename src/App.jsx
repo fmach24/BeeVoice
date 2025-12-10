@@ -1,22 +1,23 @@
 // App.js
-import React, { useState } from 'react';
-// Importujemy komponenty z folderu 'views'
+import React, { useState, useRef } from 'react';
 import FirstView from './views/first';
 import SecondView from './views/second';
 import ThirdView from './views/third';
+import ErrorBoundary from './ErrorBoundary';
 
 const views = [
-  { name: 'Widok 1 (first.jsx)', component: FirstView },
-  { name: 'Widok 2 (second.jsx)', component: SecondView },
-  { name: 'Widok 3 (third.jsx)', component: ThirdView },
+  { name: 'Widok 1', component: FirstView },
+  { name: 'Widok 2', component: SecondView },
+  { name: 'Widok 3', component: ThirdView },
 ];
 
 const containerStyle = {
-  maxHeight: '100vh',
+  height: '100vh',
   display: 'flex',
   flexDirection: 'column',
-  fontFamily: 'Arial, sans-serif',
-  overflow:'hidden'
+  fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+  overflow: 'hidden',
+  backgroundColor: '#f5f5f5'
 };
 
 const navigationStyle = {
@@ -24,192 +25,449 @@ const navigationStyle = {
   bottom: 0,
   left: 0,
   right: 0,
-  padding: '15px 20px',
-  backgroundColor: '#f0f0f0',
-  borderTop: '1px solid #ccc',
+  height: '90px',
+  padding: '0 30px',
+  backgroundColor: '#ffffff',
+  borderTop: '1px solid #e0e0e0',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+  boxShadow: '0 -5px 20px rgba(0,0,0,0.05)',
+  zIndex: 100
 };
 
+const navBtnStyle = {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    border: 'none',
+    backgroundColor: '#f0f2f5',
+    color: '#333',
+    fontSize: '24px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+};
 
+const newProjectBtnStyle = {
+    padding: '12px 24px',
+    backgroundColor: '#333',
+    backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '30px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    fontSize: '14px',
+    boxShadow: '0 4px 15px rgba(118, 75, 162, 0.4)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+};
+
+const modalOverlayStyle = {
+  position: 'fixed',
+  top: 0, left: 0, right: 0, bottom: 0,
+  backgroundColor: 'rgba(0,0,0,0.6)',
+  backdropFilter: 'blur(5px)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 2000
+};
+
+const modalContentStyle = {
+  backgroundColor: 'white',
+  padding: '40px',
+  borderRadius: '20px',
+  width: '550px',
+  boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '20px'
+};
+
+const micBtnStyle = {
+    background: 'transparent',
+    border: 'none',
+    fontSize: '13px',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    cursor: 'pointer',
+    padding: '5px 10px',
+    borderRadius: '4px',
+    transition: 'all 0.2s',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    whiteSpace: 'nowrap',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' // bo ó w mów wyglada mega słabo xd
+};
 
 export default function App() {
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const CurrentViewComponent = views[currentViewIndex].component;
   const [hasUserSelectedBest, setHasUserSelectedBest] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [comment, setComment] = useState('');
   
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const [newProjectPrompt, setNewProjectPrompt] = useState('');
+  
+  const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false); 
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+
+  const handleMicClick = async (setValueFunction) => {
+    if (isRecording) {
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+        }
+        return;
+    }
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorderRef.current = new MediaRecorder(stream);
+        audioChunksRef.current = [];
+
+        mediaRecorderRef.current.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                audioChunksRef.current.push(event.data);
+            }
+        };
+
+        mediaRecorderRef.current.onstop = async () => {
+            setIsRecording(false);
+            setIsTranscribing(true);
+
+            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+
+            try {
+                const response = await fetch("http://localhost:4000/transcribe", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                
+                if (data.text) {
+                    setValueFunction(prev => prev ? `${prev} ${data.text}` : data.text);
+                } else {
+                    alert("Nie udało się rozpoznać mowy.");
+                }
+            } catch (err) {
+                console.error("Błąd wysyłania audio:", err);
+                alert("Błąd połączenia z serwerem transkrypcji.");
+            } finally {
+                setIsTranscribing(false);
+                stream.getTracks().forEach(track => track.stop());
+            }
+        };
+
+        mediaRecorderRef.current.start();
+        setIsRecording(true);
+
+    } catch (err) {
+        console.error("Błąd dostępu do mikrofonu:", err);
+        alert("Nie udało się uzyskać dostępu do mikrofonu. Sprawdź ustawienia przeglądarki.");
+    }
+  };
+
   const goToNext = () => {
     setCurrentViewIndex((prev) => (prev + 1) % views.length);
   };
 
-  const startVoiceInput = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
-    if (!SpeechRecognition) {
-      alert('Twoja przeglądarka nie obsługuje rozpoznawania mowy. Użyj Chrome lub Edge.');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'pl-PL';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onstart = () => {
-      setIsListening(true);
-    };
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setComment(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Błąd rozpoznawania mowy:', event.error);
-      alert('Błąd mikrofonu: ' + event.error);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognition.start();
-  };
-
-  const RenderButtonConditionally = ({hasUserSelectedBest})=>{
-    if(hasUserSelectedBest){
-      return (<div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '10px' }}>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <input 
-              type="text" 
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Wpisz poprawkę..." 
-              style={{ 
-                flex: 1, 
-                padding: '10px', 
-                boxSizing: 'border-box', 
-                border: isListening ? '2px solid #e74c3c' : '1px solid #ccc',
-                borderRadius: '4px'
-              }} 
-            />
-            <button 
-              onClick={startVoiceInput}
-              disabled={isListening}
-              style={{ 
-                padding: '10px 20px', 
-                backgroundColor: isListening ? '#e74c3c' : '#2ecc71',
-                color: 'white', 
-                border: 'none', 
-                cursor: isListening ? 'not-allowed' : 'pointer',
-                borderRadius: '4px',
-                fontSize: '20px'
-              }}
-              title="Kliknij i mów"
-            >
-              {isListening ? '🔴' : '🎤'}
-            </button>
-          </div>
-          {isListening && <p style={{ margin: 0, color: '#e74c3c', fontSize: '14px' }}>🔴 Słucham... Mów teraz!</p>}
-          <button 
-            onClick={sendComment} 
-            style={{ 
-              width: '100%', 
-              padding: '10px', 
-              backgroundColor: '#008CBA', 
-              color: 'white', 
-              border: 'none', 
-              cursor: 'pointer',
-              borderRadius: '4px'
-            }}
-          >
-            Wyślij Poprawkę
-          </button>
-        </div>)
-    }
-    return null;
-  }
-
-  const sendComment=()=>{
-    if (!comment.trim()) {
-      alert('Wpisz lub nagraj poprawkę!');
-      return;
-    }
-    setIsLoading(true);
-    fetch("http://localhost:4000/edit", {
-      body: JSON.stringify({ comment: comment, bestView: currentViewIndex }),
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    }).then(res=>{
-      setIsLoading(false);
-      console.log("Poprawka wysłana");
-      setComment('');
-    });
-    setHasUserSelectedBest(false);
-  }
   const goToPrev = () => {
     setCurrentViewIndex((prev) => (prev - 1 + views.length) % views.length);
   };
 
   const selectView = () => {
-    const selectedName = views[currentViewIndex].name;
     setHasUserSelectedBest(true);
-    //fetch("http://localhost:4000/edit", {body: JSON.stringify({ selectedView: selectedName }), method: "POST", headers: { "Content-Type": "application/json" }})
+  };
 
-    console.log(`Użytkownik wybrał: ${selectedName}`);
+  const sendEdit = () => {
+    if (!comment.trim()) {
+      alert('Wpisz poprawkę!');
+      return;
+    }
+    setIsLoading(true);
+    
+    fetch("http://localhost:4000/edit", {
+      body: JSON.stringify({ comment: comment, bestViewIndex: currentViewIndex }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    }).then(res => {
+      setIsLoading(false);
+      setComment('');
+      setHasUserSelectedBest(false);
+    }).catch(err => {
+        setIsLoading(false);
+        console.error("Błąd:", err);
+    });
+  };
+
+  const generateNewProject = () => {
+    if (!newProjectPrompt.trim()) return;
+    setIsLoading(true);
+    setShowNewProjectModal(false);
+    fetch("http://localhost:4000/new", {
+        body: JSON.stringify({ prompt: newProjectPrompt }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      }).then(res => {
+        setIsLoading(false);
+        setNewProjectPrompt('');
+      }).catch(err => setIsLoading(false));
   };
 
   return (
     <div style={containerStyle}>
-      <div style={{ display:"flex", flexDirection:"row", paddingBottom: '80px', flexGrow: 1 }}>
-        <div style={{overflowY:"scroll"}}>
-          <FirstView />
-        </div>
-                <div style={{overflowY:"scroll"}}>
-          <SecondView />
-        </div>
-        <div style={{overflowY:"scroll"}}>
-          <ThirdView />
-        </div>
-      </div>
-
-      <div style={navigationStyle}>
-        <button onClick={goToPrev} style={{ padding: '10px 20px', fontSize: '16px' }}> &lt; Poprzedni </button>
-        
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ margin: '0 0 5px 0', fontWeight: 'bold' }}>
-            {views[currentViewIndex].name} ({currentViewIndex + 1}/{views.length})
-          </p>
-          <button 
-            onClick={selectView} 
-            style={{ 
-              padding: '10px 30px', 
-              fontSize: '18px', 
-              backgroundColor: '#4CAF50', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          > 
-            WYBIERZ TEN PROJEKT 
-          </button>
-        </div>
-
-        <button onClick={goToNext} style={{ padding: '10px 20px', fontSize: '16px' }}> Następny &gt; </button>
-        <RenderButtonConditionally hasUserSelectedBest={hasUserSelectedBest} />
-        {isLoading && <label style={{ marginLeft: '15px', fontStyle: 'italic' }}>
-            Laduje sie...
-        </label>}
-
-      </div>
+      {/* Dodajemy definicję animacji */}
+      <style>
+        {`
+          @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+          }
+        `}
+      </style>
       
+      {/* MODAL NOWEGO PROJEKTU */}
+      {showNewProjectModal && (
+        <div style={modalOverlayStyle}>
+            <div style={modalContentStyle}>
+                <h2 style={{margin: 0, fontSize: '24px'}}>Nowy widok</h2>
+                <p style={{margin: 0, color: '#666', lineHeight: '1.5'}}>
+                    Opisz, co chcesz stworzyć. Kliknij "MÓW", nagraj, kliknij "ZATRZYMAJ".
+                </p>
+                
+                <div style={{ position: 'relative' }}>
+                    <textarea 
+                        value={newProjectPrompt}
+                        onChange={(e) => setNewProjectPrompt(e.target.value)}
+                        placeholder="Np. Wygeneruj mi strone pizzerii w stylu neonowym."
+                        rows={5}
+                        style={{ 
+                            width: '100%',
+                            padding: '15px', 
+                            fontSize: '16px', 
+                            borderRadius: '10px', 
+                            border: isRecording ? '2px solid #e74c3c' : '1px solid #ddd',
+                            backgroundColor: '#f9f9f9',
+                            resize: 'none',
+                            boxSizing: 'border-box'
+                        }}
+                    />
+                    <button 
+                        onClick={() => handleMicClick(setNewProjectPrompt)}
+                        style={{
+                            position: 'absolute',
+                            bottom: '15px',
+                            right: '15px',
+                            ...micBtnStyle,
+                            color: isRecording ? '#e74c3c' : (isTranscribing ? '#f39c12' : '#2196F3'),
+                            backgroundColor: 'rgba(255,255,255,0.8)' // Tło pod tekst
+                        }}
+                    >
+                        {isTranscribing ? 'PRZETWARZANIE...' : (isRecording ? 'ZATRZYMAJ' : 'MÓW')}
+                    </button>
+                </div>
+
+                <div style={{display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '10px'}}>
+                    <button 
+                        onClick={() => setShowNewProjectModal(false)}
+                        style={{ padding: '12px 25px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: '#666' }}
+                    >
+                        Anuluj
+                    </button>
+                    <button 
+                        onClick={generateNewProject}
+                        style={{ ...newProjectBtnStyle, boxShadow: 'none' }}
+                    >
+                        Generuj
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* GŁÓWNY KONTENER WIDOKÓW */}
+      <div style={{ display: "flex", flexDirection: "row", height: 'calc(100vh - 90px)', width: '100%' }}>
+        {views.map((item, index) => {
+           const ViewComponent = item.component;
+           const isSelected = index === currentViewIndex;
+           return (
+             <div 
+                key={index} 
+                style={{ 
+                    flex: 1, 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    overflowY: "hidden",
+                    border: isSelected ? '5px solid #4CAF50' : '1px solid #e0e0e0',
+                    borderRadius: isSelected ? '0' : '0',
+                    zIndex: isSelected ? 10 : 1,
+                    boxSizing: 'border-box',
+                    transition: 'border 0.2s ease'
+                }}
+             >
+                <div style={{ 
+                    textAlign: 'center', 
+                    padding: '10px', 
+                    fontSize: '13px',
+                    fontWeight: 'bold', 
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    backgroundColor: isSelected ? '#4CAF50' : '#f0f2f5', 
+                    color: isSelected ? 'white' : '#999',
+                    borderBottom: '1px solid #ccc'
+                }}>
+                    {item.name}
+                </div>
+                <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'white' }}>
+                    <ErrorBoundary>
+                        <ViewComponent />
+                    </ErrorBoundary>
+                </div>
+             </div>
+           )
+        })}
+      </div>
+
+      {/* --- PANEL NAWIGACYJNY --- */}
+      <div style={navigationStyle}>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', width: '300px' }}>
+            <button 
+                onClick={() => setShowNewProjectModal(true)}
+                style={newProjectBtnStyle}
+            >
+                Nowy projekt
+            </button>
+
+            <button 
+                onClick={goToPrev} 
+                style={navBtnStyle}
+                // Dodajemy Hover dla strzałki w lewo
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
+            > 
+                ← 
+            </button>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            {!hasUserSelectedBest ? (
+                 <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '12px', color: '#888', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        Aktualnie oglądasz
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '18px' }}>{views[currentViewIndex].name}</span>
+                        <button 
+                            onClick={selectView} 
+                            style={{ 
+                                padding: '12px 35px', 
+                                fontSize: '16px', 
+                                backgroundColor: '#4CAF50', 
+                                color: 'white', 
+                                border: 'none', 
+                                borderRadius: '50px', 
+                                cursor: 'pointer',
+                                boxShadow: '0 4px 10px rgba(76, 175, 80, 0.3)',
+                                fontWeight: '600',
+                                transition: 'transform 0.1s'
+                            }}
+                        > 
+                            Edytuj ten widok
+                        </button>
+                    </div>
+                 </div>
+            ) : (
+                <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '600px', alignItems: 'center', position: 'relative' }}>
+                    
+                    <div style={{ position: 'relative', flex: 1 }}>
+                        <input 
+                          type="text" 
+                          value={comment}
+                          autoFocus
+                          onChange={(e) => setComment(e.target.value)}
+                          placeholder={`Co poprawić w ${views[currentViewIndex].name}?`} 
+                          style={{ 
+                              width: '100%',
+                              padding: '12px 130px 12px 20px', 
+                              border: isRecording ? '2px solid #e74c3c' : '2px solid #4CAF50', 
+                              borderRadius: '30px',
+                              outline: 'none',
+                              fontSize: '16px',
+                              boxSizing: 'border-box'
+                          }} 
+                        />
+                        <button 
+                            onClick={() => handleMicClick(setComment)}
+                            style={{
+                                position: 'absolute',
+                                right: '5px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                ...micBtnStyle,
+                                color: isRecording ? '#e74c3c' : (isTranscribing ? '#f39c12' : '#2196F3'),
+                            }}
+                        >
+                            {isTranscribing ? 'PRZETWARZANIE...' : (isRecording ? 'ZATRZYMAJ' : 'MÓW')}
+                        </button>
+                    </div>
+
+                    <button 
+                        onClick={sendEdit} 
+                        style={{ 
+                            padding: '12px 25px', 
+                            backgroundColor: '#2196F3', 
+                            color: 'white', 
+                            border: 'none', 
+                            cursor: 'pointer', 
+                            borderRadius: '30px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                      {isLoading ? 'Wysłano' : 'Wyślij'}
+                    </button>
+                    <button 
+                        onClick={() => setHasUserSelectedBest(false)} 
+                        style={{ 
+                            width: '40px', height: '40px', borderRadius: '50%', border: '1px solid #ccc', background: 'white', cursor: 'pointer', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                        }}
+                        title="Anuluj"
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f75b5bff'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                    >
+                        ✕
+                    </button>
+                </div>
+            )}
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '20px', width: '300px' }}>
+             {/* Animacja mrugania dodana tutaj */}
+             {isLoading && <span style={{ color: '#666', fontStyle: 'italic', fontSize: '24px', animation: 'blink 1.5s infinite ease-in-out' }}>Generowanie...</span>}
+             
+             <button 
+                onClick={goToNext} 
+                style={navBtnStyle}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
+            > 
+                → 
+            </button>
+        </div>
+
+      </div>
     </div>
   );
 }

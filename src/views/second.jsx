@@ -1,247 +1,232 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 
-function SecondBasenAGHContactInfo() {
-  const palette = {
-    background: '#1a202c',
-    card: '#2d3748',
-    primaryText: '#e2e8f0',
-    secondaryText: '#a0aec0',
-    accentRed: '#e53e3e',
-    hoverRed: '#c53030',
-    borderColor: '#4a5568',
-    shadow: 'rgba(0,0,0,0.3)',
-    navBg: '#171923',
-    navText: '#e2e8f0',
-  };
+const ModernPoolAGHApp = () => {
+    // Neon Color Palette
+    const darkBg = '#0A0A0A'; // Deep black background
+    const darkerBg = '#1A1A1A'; // Slightly lighter black for sections/cards
+    const neonPrimary = '#00FFFF'; // Vibrant Cyan for primary elements (e.g., AGH Blue equivalent)
+    const neonAccent = '#39FF14'; // Electric Green for calls to action/highlights
+    const neonTextLight = '#E0FFFF'; // Very light cyan for general text
 
-  const containerStyle = useMemo(() => ({
-    minHeight: '100vh',
-    background: palette.background,
-    padding: '0px 20px 40px',
-    fontFamily: "'Inter', sans-serif",
-    color: palette.primaryText,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  }), [palette.background, palette.primaryText]);
+    // Glow effects
+    const textGlowPrimary = `0 0 5px ${neonPrimary}, 0 0 10px ${neonPrimary}`;
+    const textGlowAccent = `0 0 5px ${neonAccent}, 0 0 10px ${neonAccent}`;
+    // Stronger glow for elements to stand out
+    const elementGlowPrimary = `0 0 8px ${neonPrimary}, 0 0 15px ${neonPrimary}, 0 0 25px ${neonPrimary}50`; // Last value is opacity
+    const elementGlowAccent = `0 0 8px ${neonAccent}, 0 0 15px ${neonAccent}, 0 0 25px ${neonAccent}50`;
 
-  const navStyle = useMemo(() => ({
-    width: '100%',
-    backgroundColor: palette.navBg,
-    boxShadow: `0 2px 8px ${palette.shadow}`,
-    padding: '15px 40px',
-    marginBottom: '40px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1000,
-    boxSizing: 'border-box',
-  }), [palette.navBg, palette.shadow]);
+    const sectionStyle = {
+        padding: '60px 20px',
+        textAlign: 'center',
+        marginBottom: '0',
+        color: neonTextLight, // Default text color for sections
+        borderBottom: `1px solid ${neonPrimary}40`, // Subtle divider
+    };
 
-  const navLinkStyle = useMemo(() => ({
-    color: palette.navText,
-    textDecoration: 'none',
-    fontWeight: '500',
-    margin: '0 15px',
-    transition: 'color 0.2s ease',
-  }), [palette.navText]);
+    const cardStyle = {
+        background: darkerBg,
+        borderRadius: '10px',
+        border: `1px solid ${neonPrimary}80`, // Slightly transparent neon border
+        boxShadow: elementGlowPrimary, // Neon glow for cards
+        padding: '30px',
+        margin: '20px',
+        flex: '1',
+        minWidth: '280px',
+        maxWidth: '350px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center',
+        transition: 'all 0.3s ease-in-out', // Smooth transitions
+        // Note: For actual hover effects, you'd typically use CSS modules or styled-components
+        // as inline styles don't support pseudo-classes like :hover directly.
+        // For this example, we'll focus on the static neon aesthetic.
+    };
 
-  const navBrandStyle = useMemo(() => ({
-    fontSize: '1.4em',
-    fontWeight: '700',
-    color: palette.accentRed,
-    textDecoration: 'none',
-  }), [palette.accentRed]);
+    const buttonBaseStyle = {
+        border: 'none',
+        padding: '18px 35px',
+        fontSize: '1.2em',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        marginTop: '30px',
+        transition: 'all 0.3s ease',
+        textTransform: 'uppercase', // Neon text often uppercase
+    };
 
-  const cardStyle = useMemo(() => ({
-    maxWidth: '550px',
-    width: '100%',
-    backgroundColor: palette.card,
-    borderRadius: '16px',
-    boxShadow: `0 8px 20px ${palette.shadow}`,
-    padding: '40px',
-    border: `1px solid ${palette.borderColor}`,
-    textAlign: 'center',
-    boxSizing: 'border-box',
-  }), [palette.card, palette.shadow, palette.borderColor]);
+    const linkBaseStyle = {
+        margin: '0 20px',
+        color: neonTextLight,
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        transition: 'color 0.3s ease-in-out, text-shadow 0.3s ease-in-out',
+        textShadow: textGlowPrimary,
+        letterSpacing: '0.05em', // Spread out letters
+    };
 
-  const titleStyle = useMemo(() => ({
-    fontSize: '2.2em',
-    color: palette.accentRed,
-    marginBottom: '15px',
-    fontWeight: '700',
-  }), [palette.accentRed]);
+    return (
+        <div style={{
+            fontFamily: "'Orbitron', monospace, sans-serif", // Futuristic/neon font. Link it in index.html for full effect.
+            color: neonTextLight,
+            backgroundColor: darkBg,
+            minHeight: '100vh', // Ensure background covers full height
+        }}>
+            <header style={{
+                backgroundColor: darkerBg,
+                color: neonPrimary,
+                padding: '15px 40px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                boxShadow: elementGlowPrimary, // Header glow
+                borderBottom: `1px solid ${neonPrimary}`,
+            }}>
+                <h1 style={{ margin: 0, fontSize: '2.2em', textShadow: textGlowPrimary, letterSpacing: '0.1em' }}>Basen <span style={{ fontWeight: 'normal', color: neonTextLight, textShadow: textGlowPrimary }}>AGH</span></h1>
+                <nav>
+                    <a href="#about" style={linkBaseStyle}>O Nas</a>
+                    <a href="#features" style={linkBaseStyle}>Udogodnienia</a>
+                    <a href="#hours-prices" style={linkBaseStyle}>Godziny & Cennik</a>
+                    <a href="#contact" style={linkBaseStyle}>Kontakt</a>
+                </nav>
+            </header>
 
-  const subtitleStyle = useMemo(() => ({
-    fontSize: '1.05em',
-    color: palette.accentRed,
-    marginBottom: '35px',
-    lineHeight: '1.6',
-  }), [palette.accentRed]);
+            <section style={{
+                ...sectionStyle,
+                // Darker overlay and neon placeholder image
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url("https://via.placeholder.com/1500x500/${darkBg.substring(1)}/${neonPrimary.substring(1)}?text=AGH+POOL+NEON")`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                color: neonTextLight,
+                height: '450px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textShadow: textGlowPrimary, // Hero text glow
+                borderBottom: `2px solid ${neonPrimary}`, // Stronger border for hero
+            }}>
+                <h2 style={{ fontSize: '3.8em', marginBottom: '15px', lineHeight: '1.2', textShadow: textGlowPrimary, letterSpacing: '0.08em' }}>Zanurkuj w Świecie Sportu!</h2>
+                <p style={{ fontSize: '1.3em', maxWidth: '750px', lineHeight: '1.6', opacity: 0.9 }}>
+                    Nowoczesny basen sportowo-rekreacyjny AGH w Krakowie. Idealne miejsce na trening, relaks i aktywny wypoczynek dla każdego.
+                </p>
+                <button style={{
+                    ...buttonBaseStyle,
+                    backgroundColor: neonAccent,
+                    color: darkBg, // Text on button is dark for strong contrast
+                    boxShadow: elementGlowAccent, // Accent glow
+                    textShadow: `none`, // Remove text shadow on button text for crispness
+                }} onClick={() => alert('Przekierowanie do systemu rezerwacji lub aktualności')}>
+                    Sprawdź Dostępność & Zarezerwuj!
+                </button>
+            </section>
 
-  const sectionTitleStyle = useMemo(() => ({
-    fontSize: '1.5em',
-    color: palette.accentRed,
-    marginBottom: '20px',
-    marginTop: '30px',
-    fontWeight: '600',
-  }), [palette.accentRed]);
+            <section id="about" style={{ ...sectionStyle, backgroundColor: darkerBg }}>
+                <h2 style={{ fontSize: '2.5em', marginBottom: '20px', color: neonPrimary, textShadow: textGlowPrimary, letterSpacing: '0.05em' }}>O Nas</h2>
+                <p style={{ maxWidth: '800px', margin: '0 auto', lineHeight: '1.8', fontSize: '1.1em', opacity: 0.9 }}>
+                    Basen AGH to nowoczesny kompleks wodny otwarty dla studentów, pracowników AGH oraz mieszkańców Krakowa. Oferujemy 6-torowy basen sportowy, strefę rekreacyjną z hydromasażami, jacuzzi oraz saunę suchą. Dbamy o najwyższe standardy czystości i bezpieczeństwa, zapewniając idealne warunki do pływania i relaksu.
+                </p>
+            </section>
 
-  const contactGridStyle = useMemo(() => ({
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '15px',
-    marginBottom: '30px',
-  }), []);
+            <section id="features" style={{ ...sectionStyle, backgroundColor: darkBg }}>
+                <h2 style={{ fontSize: '2.5em', marginBottom: '40px', color: neonPrimary, textShadow: textGlowPrimary, letterSpacing: '0.05em' }}>Nasze Udogodnienia</h2>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+                    <div style={cardStyle}>
+                        {/* Placeholder icons with neon colors */}
+                        <img src={`https://via.placeholder.com/60/${darkerBg.substring(1)}/${neonPrimary.substring(1)}?text=🏊`} alt="Tor pływacki" style={{ marginBottom: '15px', borderRadius: '50%', boxShadow: `0 0 10px ${neonPrimary}` }} />
+                        <h3 style={{ color: neonPrimary, fontSize: '1.6em', marginBottom: '10px', textShadow: textGlowPrimary }}>Tory Pływackie</h3>
+                        <p style={{ opacity: 0.8 }}>6 profesjonalnych torów, idealnych do intensywnych treningów i swobodnego pływania rekreacyjnego.</p>
+                    </div>
+                    <div style={cardStyle}>
+                        <img src={`https://via.placeholder.com/60/${darkerBg.substring(1)}/${neonAccent.substring(1)}?text=🌊`} alt="Basen rekreacyjny" style={{ marginBottom: '15px', borderRadius: '50%', boxShadow: `0 0 10px ${neonAccent}` }} />
+                        <h3 style={{ color: neonPrimary, fontSize: '1.6em', marginBottom: '10px', textShadow: textGlowPrimary }}>Strefa Rekreacyjna</h3>
+                        <p style={{ opacity: 0.8 }}>Basen rekreacyjny z hydromasażami, gejzerami i "dziką rzeką" dla pełnego relaksu i zabawy.</p>
+                    </div>
+                    <div style={cardStyle}>
+                        <img src={`https://via.placeholder.com/60/${darkerBg.substring(1)}/${neonTextLight.substring(1)}?text=♨️`} alt="Sauna" style={{ marginBottom: '15px', borderRadius: '50%', boxShadow: `0 0 10px ${neonTextLight}` }} />
+                        <h3 style={{ color: neonPrimary, fontSize: '1.6em', marginBottom: '10px', textShadow: textGlowPrimary }}>Sauna & Jacuzzi</h3>
+                        <p style={{ opacity: 0.8 }}>Odpocznij po treningu w naszej suchej saunie lub zrelaksuj się w bąbelkowej wodzie jacuzzi.</p>
+                    </div>
+                </div>
+            </section>
 
-  const contactItemStyle = useMemo(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.05em',
-    color: palette.accentRed,
-  }), [palette.accentRed]);
+            <section id="hours-prices" style={{ ...sectionStyle, backgroundColor: darkerBg }}>
+                <h2 style={{ fontSize: '2.5em', marginBottom: '40px', color: neonPrimary, textShadow: textGlowPrimary, letterSpacing: '0.05em' }}>Godziny Otwarcia & Cennik</h2>
+                <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '40px' }}>
+                    <div style={{
+                        flex: '1',
+                        minWidth: '300px',
+                        maxWidth: '450px',
+                        textAlign: 'left',
+                        padding: '30px',
+                        borderRadius: '10px',
+                        boxShadow: elementGlowPrimary, // Glow for hours box
+                        backgroundColor: darkBg,
+                        border: `1px solid ${neonPrimary}80`
+                    }}>
+                        <h3 style={{ color: neonPrimary, borderBottom: `2px solid ${neonPrimary}`, paddingBottom: '15px', marginBottom: '25px', fontSize: '1.8em', textShadow: textGlowPrimary }}>Godziny</h3>
+                        <ul style={{ listStyle: 'none', padding: 0 }}>
+                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span><strong>Pon - Pt:</strong></span> <span>6:00 - 22:00</span></li>
+                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span><strong>Sobota:</strong></span> <span>8:00 - 20:00</span></li>
+                            <li style={{ padding: '10px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span><strong>Niedziela:</strong></span> <span>9:00 - 18:00</span></li>
+                        </ul>
+                    </div>
+                    <div style={{
+                        flex: '1',
+                        minWidth: '300px',
+                        maxWidth: '450px',
+                        textAlign: 'left',
+                        padding: '30px',
+                        borderRadius: '10px',
+                        boxShadow: elementGlowPrimary, // Glow for prices box
+                        backgroundColor: darkBg,
+                        border: `1px solid ${neonPrimary}80`
+                    }}>
+                        <h3 style={{ color: neonPrimary, borderBottom: `2px solid ${neonPrimary}`, paddingBottom: '15px', marginBottom: '25px', fontSize: '1.8em', textShadow: textGlowPrimary }}>Cennik (60 min)</h3>
+                        <ul style={{ listStyle: 'none', padding: 0 }}>
+                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Bilet Normalny:</span> <strong style={{ color: neonPrimary, textShadow: textGlowPrimary }}>20 PLN</strong></li>
+                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Bilet Ulgowy (studenci AGH):</span> <strong style={{ color: neonAccent, textShadow: textGlowAccent }}>15 PLN</strong></li>
+                            <li style={{ padding: '10px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Karnet Miesięczny:</span> <strong style={{ color: neonPrimary, textShadow: textGlowPrimary }}>od 120 PLN</strong></li>
+                        </ul>
+                        <p style={{ fontSize: '0.9em', color: neonTextLight, opacity: 0.7, marginTop: '15px' }}>Szczegółowy cennik i zasady korzystania z karnetów dostępne w recepcji.</p>
+                    </div>
+                </div>
+            </section>
 
-  const contactIconStyle = useMemo(() => ({
-    fontSize: '1.2em',
-    color: palette.primaryText,
-    marginRight: '15px',
-    width: '30px',
-    height: '30px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-    backgroundColor: 'rgba(229, 62, 62, 0.2)',
-  }), [palette.primaryText]);
+            {/* Contact section with inverted colors for striking effect */}
+            <section id="contact" style={{ ...sectionStyle, backgroundColor: neonPrimary, color: darkBg, borderBottom: `2px solid ${neonAccent}` }}>
+                <h2 style={{ fontSize: '2.5em', marginBottom: '30px', color: darkBg, textShadow: `0 0 5px ${neonTextLight}` }}>Skontaktuj Się z Nami!</h2>
+                <p style={{ fontSize: '1.2em', marginBottom: '15px', fontWeight: 'bold' }}><strong>Adres:</strong> ul. Reymonta 19, 30-059 Kraków</p>
+                <p style={{ fontSize: '1.2em', marginBottom: '15px', fontWeight: 'bold' }}><strong>Telefon:</strong> +48 12 617 39 39</p>
+                <p style={{ fontSize: '1.2em', marginBottom: '20px', fontWeight: 'bold' }}><strong>Email:</strong> <a href="mailto:basen@agh.edu.pl" style={{ color: darkBg, textDecoration: 'underline', textShadow: `0 0 3px ${neonTextLight}` }}>basen@agh.edu.pl</a></p>
+                <div style={{ marginTop: '30px' }}>
+                    <button style={{
+                        ...buttonBaseStyle,
+                        backgroundColor: darkBg, // Dark button on bright background
+                        color: neonPrimary,
+                        padding: '15px 30px',
+                        boxShadow: elementGlowPrimary, // Primary neon glow
+                        textShadow: textGlowPrimary,
+                    }} onClick={() => alert('Otworzy mapę z lokalizacją basenu')}>
+                        Znajdź nas na mapie!
+                    </button>
+                </div>
+            </section>
 
-  const linkStyle = useMemo(() => ({
-    color: palette.primaryText,
-    textDecoration: 'none',
-    fontWeight: '500',
-    transition: 'color 0.2s ease, text-decoration 0.2s ease',
-  }), [palette.primaryText]);
-
-  const hoverLinkStyle = useMemo(() => ({
-    color: palette.accentRed,
-    textDecoration: 'underline',
-  }), [palette.accentRed]);
-
-  const mapFrameStyle = useMemo(() => ({
-    width: '100%',
-    height: '350px',
-    border: `1px solid ${palette.borderColor}`,
-    borderRadius: '10px',
-    marginTop: '30px',
-    marginBottom: '15px',
-    boxShadow: `0 4px 10px ${palette.shadow}`,
-  }), [palette.borderColor, palette.shadow]);
-
-  const [isPhoneHovered, setIsPhoneHovered] = useState(false);
-  const [isEmailHovered, setIsEmailHovered] = useState(false);
-  const [isMapsLinkHovered, setIsMapsLinkHovered] = useState(false);
-  const [isNavHomeHovered, setIsNavHomeHovered] = useState(false);
-  const [isNavAboutHovered, setIsNavAboutHovered] = useState(false);
-  const [isNavContactHovered, setIsNavContactHovered] = useState(false);
-
-  const applyHoverStyle = (baseStyle, hoverStyle, isHovered) => ({
-    ...baseStyle,
-    ...(isHovered ? hoverStyle : {}),
-  });
-
-  return (
-    <div style={containerStyle}>
-      <nav style={navStyle}>
-        <a href="#" style={navBrandStyle}>Basen AGH</a>
-        <div>
-          <a
-            href="#"
-            style={applyHoverStyle(navLinkStyle, {color: palette.accentRed}, isNavHomeHovered)}
-            onMouseEnter={() => setIsNavHomeHovered(true)}
-            onMouseLeave={() => setIsNavHomeHovered(false)}
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            style={applyHoverStyle(navLinkStyle, {color: palette.accentRed}, isNavAboutHovered)}
-            onMouseEnter={() => setIsNavAboutHovered(true)}
-            onMouseLeave={() => setIsNavAboutHovered(false)}
-          >
-            About
-          </a>
-          <a
-            href="#"
-            style={applyHoverStyle(navLinkStyle, {color: palette.accentRed}, isNavContactHovered)}
-            onMouseEnter={() => setIsNavContactHovered(true)}
-            onMouseLeave={() => setIsNavContactHovered(false)}
-          >
-            Contact
-          </a>
+            <footer style={{
+                backgroundColor: darkerBg,
+                color: neonTextLight,
+                textAlign: 'center',
+                padding: '25px',
+                fontSize: '0.9em',
+                borderTop: `1px solid ${neonPrimary}`,
+                textShadow: `0 0 3px ${neonTextLight}`,
+                opacity: 0.7,
+            }}>
+                <p>&copy; {new Date().getFullYear()} Basen AGH. Wszystkie prawa zastrzeżone.</p>
+                <p>Projekt i wykonanie: Zespół IT AGH (w domyśle).</p>
+            </footer>
         </div>
-      </nav>
-      <div style={cardStyle}>
-        <h2 style={titleStyle}>Kontakt: Basen AGH</h2>
-        <p style={subtitleStyle}>
-          Nasz zespół chętnie odpowie na Twoje pytania. Poniżej znajdziesz wszystkie niezbędne dane kontaktowe oraz mapę dojazdu.
-        </p>
+    );
+};
 
-        <h3 style={sectionTitleStyle}>Dane Kontaktowe</h3>
-        <div style={contactGridStyle}>
-          <div style={contactItemStyle}>
-            <div style={contactIconStyle}>📞</div>
-            <span>Telefon: <a
-              href="tel:+48126173000"
-              style={applyHoverStyle(linkStyle, hoverLinkStyle, isPhoneHovered)}
-              onMouseEnter={() => setIsPhoneHovered(true)}
-              onMouseLeave={() => setIsPhoneHovered(false)}
-            >+48 12 617 30 00</a></span>
-          </div>
-          <div style={contactItemStyle}>
-            <div style={contactIconStyle}>✉️</div>
-            <span>E-mail: <a
-              href="mailto:basen@agh.edu.pl"
-              style={applyHoverStyle(linkStyle, hoverLinkStyle, isEmailHovered)}
-              onMouseEnter={() => setIsEmailHovered(true)}
-              onMouseLeave={() => setIsEmailHovered(false)}
-            >basen@agh.edu.pl</a></span>
-          </div>
-          <div style={contactItemStyle}>
-            <div style={contactIconStyle}>📍</div>
-            <span>Adres: Reymonta 17, 30-059 Kraków</span>
-          </div>
-        </div>
-
-        <h3 style={sectionTitleStyle}>Nasza Lokalizacja</h3>
-        <p style={subtitleStyle}>
-          Basen znajduje się na terenie kampusu AGH, w dogodnej lokalizacji blisko centrum.
-        </p>
-
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2560.852904834898!2d19.91185591571732!3d50.06526977942436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47165bb0d9a6c9d5%3A0x6b8d7c4b7b3b9b4d!2sBasen%20AGH!5e0!3m2!1spl!2spl!4v1678901234567!5m2!1spl!2spl"
-          width="600"
-          height="450"
-          style={mapFrameStyle}
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          title="Lokalizacja Basenu AGH"
-        ></iframe>
-        <a
-          href="https://www.google.com/maps/place/Basen+AGH/@50.06527,19.9118559,17z/data=!3m1!4b1!4m6!3m5!1s0x47165bb0d9a6c9d5:0x6b8d7c4b7b3b9b4d!8m2!3d50.06527!4d19.9144308!16s%2Fg%2F1tdw1v42?entry=ttu"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={applyHoverStyle(linkStyle, hoverLinkStyle, isMapsLinkHovered)}
-          onMouseEnter={() => setIsMapsLinkHovered(true)}
-          onMouseLeave={() => setIsMapsLinkHovered(false)}
-        >
-          Otwórz w Google Maps
-        </a>
-      </div>
-    </div>
-  );
-}
-
-export default SecondBasenAGHContactInfo;
+export default ModernPoolAGHApp;

@@ -1,273 +1,198 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 
-function ThirdBasenAGHContactInfo() {
-  const palette = {
-    background: '#f9fafb',
-    card: '#ffffff',
-    primaryText: '#2d3748',
-    secondaryText: '#718096',
-    accentRed: '#e53e3e',
-    hoverRed: '#c53030',
-    borderColor: '#e2e8f0',
-    shadow: 'rgba(0,0,0,0.05)',
-  };
+const CommunityPoolAGHApp = () => {
+    const primaryGreen = '#8bc34a'; // Fresh, friendly green
+    const secondaryGreen = '#4caf50'; // Darker green
+    const accentYellow = '#ffeb3b'; // Yellow accent
+    const textColor = '#333';
+    const bgColor = '#f7fdf7'; // Light green-ish background
 
-  const mainContainerStyle = useMemo(() => ({
-    minHeight: '100vh',
-    background: palette.background,
-    fontFamily: "'Inter', sans-serif",
-    color: palette.primaryText,
-    display: 'flex',
-  }), [palette.background, palette.primaryText]);
+    const containerStyle = {
+        fontFamily: '"Comic Sans MS", "Chalkboard SE", sans-serif', // Playful font for community feel
+        maxWidth: '1000px',
+        margin: '0 auto',
+        padding: '30px',
+        backgroundColor: bgColor,
+        boxShadow: '0 0 20px rgba(0,0,0,0.08)',
+        border: `4px dashed ${primaryGreen}`, // Playful border
+        borderRadius: '20px',
+        marginTop: '30px',
+        marginBottom: '30px',
+        color: textColor,
+        lineHeight: '1.6',
+    };
 
-  const sidebarStyle = useMemo(() => ({
-    width: '250px',
-    minWidth: '200px',
-    backgroundColor: palette.card,
-    padding: '30px 20px',
-    boxShadow: `0 2px 10px ${palette.shadow}`,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    borderRight: `1px solid ${palette.borderColor}`,
-    position: 'sticky',
-    top: 0,
-    height: '100vh',
-    boxSizing: 'border-box',
-  }), [palette.card, palette.shadow, palette.borderColor]);
+    const headerStyle = {
+        textAlign: 'center',
+        marginBottom: '50px',
+        borderBottom: `3px solid ${secondaryGreen}`,
+        paddingBottom: '25px',
+    };
 
-  const sidebarTitleStyle = useMemo(() => ({
-    fontSize: '1.5em',
-    fontWeight: '700',
-    color: palette.accentRed,
-    marginBottom: '30px',
-    textAlign: 'left',
-    width: '100%',
-    textDecoration: 'none',
-  }), [palette.accentRed]);
+    // Note: Inline styles don't directly support :hover pseudo-classes.
+    // For a real app, you'd use a CSS module, styled-components, or a library.
+    // Here, we just define the base style.
+    const navItemStyle = {
+        margin: '0 15px',
+        textDecoration: 'none',
+        color: secondaryGreen,
+        fontWeight: 'bold',
+        fontSize: '1.2em',
+        padding: '8px 15px',
+        borderRadius: '8px',
+        transition: 'background-color 0.3s, color 0.3s',
+        border: `1px solid ${primaryGreen}`,
+    };
 
-  const sidebarNavContainerStyle = useMemo(() => ({
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  }), []);
+    const sectionHeaderStyle = {
+        fontSize: '2.5em',
+        color: secondaryGreen,
+        textAlign: 'center',
+        marginBottom: '40px',
+        marginTop: '60px',
+        position: 'relative',
+        textShadow: '1px 1px 0px rgba(0,0,0,0.05)',
+    };
 
-  const sidebarLinkStyle = useMemo(() => ({
-    color: palette.primaryText,
-    textDecoration: 'none',
-    fontWeight: '500',
-    padding: '12px 10px',
-    marginBottom: '10px',
-    borderRadius: '8px',
-    width: '100%',
-    textAlign: 'left',
-    transition: 'background-color 0.2s ease, color 0.2s ease',
-    boxSizing: 'border-box',
-  }), [palette.primaryText]);
+    const cardContainerStyle = {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        gap: '30px',
+    };
 
-  const sidebarLinkHoverStyle = useMemo(() => ({
-    backgroundColor: 'rgba(229, 62, 62, 0.1)',
-    color: palette.accentRed,
-  }), [palette.accentRed]);
+    const cardStyle = {
+        background: '#fff',
+        padding: '25px',
+        borderRadius: '15px',
+        boxShadow: '0 5px 20px rgba(0,0,0,0.1)',
+        width: '45%',
+        minWidth: '300px',
+        transition: 'transform 0.2s ease-in-out',
+        // Example hover: ':hover': { transform: 'translateY(-5px)' }
+    };
 
-  const contentAreaStyle = useMemo(() => ({
-    flexGrow: 1,
-    padding: '40px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    boxSizing: 'border-box',
-  }), []);
+    return (
+        <div style={containerStyle}>
+            <header style={headerStyle}>
+                <h1 style={{ fontSize: '4em', color: primaryGreen, textShadow: '3px 3px 0px rgba(0,0,0,0.1)' }}>
+                    💦 Basen AGH 🥳
+                </h1>
+                <p style={{ fontSize: '1.4em', color: secondaryGreen, marginBottom: '25px' }}>
+                    Twoje miejsce na plusk, relaks i sport w sercu AGH!
+                </p>
+                <nav>
+                    <a href="#news" style={navItemStyle}>Aktualności</a>
+                    <a href="#schedule" style={navItemStyle}>Harmonogram</a>
+                    <a href="#gallery" style={navItemStyle}>Galeria Wodna</a>
+                    <a href="#join-us" style={navItemStyle}>Dołącz do nas!</a>
+                </nav>
+            </header>
 
-  const cardStyle = useMemo(() => ({
-    maxWidth: '600px',
-    width: '100%',
-    backgroundColor: palette.card,
-    borderRadius: '16px',
-    boxShadow: `0 8px 20px ${palette.shadow}`,
-    padding: '40px',
-    border: `1px solid ${palette.borderColor}`,
-    textAlign: 'center',
-    boxSizing: 'border-box',
-  }), [palette.card, palette.shadow, palette.borderColor]);
+            <section id="news" style={{ marginBottom: '70px' }}>
+                <h2 style={sectionHeaderStyle}>Najświeższe Wiadomości z Basenu!</h2>
+                <div style={cardContainerStyle}>
+                    <div style={cardStyle}>
+                        <h3 style={{ color: secondaryGreen, borderBottom: `2px dashed ${primaryGreen}`, paddingBottom: '12px', marginBottom: '15px', fontSize: '1.8em' }}>Grand Prix Pływackie AGH 2024!</h3>
+                        <p style={{ fontSize: '0.9em', color: '#777', marginBottom: '18px' }}>25 października 2024</p>
+                        <p>Zapraszamy wszystkich entuzjastów pływania do udziału w naszym corocznym Grand Prix! Zapisy ruszają już w przyszłym tygodniu. Medale i nagrody czekają!</p>
+                        <button style={{ background: accentYellow, border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', marginTop: '20px', fontSize: '1.1em', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
+                            Czytaj więcej!
+                        </button>
+                    </div>
+                    <div style={cardStyle}>
+                        <h3 style={{ color: secondaryGreen, borderBottom: `2px dashed ${primaryGreen}`, paddingBottom: '12px', marginBottom: '15px', fontSize: '1.8em' }}>Nowe Zajęcia Aqua Aerobiku!</h3>
+                        <p style={{ fontSize: '0.9em', color: '#777', marginBottom: '18px' }}>10 października 2024</p>
+                        <p>Od listopada rozszerzamy ofertę o dodatkowe zajęcia Aqua Aerobiku! Idealne dla każdego, kto szuka energicznej formy ruchu w wodzie. Zapraszamy!</p>
+                        <button style={{ background: accentYellow, border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', marginTop: '20px', fontSize: '1.1em', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
+                            Sprawdź godziny
+                        </button>
+                    </div>
+                </div>
+            </section>
 
-  const titleStyle = useMemo(() => ({
-    fontSize: '2.2em',
-    color: palette.primaryText,
-    marginBottom: '15px',
-    fontWeight: '700',
-  }), [palette.primaryText]);
+            <section id="schedule" style={{ marginBottom: '70px' }}>
+                <h2 style={sectionHeaderStyle}>Harmonogram Zajęć i Dostępności</h2>
+                <div style={{ background: '#fff', padding: '35px', borderRadius: '15px', boxShadow: '0 5px 20px rgba(0,0,0,0.08)' }}>
+                    <p style={{ marginBottom: '25px', textAlign: 'center', fontSize: '1.1em' }}>
+                        Zobacz, co dzieje się na naszym basenie każdego dnia! Od porannych pływań po wieczorne relaksacje.
+                    </p>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', marginBottom: '25px' }}>
+                        <thead>
+                            <tr style={{ backgroundColor: primaryGreen, color: '#fff' }}>
+                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Godzina</th>
+                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Poniedziałek</th>
+                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Wtorek</th>
+                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Środa</th>
+                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>7:00-8:00</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Aqua Fitness</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>...</td>
+                            </tr>
+                            <tr>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>17:00-18:00</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Nauka Pływania</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Aqua Aerobik</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>...</td>
+                            </tr>
+                            <tr>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>20:00-21:00</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Tory zamknięte</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
+                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style={{ fontSize: '1em', color: '#555', marginTop: '25px', textAlign: 'center' }}>
+                        Pełny, szczegółowy rozkład dostępny jest w recepcji oraz do pobrania w formacie PDF.
+                    </p>
+                </div>
+            </section>
 
-  const subtitleStyle = useMemo(() => ({
-    fontSize: '1.05em',
-    color: palette.secondaryText,
-    marginBottom: '35px',
-    lineHeight: '1.6',
-  }), [palette.secondaryText]);
+            <section id="gallery" style={{ marginBottom: '70px' }}>
+                <h2 style={sectionHeaderStyle}>Nasza Wodna Galeria!</h2>
+                <div style={cardContainerStyle}>
+                    <img src="https://via.placeholder.com/300x220/4CAF50/fff?text=Basen+AGH+1" alt="Basen AGH" style={{ width: '300px', height: '220px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }} />
+                    <img src="https://via.placeholder.com/300x220/8BC34A/fff?text=Basen+AGH+2" alt="Basen AGH" style={{ width: '300px', height: '220px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }} />
+                    <img src="https://via.placeholder.com/300x220/FFEB3B/333?text=Basen+AGH+3" alt="Basen AGH" style={{ width: '300px', height: '220px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }} />
+                </div>
+                <p style={{ textAlign: 'center', marginTop: '30px', fontSize: '1.2em' }}>
+                    Przyjdź i poczuj atmosferę na żywo! Czekamy na Ciebie!
+                </p>
+            </section>
 
-  const sectionTitleStyle = useMemo(() => ({
-    fontSize: '1.5em',
-    color: palette.accentRed,
-    marginBottom: '20px',
-    marginTop: '30px',
-    fontWeight: '600',
-  }), [palette.accentRed]);
+            <section id="join-us" style={{ marginBottom: '70px', textAlign: 'center' }}>
+                <h2 style={sectionHeaderStyle}>Dołącz do Naszej Społeczności!</h2>
+                <p style={{ fontSize: '1.3em', marginBottom: '35px' }}>
+                    Śledź nas w mediach społecznościowych, aby być na bieżąco z wydarzeniami i promocjami!
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '25px' }}>
+                    <button style={{ backgroundColor: '#1877F2', color: '#fff', border: 'none', padding: '18px 35px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2em', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
+                        Facebook
+                    </button>
+                    <button style={{ backgroundColor: '#C13584', color: '#fff', border: 'none', padding: '18px 35px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2em', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
+                        Instagram
+                    </button>
+                </div>
+                <p style={{ marginTop: '40px', fontSize: '1.2em' }}>
+                    Masz pytania lub chcesz z nami porozmawiać? <br/> <a href="mailto:info@agh.edu.pl" style={{ color: secondaryGreen, textDecoration: 'underline' }}>Napisz do nas!</a>
+                </p>
+            </section>
 
-  const contactGridStyle = useMemo(() => ({
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '15px',
-    marginBottom: '30px',
-  }), []);
-
-  const contactItemStyle = useMemo(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.05em',
-    color: palette.primaryText,
-  }), [palette.primaryText]);
-
-  const contactIconStyle = useMemo(() => ({
-    fontSize: '1.2em',
-    color: palette.accentRed,
-    marginRight: '15px',
-    width: '30px',
-    height: '30px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-    backgroundColor: 'rgba(229, 62, 62, 0.1)',
-  }), [palette.accentRed]);
-
-  const linkStyle = useMemo(() => ({
-    color: palette.accentRed,
-    textDecoration: 'none',
-    fontWeight: '500',
-    transition: 'color 0.2s ease, text-decoration 0.2s ease',
-  }), [palette.accentRed]);
-
-  const hoverLinkStyle = useMemo(() => ({
-    color: palette.hoverRed,
-    textDecoration: 'underline',
-  }), [palette.hoverRed]);
-
-  const mapFrameStyle = useMemo(() => ({
-    width: '100%',
-    height: '350px',
-    border: `1px solid ${palette.borderColor}`,
-    borderRadius: '10px',
-    marginTop: '30px',
-    marginBottom: '15px',
-    boxShadow: `0 4px 10px ${palette.shadow}`,
-  }), [palette.borderColor, palette.shadow]);
-
-  const [isPhoneHovered, setIsPhoneHovered] = useState(false);
-  const [isEmailHovered, setIsEmailHovered] = useState(false);
-  const [isMapsLinkHovered, setIsMapsLinkHovered] = useState(false);
-  const [isSidebarHomeHovered, setIsSidebarHomeHovered] = useState(false);
-  const [isSidebarAboutHovered, setIsSidebarAboutHovered] = useState(false);
-  const [isSidebarContactHovered, setIsSidebarContactHovered] = useState(false);
-
-  const applyHoverStyle = (baseStyle, hoverStyle, isHovered) => ({
-    ...baseStyle,
-    ...(isHovered ? hoverStyle : {}),
-  });
-
-  return (
-    <div style={mainContainerStyle}>
-      <div style={sidebarStyle}>
-        <a href="#" style={sidebarTitleStyle}>Basen AGH</a>
-        <div style={sidebarNavContainerStyle}>
-          <a
-            href="#"
-            style={applyHoverStyle(sidebarLinkStyle, sidebarLinkHoverStyle, isSidebarHomeHovered)}
-            onMouseEnter={() => setIsSidebarHomeHovered(true)}
-            onMouseLeave={() => setIsSidebarHomeHovered(false)}
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            style={applyHoverStyle(sidebarLinkStyle, sidebarLinkHoverStyle, isSidebarAboutHovered)}
-            onMouseEnter={() => setIsSidebarAboutHovered(true)}
-            onMouseLeave={() => setIsSidebarAboutHovered(false)}
-          >
-            About
-          </a>
-          <a
-            href="#"
-            style={applyHoverStyle(sidebarLinkStyle, sidebarLinkHoverStyle, isSidebarContactHovered)}
-            onMouseEnter={() => setIsSidebarContactHovered(true)}
-            onMouseLeave={() => setIsSidebarContactHovered(false)}
-          >
-            Contact
-          </a>
+            <footer style={{ textAlign: 'center', marginTop: '60px', paddingTop: '25px', borderTop: `2px dashed ${primaryGreen}`, color: '#777', fontSize: '1em' }}>
+                <p>Zawsze dla Ciebie, z basenu AGH! &copy; {new Date().getFullYear()}</p>
+                <p style={{ fontSize: '0.8em', marginTop: '10px' }}>Tworzone z pasją przez wodnych entuzjastów AGH.</p>
+            </footer>
         </div>
-      </div>
-      <div style={contentAreaStyle}>
-        <div style={cardStyle}>
-          <h2 style={titleStyle}>Kontakt: Basen AGH</h2>
-          <p style={subtitleStyle}>
-            Nasz zespół chętnie odpowie na Twoje pytania. Poniżej znajdziesz wszystkie niezbędne dane kontaktowe oraz mapę dojazdu.
-          </p>
+    );
+};
 
-          <h3 style={sectionTitleStyle}>Dane Kontaktowe</h3>
-          <div style={contactGridStyle}>
-            <div style={contactItemStyle}>
-              <div style={contactIconStyle}>📞</div>
-              <span>Telefon: <a
-                href="tel:+48126173000"
-                style={applyHoverStyle(linkStyle, hoverLinkStyle, isPhoneHovered)}
-                onMouseEnter={() => setIsPhoneHovered(true)}
-                onMouseLeave={() => setIsPhoneHovered(false)}
-              >+48 12 617 30 00</a></span>
-            </div>
-            <div style={contactItemStyle}>
-              <div style={contactIconStyle}>✉️</div>
-              <span>E-mail: <a
-                href="mailto:basen@agh.edu.pl"
-                style={applyHoverStyle(linkStyle, hoverLinkStyle, isEmailHovered)}
-                onMouseEnter={() => setIsEmailHovered(true)}
-                onMouseLeave={() => setIsEmailHovered(false)}
-              >basen@agh.edu.pl</a></span>
-            </div>
-            <div style={contactItemStyle}>
-              <div style={contactIconStyle}>📍</div>
-              <span>Adres: Reymonta 17, 30-059 Kraków</span>
-            </div>
-          </div>
-
-          <h3 style={sectionTitleStyle}>Nasza Lokalizacja</h3>
-          <p style={subtitleStyle}>
-            Basen znajduje się na terenie kampusu AGH, w dogodnej lokalizacji blisko centrum.
-          </p>
-
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2560.852904834898!2d19.91185591571732!3d50.06526977942436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47165bb0d9a6c9d5%3A0x6b8d7c4b7b3b9b4d!2sBasen%20AGH!5e0!3m2!1spl!2spl!4v1678901234567!5m2!1spl!2spl"
-            width="600"
-            height="450"
-            style={mapFrameStyle}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Lokalizacja Basenu AGH"
-          ></iframe>
-          <a
-            href="https://www.google.com/maps/place/Basen+AGH/@50.06527,19.9118559,17z/data=!3m1!4b1!4m6!3m5!1s0x47165bb0d9a6c9d5:0x6b8d7c4b7b3b9b4d!8m2!3d50.06527!4d19.9144308!16s%2Fg%2F1tdw1v42?entry=ttu"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={applyHoverStyle(linkStyle, hoverLinkStyle, isMapsLinkHovered)}
-            onMouseEnter={() => setIsMapsLinkHovered(true)}
-            onMouseLeave={() => setIsMapsLinkHovered(false)}
-          >
-            Otwórz w Google Maps
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default ThirdBasenAGHContactInfo;
+export default CommunityPoolAGHApp;

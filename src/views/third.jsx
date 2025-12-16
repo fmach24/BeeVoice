@@ -1,198 +1,407 @@
 import React from 'react';
 
-const CommunityPoolAGHApp = () => {
-    const primaryGreen = '#8bc34a'; // Fresh, friendly green
-    const secondaryGreen = '#4caf50'; // Darker green
-    const accentYellow = '#ffeb3b'; // Yellow accent
-    const textColor = '#333';
-    const bgColor = '#f7fdf7'; // Light green-ish background
+const MenuItem = ({ name, description, price, isSpecial }) => (
+  <div className={`modern-menu-item ${isSpecial ? 'special-glow' : ''}`}>
+    <div className="item-info">
+      <h3 className="item-name">{name}</h3>
+      <p className="item-description">{description}</p>
+    </div>
+    <span className="item-price">{price}</span>
+  </div>
+);
 
-    const containerStyle = {
-        fontFamily: '"Comic Sans MS", "Chalkboard SE", sans-serif', // Playful font for community feel
-        maxWidth: '1000px',
-        margin: '0 auto',
-        padding: '30px',
-        backgroundColor: bgColor,
-        boxShadow: '0 0 20px rgba(0,0,0,0.08)',
-        border: `4px dashed ${primaryGreen}`, // Playful border
-        borderRadius: '20px',
-        marginTop: '30px',
-        marginBottom: '30px',
-        color: textColor,
-        lineHeight: '1.6',
-    };
+const App = () => {
+  const pizzas = [
+    { name: "NEO MARGHERITA", description: "Klasyka, na nowo wyobrażona z nowoczesnym blaskiem.", price: "$12.99" },
+    { name: "CYBER KURCZAK", description: "Kurczak grillowany, wędzone chipotle i neonowa mżawka.", price: "$15.50", isSpecial: true },
+    { name: "ELEKTRYCZNE WARZYWA", description: "Świeże warzywa sezonowe, jasne i żywe.", price: "$14.00" },
+    { name: "RETRO ROMANA", description: "Anchois, kapary, oliwki – ponadczasowy smak.", price: "$13.75" },
+    { name: "METROPOLIS MIĘSNA", description: "Pepperoni, kiełbasa, szynka, marzenie mięsożercy.", price: "$16.99", isSpecial: true },
+  ];
 
-    const headerStyle = {
-        textAlign: 'center',
-        marginBottom: '50px',
-        borderBottom: `3px solid ${secondaryGreen}`,
-        paddingBottom: '25px',
-    };
+  return (
+    <div className="modern-neon-pizzeria">
+      <header className="modern-header">
+        <h1 className="modern-logo">
+          <span className="logo-text-primary">NEO</span>
+          <span className="logo-text-secondary">PIZZA</span>
+        </h1>
+        <nav className="modern-nav">
+          <a href="#menu" className="nav-link">Menu</a>
+          <a href="#about" className="nav-link">O Nas</a>
+          <a href="#contact" className="nav-link">Kontakt</a>
+        </nav>
+      </header>
 
-    // Note: Inline styles don't directly support :hover pseudo-classes.
-    // For a real app, you'd use a CSS module, styled-components, or a library.
-    // Here, we just define the base style.
-    const navItemStyle = {
-        margin: '0 15px',
-        textDecoration: 'none',
-        color: secondaryGreen,
-        fontWeight: 'bold',
-        fontSize: '1.2em',
-        padding: '8px 15px',
-        borderRadius: '8px',
-        transition: 'background-color 0.3s, color 0.3s',
-        border: `1px solid ${primaryGreen}`,
-    };
-
-    const sectionHeaderStyle = {
-        fontSize: '2.5em',
-        color: secondaryGreen,
-        textAlign: 'center',
-        marginBottom: '40px',
-        marginTop: '60px',
-        position: 'relative',
-        textShadow: '1px 1px 0px rgba(0,0,0,0.05)',
-    };
-
-    const cardContainerStyle = {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: '30px',
-    };
-
-    const cardStyle = {
-        background: '#fff',
-        padding: '25px',
-        borderRadius: '15px',
-        boxShadow: '0 5px 20px rgba(0,0,0,0.1)',
-        width: '45%',
-        minWidth: '300px',
-        transition: 'transform 0.2s ease-in-out',
-        // Example hover: ':hover': { transform: 'translateY(-5px)' }
-    };
-
-    return (
-        <div style={containerStyle}>
-            <header style={headerStyle}>
-                <h1 style={{ fontSize: '4em', color: primaryGreen, textShadow: '3px 3px 0px rgba(0,0,0,0.1)' }}>
-                    💦 Basen AGH 🥳
-                </h1>
-                <p style={{ fontSize: '1.4em', color: secondaryGreen, marginBottom: '25px' }}>
-                    Twoje miejsce na plusk, relaks i sport w sercu AGH!
-                </p>
-                <nav>
-                    <a href="#news" style={navItemStyle}>Aktualności</a>
-                    <a href="#schedule" style={navItemStyle}>Harmonogram</a>
-                    <a href="#gallery" style={navItemStyle}>Galeria Wodna</a>
-                    <a href="#join-us" style={navItemStyle}>Dołącz do nas!</a>
-                </nav>
-            </header>
-
-            <section id="news" style={{ marginBottom: '70px' }}>
-                <h2 style={sectionHeaderStyle}>Najświeższe Wiadomości z Basenu!</h2>
-                <div style={cardContainerStyle}>
-                    <div style={cardStyle}>
-                        <h3 style={{ color: secondaryGreen, borderBottom: `2px dashed ${primaryGreen}`, paddingBottom: '12px', marginBottom: '15px', fontSize: '1.8em' }}>Grand Prix Pływackie AGH 2024!</h3>
-                        <p style={{ fontSize: '0.9em', color: '#777', marginBottom: '18px' }}>25 października 2024</p>
-                        <p>Zapraszamy wszystkich entuzjastów pływania do udziału w naszym corocznym Grand Prix! Zapisy ruszają już w przyszłym tygodniu. Medale i nagrody czekają!</p>
-                        <button style={{ background: accentYellow, border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', marginTop: '20px', fontSize: '1.1em', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-                            Czytaj więcej!
-                        </button>
-                    </div>
-                    <div style={cardStyle}>
-                        <h3 style={{ color: secondaryGreen, borderBottom: `2px dashed ${primaryGreen}`, paddingBottom: '12px', marginBottom: '15px', fontSize: '1.8em' }}>Nowe Zajęcia Aqua Aerobiku!</h3>
-                        <p style={{ fontSize: '0.9em', color: '#777', marginBottom: '18px' }}>10 października 2024</p>
-                        <p>Od listopada rozszerzamy ofertę o dodatkowe zajęcia Aqua Aerobiku! Idealne dla każdego, kto szuka energicznej formy ruchu w wodzie. Zapraszamy!</p>
-                        <button style={{ background: accentYellow, border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', marginTop: '20px', fontSize: '1.1em', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-                            Sprawdź godziny
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="schedule" style={{ marginBottom: '70px' }}>
-                <h2 style={sectionHeaderStyle}>Harmonogram Zajęć i Dostępności</h2>
-                <div style={{ background: '#fff', padding: '35px', borderRadius: '15px', boxShadow: '0 5px 20px rgba(0,0,0,0.08)' }}>
-                    <p style={{ marginBottom: '25px', textAlign: 'center', fontSize: '1.1em' }}>
-                        Zobacz, co dzieje się na naszym basenie każdego dnia! Od porannych pływań po wieczorne relaksacje.
-                    </p>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', marginBottom: '25px' }}>
-                        <thead>
-                            <tr style={{ backgroundColor: primaryGreen, color: '#fff' }}>
-                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Godzina</th>
-                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Poniedziałek</th>
-                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Wtorek</th>
-                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>Środa</th>
-                                <th style={{ padding: '15px', border: `1px solid ${primaryGreen}` }}>...</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>7:00-8:00</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Aqua Fitness</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>...</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>17:00-18:00</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Nauka Pływania</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Aqua Aerobik</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>...</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>20:00-21:00</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Tory zamknięte</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>Pływanie swobodne</td>
-                                <td style={{ padding: '12px', border: `1px solid ${primaryGreen}` }}>...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p style={{ fontSize: '1em', color: '#555', marginTop: '25px', textAlign: 'center' }}>
-                        Pełny, szczegółowy rozkład dostępny jest w recepcji oraz do pobrania w formacie PDF.
-                    </p>
-                </div>
-            </section>
-
-            <section id="gallery" style={{ marginBottom: '70px' }}>
-                <h2 style={sectionHeaderStyle}>Nasza Wodna Galeria!</h2>
-                <div style={cardContainerStyle}>
-                    <img src="https://via.placeholder.com/300x220/4CAF50/fff?text=Basen+AGH+1" alt="Basen AGH" style={{ width: '300px', height: '220px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }} />
-                    <img src="https://via.placeholder.com/300x220/8BC34A/fff?text=Basen+AGH+2" alt="Basen AGH" style={{ width: '300px', height: '220px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }} />
-                    <img src="https://via.placeholder.com/300x220/FFEB3B/333?text=Basen+AGH+3" alt="Basen AGH" style={{ width: '300px', height: '220px', objectFit: 'cover', borderRadius: '10px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)' }} />
-                </div>
-                <p style={{ textAlign: 'center', marginTop: '30px', fontSize: '1.2em' }}>
-                    Przyjdź i poczuj atmosferę na żywo! Czekamy na Ciebie!
-                </p>
-            </section>
-
-            <section id="join-us" style={{ marginBottom: '70px', textAlign: 'center' }}>
-                <h2 style={sectionHeaderStyle}>Dołącz do Naszej Społeczności!</h2>
-                <p style={{ fontSize: '1.3em', marginBottom: '35px' }}>
-                    Śledź nas w mediach społecznościowych, aby być na bieżąco z wydarzeniami i promocjami!
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '25px' }}>
-                    <button style={{ backgroundColor: '#1877F2', color: '#fff', border: 'none', padding: '18px 35px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2em', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
-                        Facebook
-                    </button>
-                    <button style={{ backgroundColor: '#C13584', color: '#fff', border: 'none', padding: '18px 35px', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2em', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
-                        Instagram
-                    </button>
-                </div>
-                <p style={{ marginTop: '40px', fontSize: '1.2em' }}>
-                    Masz pytania lub chcesz z nami porozmawiać? <br/> <a href="mailto:info@agh.edu.pl" style={{ color: secondaryGreen, textDecoration: 'underline' }}>Napisz do nas!</a>
-                </p>
-            </section>
-
-            <footer style={{ textAlign: 'center', marginTop: '60px', paddingTop: '25px', borderTop: `2px dashed ${primaryGreen}`, color: '#777', fontSize: '1em' }}>
-                <p>Zawsze dla Ciebie, z basenu AGH! &copy; {new Date().getFullYear()}</p>
-                <p style={{ fontSize: '0.8em', marginTop: '10px' }}>Tworzone z pasją przez wodnych entuzjastów AGH.</p>
-            </footer>
+      <section className="hero-modern">
+        <div className="hero-content">
+          <h2 className="hero-title">Poczuj Noc</h2>
+          <p className="hero-subtitle">Wyrafinowane smaki w eleganckiej, lśniącej atmosferze.</p>
+          <button className="cta-button">Zobacz Menu</button>
         </div>
-    );
+        <div className="hero-overlay"></div>
+      </section>
+
+      <section id="menu" className="menu-modern">
+        <h2 className="section-title">Nasze Firmowe Kawałki</h2>
+        <div className="menu-list">
+          {pizzas.map((pizza, index) => (
+            <MenuItem key={index} {...pizza} />
+          ))}
+        </div>
+        <button className="cta-button secondary-button">Pełne Menu i Zamawianie</button>
+      </section>
+
+      <footer className="modern-footer">
+        <p className="footer-text">&copy; 2023 NEOPIZZA. Nowoczesny Smak. Neonowe Noce.</p>
+      </footer>
+
+      {/* Stylizacja CSS */}
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Bebas+Neue&display=swap');
+
+        :root {
+          --dark-bg: #0d0d1a;
+          --accent-glow: #00f0ff; /* Cyjan */
+          --secondary-glow: #ff00ff; /* Magenta */
+          --text-color-light: #f0f0f0;
+          --text-color-dark: #b0b0b0;
+        }
+
+        .modern-neon-pizzeria {
+          font-family: 'Montserrat', sans-serif;
+          background-color: var(--dark-bg);
+          color: var(--text-color-light);
+          min-height: 100vh;
+          overflow-x: hidden;
+          text-align: center;
+        }
+
+        .modern-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 25px 50px;
+          background-color: rgba(0, 0, 0, 0.4);
+          border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          backdrop-filter: blur(5px);
+        }
+
+        .modern-logo {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 3em;
+          margin: 0;
+          line-height: 1;
+        }
+
+        .logo-text-primary {
+          color: var(--text-color-light);
+          text-shadow: 0 0 8px var(--accent-glow), 0 0 15px var(--accent-glow);
+        }
+
+        .logo-text-secondary {
+          color: var(--secondary-glow);
+          text-shadow: 0 0 6px var(--secondary-glow), 0 0 10px var(--secondary-glow);
+          margin-left: -0.1em; /* Korekta optyczna */
+        }
+
+        .modern-nav .nav-link {
+          color: var(--text-color-dark);
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 1.1em;
+          margin-left: 35px;
+          padding: 5px 0;
+          position: relative;
+          transition: all 0.3s ease;
+        }
+
+        .modern-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent-glow);
+            box-shadow: 0 0 5px var(--accent-glow);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .modern-nav .nav-link:hover {
+          color: var(--text-color-light);
+          text-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        .modern-nav .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .hero-modern {
+          height: 80vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          /* Tło: Użyj własnego obrazu w stylu neonowym lub ciemnego tła miasta */
+          background: url('https://images.unsplash.com/photo-1517248135460-4c31154316d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80') center center/cover no-repeat fixed;
+          box-shadow: inset 0 0 50px rgba(0,240,255,0.2), inset 0 0 100px rgba(255,0,255,0.2);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(13, 13, 26, 0.6) 0%,
+                rgba(13, 13, 26, 0.8) 50%,
+                rgba(13, 13, 26, 0.9) 100%
+            );
+            z-index: 1;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          padding: 20px;
+        }
+
+        .hero-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 5em;
+          margin-bottom: 20px;
+          color: var(--text-color-light);
+          text-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow);
+          letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+          font-size: 1.5em;
+          color: var(--text-color-dark);
+          text-shadow: 0 0 5px rgba(255,255,255,0.3);
+          margin-bottom: 40px;
+        }
+
+        .cta-button {
+          background: none;
+          border: 2px solid var(--accent-glow);
+          color: var(--text-color-light);
+          padding: 15px 35px;
+          font-size: 1.2em;
+          font-weight: 600;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          box-shadow: 0 0 15px rgba(0,240,255,0.4);
+          border-radius: 5px;
+        }
+
+        .cta-button:hover {
+          background-color: var(--accent-glow);
+          color: var(--dark-bg);
+          box-shadow: 0 0 25px var(--accent-glow), 0 0 40px var(--accent-glow);
+          transform: translateY(-3px);
+        }
+
+        .menu-modern {
+          padding: 80px 20px;
+          background-color: var(--dark-bg);
+          position: relative;
+          z-index: 5;
+        }
+
+        .section-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 3.5em;
+          margin-bottom: 70px;
+          color: var(--text-color-light);
+          text-shadow: 0 0 8px var(--secondary-glow), 0 0 15px var(--secondary-glow);
+          letter-spacing: 1px;
+        }
+
+        .menu-list {
+          max-width: 900px;
+          margin: 0 auto 60px auto;
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+        }
+
+        .modern-menu-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 25px 30px;
+          background-color: rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(0, 240, 255, 0.1);
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+          transition: all 0.3s ease;
+          position: relative;
+        }
+
+        .modern-menu-item::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-glow), var(--secondary-glow));
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .modern-menu-item:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .modern-menu-item:hover::before {
+            opacity: 0.6;
+        }
+
+        .modern-menu-item.special-glow {
+            border-color: var(--secondary-glow);
+            box-shadow: 0 0 15px rgba(255,0,255,0.4);
+        }
+        .modern-menu-item.special-glow .item-name {
+            color: var(--secondary-glow);
+            text-shadow: 0 0 8px var(--secondary-glow);
+        }
+        .modern-menu-item.special-glow .item-price {
+            color: var(--accent-glow);
+            text-shadow: 0 0 6px var(--accent-glow);
+        }
+        .modern-menu-item.special-glow:hover::before {
+            opacity: 0.8;
+            background: linear-gradient(45deg, var(--secondary-glow), var(--accent-glow));
+        }
+
+        .item-info {
+          text-align: left;
+          flex-grow: 1;
+        }
+
+        .item-name {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.8em;
+          margin-bottom: 5px;
+          color: var(--accent-glow);
+          text-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        .item-description {
+          font-size: 0.95em;
+          color: var(--text-color-dark);
+          line-height: 1.4;
+        }
+
+        .item-price {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.6em;
+          color: var(--secondary-glow);
+          text-shadow: 0 0 5px var(--secondary-glow);
+          margin-left: 30px;
+        }
+
+        .secondary-button {
+            background: none;
+            border: 1px solid var(--text-color-dark);
+            color: var(--text-color-dark);
+            box-shadow: none;
+            font-size: 1em;
+            padding: 12px 25px;
+            margin-top: 30px;
+        }
+
+        .secondary-button:hover {
+            border-color: var(--accent-glow);
+            color: var(--accent-glow);
+            background-color: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .modern-footer {
+          padding: 40px 20px;
+          background-color: rgba(0, 0, 0, 0.6);
+          border-top: 1px solid rgba(255, 0, 255, 0.2);
+          color: var(--text-color-dark);
+          font-size: 0.9em;
+          text-shadow: 0 0 3px rgba(255,255,255,0.1);
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .modern-header {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .modern-logo {
+                font-size: 2.5em;
+                margin-bottom: 15px;
+            }
+            .modern-nav .nav-link {
+                margin: 0 15px;
+                font-size: 1em;
+            }
+            .hero-title {
+                font-size: 3.5em;
+            }
+            .hero-subtitle {
+                font-size: 1.2em;
+            }
+            .section-title {
+                font-size: 2.8em;
+                margin-bottom: 50px;
+            }
+            .modern-menu-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+            }
+            .item-name {
+                font-size: 1.6em;
+            }
+            .item-description {
+                margin-bottom: 10px;
+            }
+            .item-price {
+                align-self: flex-end;
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modern-nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .modern-nav .nav-link {
+                margin: 0 5px;
+            }
+            .hero-title {
+                font-size: 2.5em;
+            }
+            .hero-subtitle {
+                font-size: 1em;
+            }
+        }
+      `}</style>
+    </div>
+  );
 };
 
-export default CommunityPoolAGHApp;
+export default App;

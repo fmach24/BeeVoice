@@ -1,232 +1,402 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const ModernPoolAGHApp = () => {
-    // Neon Color Palette
-    const darkBg = '#0A0A0A'; // Deep black background
-    const darkerBg = '#1A1A1A'; // Slightly lighter black for sections/cards
-    const neonPrimary = '#00FFFF'; // Vibrant Cyan for primary elements (e.g., AGH Blue equivalent)
-    const neonAccent = '#39FF14'; // Electric Green for calls to action/highlights
-    const neonTextLight = '#E0FFFF'; // Very light cyan for general text
+const pizzas = [
+  { id: 1, name: "PIXEL PEPPERONI", desc: "KLASYCZNY SMAK, 8-BITOWA ZABAWA.", img: "🍕" },
+  { id: 2, name: "SYNTH WAVE SUPREME", desc: "STRZAŁ Z PRZYSZŁOŚCI-PRZESZŁOŚCI.", img: "✨" },
+  { id: 3, name: "GALACTIC GARDEN", desc: "WARZYWA Z KOSMOSU.", img: "🌿" },
+  { id: 4, name: "QUANTUM QUATTRO", desc: "CZTERY SERY, NIESKOŃCZONY SMAK.", img: "🧀" },
+];
 
-    // Glow effects
-    const textGlowPrimary = `0 0 5px ${neonPrimary}, 0 0 10px ${neonPrimary}`;
-    const textGlowAccent = `0 0 5px ${neonAccent}, 0 0 10px ${neonAccent}`;
-    // Stronger glow for elements to stand out
-    const elementGlowPrimary = `0 0 8px ${neonPrimary}, 0 0 15px ${neonPrimary}, 0 0 25px ${neonPrimary}50`; // Last value is opacity
-    const elementGlowAccent = `0 0 8px ${neonAccent}, 0 0 15px ${neonAccent}, 0 0 25px ${neonAccent}50`;
+const App = () => {
+  const [selectedPizza, setSelectedPizza] = useState(null);
 
-    const sectionStyle = {
-        padding: '60px 20px',
-        textAlign: 'center',
-        marginBottom: '0',
-        color: neonTextLight, // Default text color for sections
-        borderBottom: `1px solid ${neonPrimary}40`, // Subtle divider
-    };
+  const handleSelectPizza = (pizza) => {
+    setSelectedPizza(pizza);
+  };
 
-    const cardStyle = {
-        background: darkerBg,
-        borderRadius: '10px',
-        border: `1px solid ${neonPrimary}80`, // Slightly transparent neon border
-        boxShadow: elementGlowPrimary, // Neon glow for cards
-        padding: '30px',
-        margin: '20px',
-        flex: '1',
-        minWidth: '280px',
-        maxWidth: '350px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-        transition: 'all 0.3s ease-in-out', // Smooth transitions
-        // Note: For actual hover effects, you'd typically use CSS modules or styled-components
-        // as inline styles don't support pseudo-classes like :hover directly.
-        // For this example, we'll focus on the static neon aesthetic.
-    };
-
-    const buttonBaseStyle = {
-        border: 'none',
-        padding: '18px 35px',
-        fontSize: '1.2em',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        marginTop: '30px',
-        transition: 'all 0.3s ease',
-        textTransform: 'uppercase', // Neon text often uppercase
-    };
-
-    const linkBaseStyle = {
-        margin: '0 20px',
-        color: neonTextLight,
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        transition: 'color 0.3s ease-in-out, text-shadow 0.3s ease-in-out',
-        textShadow: textGlowPrimary,
-        letterSpacing: '0.05em', // Spread out letters
-    };
-
-    return (
-        <div style={{
-            fontFamily: "'Orbitron', monospace, sans-serif", // Futuristic/neon font. Link it in index.html for full effect.
-            color: neonTextLight,
-            backgroundColor: darkBg,
-            minHeight: '100vh', // Ensure background covers full height
-        }}>
-            <header style={{
-                backgroundColor: darkerBg,
-                color: neonPrimary,
-                padding: '15px 40px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                boxShadow: elementGlowPrimary, // Header glow
-                borderBottom: `1px solid ${neonPrimary}`,
-            }}>
-                <h1 style={{ margin: 0, fontSize: '2.2em', textShadow: textGlowPrimary, letterSpacing: '0.1em' }}>Basen <span style={{ fontWeight: 'normal', color: neonTextLight, textShadow: textGlowPrimary }}>AGH</span></h1>
-                <nav>
-                    <a href="#about" style={linkBaseStyle}>O Nas</a>
-                    <a href="#features" style={linkBaseStyle}>Udogodnienia</a>
-                    <a href="#hours-prices" style={linkBaseStyle}>Godziny & Cennik</a>
-                    <a href="#contact" style={linkBaseStyle}>Kontakt</a>
-                </nav>
-            </header>
-
-            <section style={{
-                ...sectionStyle,
-                // Darker overlay and neon placeholder image
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url("https://via.placeholder.com/1500x500/${darkBg.substring(1)}/${neonPrimary.substring(1)}?text=AGH+POOL+NEON")`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                color: neonTextLight,
-                height: '450px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textShadow: textGlowPrimary, // Hero text glow
-                borderBottom: `2px solid ${neonPrimary}`, // Stronger border for hero
-            }}>
-                <h2 style={{ fontSize: '3.8em', marginBottom: '15px', lineHeight: '1.2', textShadow: textGlowPrimary, letterSpacing: '0.08em' }}>Zanurkuj w Świecie Sportu!</h2>
-                <p style={{ fontSize: '1.3em', maxWidth: '750px', lineHeight: '1.6', opacity: 0.9 }}>
-                    Nowoczesny basen sportowo-rekreacyjny AGH w Krakowie. Idealne miejsce na trening, relaks i aktywny wypoczynek dla każdego.
-                </p>
-                <button style={{
-                    ...buttonBaseStyle,
-                    backgroundColor: neonAccent,
-                    color: darkBg, // Text on button is dark for strong contrast
-                    boxShadow: elementGlowAccent, // Accent glow
-                    textShadow: `none`, // Remove text shadow on button text for crispness
-                }} onClick={() => alert('Przekierowanie do systemu rezerwacji lub aktualności')}>
-                    Sprawdź Dostępność & Zarezerwuj!
-                </button>
-            </section>
-
-            <section id="about" style={{ ...sectionStyle, backgroundColor: darkerBg }}>
-                <h2 style={{ fontSize: '2.5em', marginBottom: '20px', color: neonPrimary, textShadow: textGlowPrimary, letterSpacing: '0.05em' }}>O Nas</h2>
-                <p style={{ maxWidth: '800px', margin: '0 auto', lineHeight: '1.8', fontSize: '1.1em', opacity: 0.9 }}>
-                    Basen AGH to nowoczesny kompleks wodny otwarty dla studentów, pracowników AGH oraz mieszkańców Krakowa. Oferujemy 6-torowy basen sportowy, strefę rekreacyjną z hydromasażami, jacuzzi oraz saunę suchą. Dbamy o najwyższe standardy czystości i bezpieczeństwa, zapewniając idealne warunki do pływania i relaksu.
-                </p>
-            </section>
-
-            <section id="features" style={{ ...sectionStyle, backgroundColor: darkBg }}>
-                <h2 style={{ fontSize: '2.5em', marginBottom: '40px', color: neonPrimary, textShadow: textGlowPrimary, letterSpacing: '0.05em' }}>Nasze Udogodnienia</h2>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
-                    <div style={cardStyle}>
-                        {/* Placeholder icons with neon colors */}
-                        <img src={`https://via.placeholder.com/60/${darkerBg.substring(1)}/${neonPrimary.substring(1)}?text=🏊`} alt="Tor pływacki" style={{ marginBottom: '15px', borderRadius: '50%', boxShadow: `0 0 10px ${neonPrimary}` }} />
-                        <h3 style={{ color: neonPrimary, fontSize: '1.6em', marginBottom: '10px', textShadow: textGlowPrimary }}>Tory Pływackie</h3>
-                        <p style={{ opacity: 0.8 }}>6 profesjonalnych torów, idealnych do intensywnych treningów i swobodnego pływania rekreacyjnego.</p>
-                    </div>
-                    <div style={cardStyle}>
-                        <img src={`https://via.placeholder.com/60/${darkerBg.substring(1)}/${neonAccent.substring(1)}?text=🌊`} alt="Basen rekreacyjny" style={{ marginBottom: '15px', borderRadius: '50%', boxShadow: `0 0 10px ${neonAccent}` }} />
-                        <h3 style={{ color: neonPrimary, fontSize: '1.6em', marginBottom: '10px', textShadow: textGlowPrimary }}>Strefa Rekreacyjna</h3>
-                        <p style={{ opacity: 0.8 }}>Basen rekreacyjny z hydromasażami, gejzerami i "dziką rzeką" dla pełnego relaksu i zabawy.</p>
-                    </div>
-                    <div style={cardStyle}>
-                        <img src={`https://via.placeholder.com/60/${darkerBg.substring(1)}/${neonTextLight.substring(1)}?text=♨️`} alt="Sauna" style={{ marginBottom: '15px', borderRadius: '50%', boxShadow: `0 0 10px ${neonTextLight}` }} />
-                        <h3 style={{ color: neonPrimary, fontSize: '1.6em', marginBottom: '10px', textShadow: textGlowPrimary }}>Sauna & Jacuzzi</h3>
-                        <p style={{ opacity: 0.8 }}>Odpocznij po treningu w naszej suchej saunie lub zrelaksuj się w bąbelkowej wodzie jacuzzi.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="hours-prices" style={{ ...sectionStyle, backgroundColor: darkerBg }}>
-                <h2 style={{ fontSize: '2.5em', marginBottom: '40px', color: neonPrimary, textShadow: textGlowPrimary, letterSpacing: '0.05em' }}>Godziny Otwarcia & Cennik</h2>
-                <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '40px' }}>
-                    <div style={{
-                        flex: '1',
-                        minWidth: '300px',
-                        maxWidth: '450px',
-                        textAlign: 'left',
-                        padding: '30px',
-                        borderRadius: '10px',
-                        boxShadow: elementGlowPrimary, // Glow for hours box
-                        backgroundColor: darkBg,
-                        border: `1px solid ${neonPrimary}80`
-                    }}>
-                        <h3 style={{ color: neonPrimary, borderBottom: `2px solid ${neonPrimary}`, paddingBottom: '15px', marginBottom: '25px', fontSize: '1.8em', textShadow: textGlowPrimary }}>Godziny</h3>
-                        <ul style={{ listStyle: 'none', padding: 0 }}>
-                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span><strong>Pon - Pt:</strong></span> <span>6:00 - 22:00</span></li>
-                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span><strong>Sobota:</strong></span> <span>8:00 - 20:00</span></li>
-                            <li style={{ padding: '10px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span><strong>Niedziela:</strong></span> <span>9:00 - 18:00</span></li>
-                        </ul>
-                    </div>
-                    <div style={{
-                        flex: '1',
-                        minWidth: '300px',
-                        maxWidth: '450px',
-                        textAlign: 'left',
-                        padding: '30px',
-                        borderRadius: '10px',
-                        boxShadow: elementGlowPrimary, // Glow for prices box
-                        backgroundColor: darkBg,
-                        border: `1px solid ${neonPrimary}80`
-                    }}>
-                        <h3 style={{ color: neonPrimary, borderBottom: `2px solid ${neonPrimary}`, paddingBottom: '15px', marginBottom: '25px', fontSize: '1.8em', textShadow: textGlowPrimary }}>Cennik (60 min)</h3>
-                        <ul style={{ listStyle: 'none', padding: 0 }}>
-                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Bilet Normalny:</span> <strong style={{ color: neonPrimary, textShadow: textGlowPrimary }}>20 PLN</strong></li>
-                            <li style={{ marginBottom: '12px', padding: '10px 0', borderBottom: `1px dotted ${neonPrimary}50`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Bilet Ulgowy (studenci AGH):</span> <strong style={{ color: neonAccent, textShadow: textGlowAccent }}>15 PLN</strong></li>
-                            <li style={{ padding: '10px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span>Karnet Miesięczny:</span> <strong style={{ color: neonPrimary, textShadow: textGlowPrimary }}>od 120 PLN</strong></li>
-                        </ul>
-                        <p style={{ fontSize: '0.9em', color: neonTextLight, opacity: 0.7, marginTop: '15px' }}>Szczegółowy cennik i zasady korzystania z karnetów dostępne w recepcji.</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Contact section with inverted colors for striking effect */}
-            <section id="contact" style={{ ...sectionStyle, backgroundColor: neonPrimary, color: darkBg, borderBottom: `2px solid ${neonAccent}` }}>
-                <h2 style={{ fontSize: '2.5em', marginBottom: '30px', color: darkBg, textShadow: `0 0 5px ${neonTextLight}` }}>Skontaktuj Się z Nami!</h2>
-                <p style={{ fontSize: '1.2em', marginBottom: '15px', fontWeight: 'bold' }}><strong>Adres:</strong> ul. Reymonta 19, 30-059 Kraków</p>
-                <p style={{ fontSize: '1.2em', marginBottom: '15px', fontWeight: 'bold' }}><strong>Telefon:</strong> +48 12 617 39 39</p>
-                <p style={{ fontSize: '1.2em', marginBottom: '20px', fontWeight: 'bold' }}><strong>Email:</strong> <a href="mailto:basen@agh.edu.pl" style={{ color: darkBg, textDecoration: 'underline', textShadow: `0 0 3px ${neonTextLight}` }}>basen@agh.edu.pl</a></p>
-                <div style={{ marginTop: '30px' }}>
-                    <button style={{
-                        ...buttonBaseStyle,
-                        backgroundColor: darkBg, // Dark button on bright background
-                        color: neonPrimary,
-                        padding: '15px 30px',
-                        boxShadow: elementGlowPrimary, // Primary neon glow
-                        textShadow: textGlowPrimary,
-                    }} onClick={() => alert('Otworzy mapę z lokalizacją basenu')}>
-                        Znajdź nas na mapie!
-                    </button>
-                </div>
-            </section>
-
-            <footer style={{
-                backgroundColor: darkerBg,
-                color: neonTextLight,
-                textAlign: 'center',
-                padding: '25px',
-                fontSize: '0.9em',
-                borderTop: `1px solid ${neonPrimary}`,
-                textShadow: `0 0 3px ${neonTextLight}`,
-                opacity: 0.7,
-            }}>
-                <p>&copy; {new Date().getFullYear()} Basen AGH. Wszystkie prawa zastrzeżone.</p>
-                <p>Projekt i wykonanie: Zespół IT AGH (w domyśle).</p>
-            </footer>
+  return (
+    <div className="arcade-pizzeria-app">
+      <header className="arcade-header">
+        <h1 className="game-title neon-flicker">NEON ARCADE PIZZERIA</h1>
+        <div className="score-display">
+          PUNKTY: <span className="neon-green">99999</span> | ŻYCIA: <span className="neon-red">3</span>
         </div>
-    );
+      </header>
+
+      <div className="main-screen">
+        <aside className="menu-selection">
+          <h2 className="section-header glitch">WYBIERZ SWOJĄ MISJĘ</h2>
+          <ul className="pizza-list">
+            {pizzas.map((pizza) => (
+              <li
+                key={pizza.id}
+                className={`pizza-item ${selectedPizza && selectedPizza.id === pizza.id ? 'active-selection' : ''}`}
+                onClick={() => handleSelectPizza(pizza)}
+              >
+                <span className="pizza-icon">{pizza.img}</span> {pizza.name}
+              </li>
+            ))}
+          </ul>
+          <button className="start-button glow-pulse" disabled={!selectedPizza}>
+            {selectedPizza ? `ZAMÓW ${selectedPizza.name}` : 'WYBIERZ PIZZĘ ABY ZAMÓWIĆ'}
+          </button>
+        </aside>
+
+        <main className="pizza-display">
+          {selectedPizza ? (
+            <div className="pizza-detail">
+              <h3 className="neon-text-light glitch">{selectedPizza.name}</h3>
+              <p className="neon-text-secondary">{selectedPizza.desc}</p>
+              <div className="pizza-art">{selectedPizza.img}</div>
+            </div>
+          ) : (
+            <div className="placeholder-text neon-flicker">
+              <p>NACISNIJ START ABY ZACZĄĆ!</p>
+              <p>WYBIERZ SWOJE PRZEZNACZENIE!</p>
+            </div>
+          )}
+        </main>
+      </div>
+
+      <footer className="arcade-footer">
+        <p className="neon-green">© 2023 RETROSLICE CORP. WSZELKIE PRAWA ZASTRZEŻONE. WRZUĆ MONETĘ ABY KONTYNUOWAĆ.</p>
+      </footer>
+
+      {/* Stylizacja CSS */}
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+          --arcade-bg: #000000;
+          --neon-blue: #00f0ff;
+          --neon-pink: #ff00ff;
+          --neon-green: #00ff00;
+          --neon-red: #ff004c;
+          --text-color: #c0c0c0;
+          --border-color: #333;
+        }
+
+        .arcade-pizzeria-app {
+          font-family: 'Press Start 2P', cursive;
+          background-color: var(--arcade-bg);
+          color: var(--text-color);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px;
+          box-sizing: border-box;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .arcade-pizzeria-app::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .arcade-header {
+          width: 100%;
+          max-width: 1200px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px 30px;
+          background-color: rgba(10, 10, 10, 0.8);
+          border: 3px solid var(--neon-blue);
+          box-shadow: 0 0 15px var(--neon-blue), inset 0 0 15px var(--neon-blue);
+          margin-bottom: 20px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .game-title {
+          font-size: 2.5em;
+          color: var(--neon-pink);
+          margin: 0;
+          text-shadow: 0 0 8px var(--neon-pink), 0 0 15px var(--neon-pink);
+          letter-spacing: 2px;
+        }
+
+        .score-display {
+          font-size: 1.1em;
+          color: var(--text-color);
+          text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .neon-green { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
+        .neon-red { color: var(--neon-red); text-shadow: 0 0 5px var(--neon-red); }
+
+        .main-screen {
+          flex-grow: 1;
+          width: 100%;
+          max-width: 1200px;
+          display: flex;
+          gap: 30px;
+          background-color: rgba(20, 20, 20, 0.7);
+          border: 3px solid var(--neon-green);
+          box-shadow: 0 0 15px var(--neon-green), inset 0 0 15px var(--neon-green);
+          padding: 30px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .menu-selection {
+          flex: 1;
+          padding-right: 20px;
+          border-right: 2px dashed var(--border-color);
+        }
+
+        .section-header {
+          font-size: 1.8em;
+          color: var(--neon-blue);
+          text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+          margin-bottom: 30px;
+          border-bottom: 1px solid var(--neon-blue);
+          padding-bottom: 10px;
+        }
+
+        .pizza-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 40px 0;
+        }
+
+        .pizza-item {
+          font-size: 1.3em;
+          padding: 15px 10px;
+          margin-bottom: 10px;
+          border: 2px solid transparent;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+          text-align: left;
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .pizza-item:hover {
+          border-color: var(--neon-pink);
+          color: var(--neon-pink);
+          text-shadow: 0 0 5px var(--neon-pink);
+          background-color: rgba(255, 0, 255, 0.1);
+        }
+
+        .pizza-item.active-selection {
+          border-color: var(--neon-green);
+          color: var(--neon-green);
+          text-shadow: 0 0 8px var(--neon-green), 0 0 15px var(--neon-green);
+          background-color: rgba(0, 255, 0, 0.15);
+          animation: pulse-border 1s infinite alternate;
+        }
+
+        .pizza-icon {
+            font-size: 1.2em;
+        }
+
+        .start-button {
+          background-color: var(--neon-blue);
+          border: none;
+          color: var(--arcade-bg);
+          padding: 20px 30px;
+          font-family: 'Press Start 2P', cursive;
+          font-size: 1.1em;
+          cursor: pointer;
+          border-radius: 5px;
+          box-shadow: 0 0 15px var(--neon-blue);
+          transition: all 0.3s ease;
+          width: 100%;
+          text-transform: uppercase;
+        }
+
+        .start-button:hover:not(:disabled) {
+          background-color: var(--neon-pink);
+          box-shadow: 0 0 20px var(--neon-pink);
+          color: white;
+        }
+
+        .start-button:disabled {
+          background-color: #333;
+          box-shadow: none;
+          color: #888;
+          cursor: not-allowed;
+        }
+
+        .pizza-display {
+          flex: 2;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          text-align: center;
+          min-height: 400px;
+        }
+
+        .pizza-detail h3 {
+          font-size: 2.5em;
+          margin-bottom: 15px;
+        }
+
+        .pizza-detail p {
+          font-size: 1em;
+          max-width: 400px;
+          line-height: 1.4;
+          margin-bottom: 30px;
+        }
+
+        .pizza-art {
+          font-size: 6em; /* Duże emoji dla efektu pixel art */
+          line-height: 1;
+          animation: pizza-spin 4s infinite linear;
+        }
+
+        .placeholder-text {
+            font-size: 1.5em;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+            line-height: 1.6;
+        }
+
+        .neon-flicker {
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        .glitch {
+            position: relative;
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text); /* W tym przypadku po prostu replikujemy cienie tekstu */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-shadow: 0 0 5px var(--neon-blue);
+            z-index: -1;
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-pink);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-green);
+            clip: rect(85px, 450px, 100px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .glow-pulse {
+            animation: glow-pulse 2s infinite alternate;
+        }
+
+        /* Animacje */
+        @keyframes flicker {
+          0%, 18%, 22%, 25%, 53%, 57%, 100% {
+            text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-pink);
+            opacity: 1;
+          }
+          20%, 24%, 55% {
+            text-shadow: none;
+            opacity: 0.8;
+          }
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(0,255,0,0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(0,255,0,0); }
+        }
+
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 15px var(--neon-blue); }
+            100% { box-shadow: 0 0 25px var(--neon-blue), 0 0 40px var(--neon-blue); }
+        }
+
+        @keyframes pizza-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Uproszczone animacje glitch */
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(44px, 450px, 56px, 0); transform: skew(0.5deg); }
+            5% { clip: rect(78px, 450px, 100px, 0); transform: skew(-0.8deg); }
+            10% { clip: rect(10px, 450px, 25px, 0); transform: skew(1.2deg); }
+            15% { clip: rect(60px, 450px, 70px, 0); transform: skew(-0.3deg); }
+            20% { clip: rect(30px, 450px, 45px, 0); transform: skew(0.7deg); }
+            25% { clip: rect(50px, 450px, 65px, 0); transform: skew(-0.5deg); }
+            30% { clip: rect(20px, 450px, 35px, 0); transform: skew(0.9deg); }
+            100% { clip: rect(44px, 450px, 56px, 0); transform: skew(0.5deg); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(85px, 450px, 100px, 0); transform: skew(-0.8deg); }
+            5% { clip: rect(10px, 450px, 25px, 0); transform: skew(1.2deg); }
+            10% { clip: rect(60px, 450px, 70px, 0); transform: skew(-0.3deg); }
+            15% { clip: rect(30px, 450px, 45px, 0); transform: skew(0.7deg); }
+            20% { clip: rect(44px, 450px, 56px, 0); transform: skew(0.5deg); }
+            25% { clip: rect(15px, 450px, 28px, 0); transform: skew(-1deg); }
+            30% { clip: rect(70px, 450px, 85px, 0); transform: skew(0.6deg); }
+            100% { clip: rect(85px, 450px, 100px, 0); transform: skew(-0.8deg); }
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .arcade-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .game-title {
+                font-size: 1.8em;
+                margin-bottom: 10px;
+            }
+            .main-screen {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+            .menu-selection {
+                border-right: none;
+                border-bottom: 2px dashed var(--border-color);
+                padding-right: 0;
+                padding-bottom: 20px;
+            }
+            .section-header {
+                font-size: 1.5em;
+            }
+            .pizza-item {
+                font-size: 1.1em;
+            }
+            .pizza-detail h3 {
+                font-size: 2em;
+            }
+            .pizza-art {
+                font-size: 4em;
+            }
+            .start-button {
+                font-size: 0.9em;
+                padding: 15px 20px;
+            }
+        }
+      `}</style>
+    </div>
+  );
 };
 
-export default ModernPoolAGHApp;
+export default App;

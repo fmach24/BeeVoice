@@ -1,9 +1,9 @@
-// App.js
 import React, { useState, useRef } from 'react';
 import FirstView from './views/first';
 import SecondView from './views/second';
 import ThirdView from './views/third';
 import ErrorBoundary from './ErrorBoundary';
+import html2canvas from 'html2canvas';
 
 const views = [
   { name: 'Widok 1', component: FirstView },
@@ -33,7 +33,7 @@ const navigationStyle = {
   justifyContent: 'space-between',
   alignItems: 'center',
   boxShadow: '0 -5px 20px rgba(0,0,0,0.05)',
-  zIndex: 100
+  zIndex: 10000
 };
 
 const navBtnStyle = {
@@ -104,7 +104,7 @@ const micBtnStyle = {
     alignItems: 'center',
     justifyContent: 'center',
     whiteSpace: 'nowrap',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' // bo ó w mów wyglada mega słabo xd
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
 };
 
 export default function App() {
@@ -121,6 +121,12 @@ export default function App() {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
+  // stany dla mazaczka mi bombo
+  const [isDrawMode, setIsDrawMode] = useState(false);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const canvasRef = useRef(null);
+
+  // audio here
   const handleMicClick = async (setValueFunction) => {
     if (isRecording) {
         if (mediaRecorderRef.current) {
@@ -190,25 +196,94 @@ export default function App() {
     setHasUserSelectedBest(true);
   };
 
-  const sendEdit = () => {
+  // rysowanie
+  const startDrawing = ({ nativeEvent }) => {
+    if (!isDrawMode) return;
+    const { offsetX, offsetY } = nativeEvent;
+    const ctx = canvasRef.current.getContext("2d");
+    ctx.strokeStyle = "red"; 
+    ctx.lineWidth = 4; 
+    ctx.lineCap = "round";
+    ctx.beginPath(); 
+    ctx.moveTo(offsetX, offsetY);
+    setIsDrawing(true);
+  };
+
+  const draw = ({ nativeEvent }) => {
+    if (!isDrawing || !isDrawMode) return;
+    const { offsetX, offsetY } = nativeEvent;
+    const ctx = canvasRef.current.getContext("2d");
+    ctx.lineTo(offsetX, offsetY); 
+    ctx.stroke();
+  };
+
+  const stopDrawing = () => {
+    if (!isDrawing) return;
+    const ctx = canvasRef.current.getContext("2d");
+    ctx.closePath(); 
+    setIsDrawing(false);
+  };
+
+  const clearCanvas = () => {
+      const canvas = canvasRef.current;
+      if(canvas) { 
+          const ctx = canvas.getContext('2d'); 
+          ctx.clearRect(0, 0, canvas.width, canvas.height); 
+      }
+  };
+
+  const toggleDrawMode = () => {
+      if (isDrawMode) {
+          clearCanvas();
+          setIsDrawMode(false);
+      } else {
+          setIsDrawMode(true);
+      }
+  };
+
+
+  const sendEdit = async () => {
     if (!comment.trim()) {
       alert('Wpisz poprawkę!');
       return;
     }
+    
     setIsLoading(true);
     
-    fetch("http://localhost:4000/edit", {
-      body: JSON.stringify({ comment: comment, bestViewIndex: currentViewIndex }),
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    }).then(res => {
-      setIsLoading(false);
-      setComment('');
-      setHasUserSelectedBest(false);
-    }).catch(err => {
+    const formData = new FormData();
+    formData.append('comment', comment);
+    formData.append('bestViewIndex', currentViewIndex);
+
+    // zrzut ekranu (póki panel i rysunek są widoczne)
+    if (isDrawMode) {
+        const element = document.getElementById(`view-container-${currentViewIndex}`);
+        try {
+            const canvas = await html2canvas(element, { useCORS: true, backgroundColor: null });
+            const blob = await new Promise(resolve => canvas.toBlob(resolve));
+            formData.append('image', blob, 'screenshot.png');
+        } catch (err) {
+            console.error("Screen error:", err);
+        }
+    }
+
+    setHasUserSelectedBest(false);
+    setComment('');
+    setIsDrawMode(false);
+    clearCanvas();
+
+    try {
+        await fetch("http://localhost:4000/edit", {
+            method: "POST",
+            body: formData
+        });
+        
+        setIsLoading(false);
+        
+    } catch (err) {
         setIsLoading(false);
         console.error("Błąd:", err);
-    });
+        alert("Wystąpił błąd połączenia z serwerem.");
+    }
   };
 
   const generateNewProject = () => {
@@ -227,7 +302,6 @@ export default function App() {
 
   return (
     <div style={containerStyle}>
-      {/* Dodajemy definicję animacji */}
       <style>
         {`
           @keyframes blink {
@@ -254,25 +328,17 @@ export default function App() {
                         placeholder="Np. Wygeneruj mi strone pizzerii w stylu neonowym."
                         rows={5}
                         style={{ 
-                            width: '100%',
-                            padding: '15px', 
-                            fontSize: '16px', 
-                            borderRadius: '10px', 
+                            width: '100%', padding: '15px', fontSize: '16px', borderRadius: '10px', 
                             border: isRecording ? '2px solid #e74c3c' : '1px solid #ddd',
-                            backgroundColor: '#f9f9f9',
-                            resize: 'none',
-                            boxSizing: 'border-box'
+                            backgroundColor: '#f9f9f9', resize: 'none', boxSizing: 'border-box'
                         }}
                     />
                     <button 
                         onClick={() => handleMicClick(setNewProjectPrompt)}
                         style={{
-                            position: 'absolute',
-                            bottom: '15px',
-                            right: '15px',
-                            ...micBtnStyle,
+                            position: 'absolute', bottom: '15px', right: '15px', ...micBtnStyle,
                             color: isRecording ? '#e74c3c' : (isTranscribing ? '#f39c12' : '#2196F3'),
-                            backgroundColor: 'rgba(255,255,255,0.8)' // Tło pod tekst
+                            backgroundColor: 'rgba(255,255,255,0.8)'
                         }}
                     >
                         {isTranscribing ? 'PRZETWARZANIE...' : (isRecording ? 'ZATRZYMAJ' : 'MÓW')}
@@ -304,33 +370,41 @@ export default function App() {
            const isSelected = index === currentViewIndex;
            return (
              <div 
-                key={index} 
+                key={index}
+                id={`view-container-${index}`} // <-- WAŻNE DLA SCREENA
                 style={{ 
-                    flex: 1, 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    overflowY: "hidden",
+                    flex: 1, display: 'flex', flexDirection: 'column', overflowY: "hidden",
                     border: isSelected ? '5px solid #4CAF50' : '1px solid #e0e0e0',
                     borderRadius: isSelected ? '0' : '0',
                     zIndex: isSelected ? 10 : 1,
-                    boxSizing: 'border-box',
-                    transition: 'border 0.2s ease'
+                    boxSizing: 'border-box', transition: 'border 0.2s ease',
+                    position: 'relative'
                 }}
              >
                 <div style={{ 
-                    textAlign: 'center', 
-                    padding: '10px', 
-                    fontSize: '13px',
-                    fontWeight: 'bold', 
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase',
+                    textAlign: 'center', padding: '10px', fontSize: '13px', fontWeight: 'bold', 
+                    letterSpacing: '1px', textTransform: 'uppercase',
                     backgroundColor: isSelected ? '#4CAF50' : '#f0f2f5', 
-                    color: isSelected ? 'white' : '#999',
-                    borderBottom: '1px solid #ccc'
+                    color: isSelected ? 'white' : '#999', borderBottom: '1px solid #ccc'
                 }}>
                     {item.name}
                 </div>
-                <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'white' }}>
+                <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'white', position: 'relative' }}>
+                    
+                    {/* 6. WARSTWA RYSOWANIA */}
+                    {isSelected && isDrawMode && (
+                        <canvas 
+                            ref={canvasRef} 
+                            width={window.innerWidth / 3} 
+                            height={window.innerHeight}
+                            onMouseDown={startDrawing} 
+                            onMouseMove={draw} 
+                            onMouseUp={stopDrawing} 
+                            onMouseLeave={stopDrawing}
+                            style={{ position: 'absolute', top: 0, left: 0, zIndex: 9999, cursor: 'crosshair' }} 
+                        />
+                    )}
+
                     <ErrorBoundary>
                         <ViewComponent />
                     </ErrorBoundary>
@@ -344,17 +418,11 @@ export default function App() {
       <div style={navigationStyle}>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', width: '300px' }}>
-            <button 
-                onClick={() => setShowNewProjectModal(true)}
-                style={newProjectBtnStyle}
-            >
+            <button onClick={() => setShowNewProjectModal(true)} style={newProjectBtnStyle}>
                 Nowy projekt
             </button>
 
-            <button 
-                onClick={goToPrev} 
-                style={navBtnStyle}
-                // Dodajemy Hover dla strzałki w lewo
+            <button onClick={goToPrev} style={navBtnStyle}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
             > 
@@ -373,16 +441,9 @@ export default function App() {
                         <button 
                             onClick={selectView} 
                             style={{ 
-                                padding: '12px 35px', 
-                                fontSize: '16px', 
-                                backgroundColor: '#4CAF50', 
-                                color: 'white', 
-                                border: 'none', 
-                                borderRadius: '50px', 
-                                cursor: 'pointer',
-                                boxShadow: '0 4px 10px rgba(76, 175, 80, 0.3)',
-                                fontWeight: '600',
-                                transition: 'transform 0.1s'
+                                padding: '12px 35px', fontSize: '16px', backgroundColor: '#4CAF50', color: 'white', 
+                                border: 'none', borderRadius: '50px', cursor: 'pointer', boxShadow: '0 4px 10px rgba(76, 175, 80, 0.3)',
+                                fontWeight: '600', transition: 'transform 0.1s'
                             }}
                         > 
                             Edytuj ten widok
@@ -400,27 +461,35 @@ export default function App() {
                           onChange={(e) => setComment(e.target.value)}
                           placeholder={`Co poprawić w ${views[currentViewIndex].name}?`} 
                           style={{ 
-                              width: '100%',
-                              padding: '12px 130px 12px 20px', 
-                              border: isRecording ? '2px solid #e74c3c' : '2px solid #4CAF50', 
-                              borderRadius: '30px',
-                              outline: 'none',
-                              fontSize: '16px',
-                              boxSizing: 'border-box'
+                              width: '100%', padding: '12px 140px 12px 20px', // Zwiększony padding dla przycisków
+                              border: isDrawMode ? '2px solid #e74c3c' : '2px solid #4CAF50', 
+                              borderRadius: '30px', outline: 'none', fontSize: '16px', boxSizing: 'border-box'
                           }} 
                         />
+                        
                         <button 
                             onClick={() => handleMicClick(setComment)}
                             style={{
-                                position: 'absolute',
-                                right: '5px',
-                                top: '50%',
-                                transform: 'translateY(-50%)',
-                                ...micBtnStyle,
-                                color: isRecording ? '#e74c3c' : (isTranscribing ? '#f39c12' : '#2196F3'),
+                                position: 'absolute', right: '80px', top: '50%', transform: 'translateY(-50%)',
+                                ...micBtnStyle, color: isRecording ? '#e74c3c' : (isTranscribing ? '#f39c12' : '#2196F3')
                             }}
                         >
-                            {isTranscribing ? 'PRZETWARZANIE...' : (isRecording ? 'ZATRZYMAJ' : 'MÓW')}
+                            {isTranscribing ? '...' : (isRecording ? 'STOP' : 'MÓW')}
+                        </button>
+
+                        {/* 7. PRZYCISK MAZAKA */}
+                        <button 
+                            onClick={toggleDrawMode}
+                            title="Zaznacz na ekranie"
+                            style={{
+                                position: 'absolute', right: '5px', top: '50%', transform: 'translateY(-50%)',
+                                ...micBtnStyle, fontSize: '20px', 
+                                color: isDrawMode ? 'white' : '#ccc',
+                                backgroundColor: isDrawMode ? '#e74c3c' : 'transparent',
+                                width: '30px', height: '30px', borderRadius: '50%'
+                            }}
+                        >
+                            ✎
                         </button>
                     </div>
 
@@ -428,20 +497,18 @@ export default function App() {
                         onClick={sendEdit} 
                         style={{ 
                             padding: '12px 25px', 
-                            backgroundColor: '#2196F3', 
-                            color: 'white', 
-                            border: 'none', 
-                            cursor: 'pointer', 
-                            borderRadius: '30px',
-                            fontWeight: 'bold'
+                            backgroundColor: isDrawMode ? '#e74c3c' : '#2196F3', 
+                            color: 'white', border: 'none', cursor: 'pointer', borderRadius: '30px', fontWeight: 'bold'
                         }}
                     >
-                      {isLoading ? 'Wysłano' : 'Wyślij'}
+                      {isLoading ? '...' : (isDrawMode ? 'Wyślij screen' : 'Wyślij')}
                     </button>
+                    
                     <button 
-                        onClick={() => setHasUserSelectedBest(false)} 
+                        onClick={() => { setHasUserSelectedBest(false); setIsDrawMode(false); clearCanvas(); }} 
                         style={{ 
-                            width: '40px', height: '40px', borderRadius: '50%', border: '1px solid #ccc', background: 'white', cursor: 'pointer', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            width: '40px', height: '40px', borderRadius: '50%', border: '1px solid #ccc', 
+                            background: 'white', cursor: 'pointer', color: '#666', display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}
                         title="Anuluj"
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f75b5bff'}
@@ -454,7 +521,6 @@ export default function App() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '20px', width: '300px' }}>
-             {/* Animacja mrugania dodana tutaj */}
              {isLoading && <span style={{ color: '#666', fontStyle: 'italic', fontSize: '24px', animation: 'blink 1.5s infinite ease-in-out' }}>Generowanie...</span>}
              
              <button 

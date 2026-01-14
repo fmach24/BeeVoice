@@ -1,189 +1,24 @@
-import React from 'react';
-
-const AghPoolWebsiteFirst = () => {
-  const primaryColor = '#007bff'; // A vibrant blue
-  const accentColor = '#28a745'; // A green for secondary actions
-  const textColor = '#343a40';
-  const lightBg = '#f8f9fa';
-  const darkBg = '#e9ecef';
-
+export default function AGHPoolOceanicFirst() {
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      boxSizing: 'border-box',
-      fontFamily: 'Arial, sans-serif',
-      color: textColor,
-      backgroundColor: lightBg,
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      {/* Header */}
-      <header style={{
-        backgroundColor: primaryColor,
-        color: 'white',
-        padding: '15px 20px',
-        textAlign: 'center',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        flexShrink: 0
-      }}>
-        <h1 style={{ margin: 0, fontSize: '1.5em' }}>AGH Pływalnia</h1>
-        <p style={{ margin: '5px 0 0', fontSize: '0.9em', opacity: 0.9 }}>Twoje miejsce relaksu i treningu</p>
-      </header>
-
-      {/* Hero Section */}
-      <section style={{
-        backgroundImage: `url('https://via.placeholder.com/600x300/007bff/ffffff?text=AGH+Basen')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        color: 'white',
-        textAlign: 'center',
-        padding: '60px 20px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-        minHeight: '200px', // Ensure visibility in small windows
-        flexShrink: 0
-      }}>
-        <h2 style={{ fontSize: '2em', margin: '0 0 10px' }}>Zanurz się w Świecie Sportu!</h2>
-        <p style={{ fontSize: '1.1em', maxWidth: '80%', margin: '0 auto 20px' }}>
-          Nowoczesna pływalnia AGH zaprasza do korzystania z basenów i strefy wellness.
-        </p>
-        <button style={{
-          backgroundColor: accentColor,
-          color: 'white',
-          border: 'none',
-          padding: '12px 25px',
-          borderRadius: '5px',
-          fontSize: '1em',
-          cursor: 'pointer',
-          transition: 'background-color 0.3s ease',
-          outline: 'none',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-        }}>
-          Sprawdź Grafik
-        </button>
-      </section>
-
-      {/* Main Content Area - Flex Grow to fill space */}
-      <main style={{ flexGrow: 1, padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {/* Info Cards */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column', // Stack vertically in small window
-          gap: '20px',
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-            flex: '1 1 auto'
-          }}>
-            <h3 style={{ color: primaryColor, marginTop: 0, marginBottom: '10px' }}>Godziny Otwarcia</h3>
-            <p>Poniedziałek - Piątek: 6:00 - 22:00</p>
-            <p>Sobota - Niedziela: 8:00 - 20:00</p>
-          </div>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-            flex: '1 1 auto'
-          }}>
-            <h3 style={{ color: primaryColor, marginTop: 0, marginBottom: '10px' }}>Adres</h3>
-            <p>ul. Reymonta 17, 30-059 Kraków</p>
-            <p>Wydział XYZ, Budynek ABC</p>
-          </div>
-        </div>
-
-        {/* Quick Links / Call to Actions */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', // Responsive grid
-          gap: '15px'
-        }}>
-          <button style={{
-            backgroundColor: darkBg,
-            color: textColor,
-            border: 'none',
-            padding: '15px 10px',
-            borderRadius: '5px',
-            fontSize: '0.9em',
-            cursor: 'pointer',
-            textAlign: 'center',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-            transition: 'background-color 0.3s ease',
-            outline: 'none'
-          }}>
-            Cennik
-          </button>
-          <button style={{
-            backgroundColor: darkBg,
-            color: textColor,
-            border: 'none',
-            padding: '15px 10px',
-            borderRadius: '5px',
-            fontSize: '0.9em',
-            cursor: 'pointer',
-            textAlign: 'center',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-            transition: 'background-color 0.3s ease',
-            outline: 'none'
-          }}>
-            Zajęcia
-          </button>
-          <button style={{
-            backgroundColor: darkBg,
-            color: textColor,
-            border: 'none',
-            padding: '15px 10px',
-            borderRadius: '5px',
-            fontSize: '0.9em',
-            cursor: 'pointer',
-            textAlign: 'center',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-            transition: 'background-color 0.3s ease',
-            outline: 'none'
-          }}>
-            Kontakt
-          </button>
-          <button style={{
-            backgroundColor: darkBg,
-            color: textColor,
-            border: 'none',
-            padding: '15px 10px',
-            borderRadius: '5px',
-            fontSize: '0.9em',
-            cursor: 'pointer',
-            textAlign: 'center',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-            transition: 'background-color 0.3s ease',
-            outline: 'none'
-          }}>
-            Galeria
-          </button>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer style={{
-        backgroundColor: primaryColor,
-        color: 'white',
-        textAlign: 'center',
-        padding: '15px 20px',
-        fontSize: '0.8em',
-        marginTop: 'auto', // Push to bottom
-        flexShrink: 0
-      }}>
-        &copy; {new Date().getFullYear()} Pływalnia AGH. Wszystkie prawa zastrzeżone.
-      </footer>
+    <div style={{ width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', boxSizing: 'border-box', backgroundColor: '#29ABE2', backgroundImage: 'linear-gradient(to bottom, #29ABE2, #0077CC)' }}>
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h1 style={{ color: 'gold', fontSize: '2em', marginBottom: '10px' }}>Basen AGH</h1>
+        <div style={{ backgroundColor: '#fff', height: '2px', width: '50px', margin: '0 auto', marginBottom: '5px' }}></div>
+        <div style={{ backgroundColor: '#e60023', height: '2px', width: '50px', margin: '0 auto' }}></div>
+        <p style={{ color: 'white', fontSize: '1.2em' }}>Nowoczesny basen w stylu oceanicznym.</p>
+      </div>
+      <div style={{ width: '80%', margin: '0 auto', padding: '20px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}>
+        <h2 style={{ color: 'gold', fontSize: '1.5em', marginBottom: '10px' }}>Godziny Otwarcia</h2>
+        <ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
+          <li style={{ color: 'white', fontSize: '1em', marginBottom: '5px' }}>Poniedziałek - Piątek: 7:00 - 22:00</li>
+          <li style={{ color: 'white', fontSize: '1em', marginBottom: '5px' }}>Sobota: 9:00 - 20:00</li>
+          <li style={{ color: 'white', fontSize: '1em' }}>Niedziela: 9:00 - 18:00</li>
+        </ul>
+      </div>
+      <div style={{ position: 'relative', width: '80%', margin: '20px auto', height: '200px', overflow: 'hidden', borderRadius: '10px', backgroundColor: 'rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', height: '50px', backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: '50%' }}></div>
+        <div style={{ position: 'absolute', bottom: '20px', right: '0', width: '100%', height: '50px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '50%' }}></div>
+      </div>
     </div>
   );
-};
-
-export default AghPoolWebsiteFirst;
+}

@@ -36,6 +36,7 @@ ZASADY TECHNICZNE:
 1. Używaj WYŁĄCZNIE stylów inline.
 2. BRAK zewnętrznych bibliotek.
 3. Czysty React.
+4. ABSOLUTNY WYMÓG: Każdy plik MUSI kończyć się "export default function...".
 
 WYMAGANY FORMAT WYJŚCIOWY:
 --- first.jsx ---
@@ -117,7 +118,7 @@ function saveComponents(responseText) {
         const fileName = match[1];
         let code = match[2];
 
-        code = code.replace(/```jsx|```/g, '').trim();
+        code = code.replace(/```(javascript|jsx|js)?|```/g, '').trim();
 
         // Odcinanie śmieci
         const junkMarkers = ["\n### ", "\n**Propo", "\n--- \n", "\nTen kod"];
@@ -142,11 +143,20 @@ async function callGemini(fullPrompt, audioPart = null) {
             ? [{ role: "user", parts: [{ text: fullPrompt }, audioPart] }]
             : [{ role: "user", parts: [{ text: fullPrompt }] }];
 
+        console.log(`\n[TIMER] Wysyłam zapytanie do modelu: ${MODEL_NAME}...`);
+        const startTime = Date.now(); 
+
         const response = await ai.models.generateContent({
             model: MODEL_NAME, 
             contents: contents,
             config: { temperature: 0.9, candidateCount: 1 }
         });
+
+        const endTime = Date.now();
+        const duration = (endTime - startTime) / 1000;
+        
+        console.log(`[TIMER] Odpowiedź odebrana w: ${duration.toFixed(2)}s`);
+
         return response.text;
     } catch (error) {
         console.error("Błąd API:", error.message);

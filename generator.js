@@ -1,7 +1,9 @@
-require('dotenv').config();
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.resolve(__dirname, '.env'), override: true });
+
 const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs');
-const path = require('path');
 const express = require("express");
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -10,15 +12,19 @@ const multer = require('multer');
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 
+const GEMINI_API_KEY = (process.env.API_KEY || '').trim();
 
-const ai = new GoogleGenAI({}); // Inicjalizacja Gemini
+if (!GEMINI_API_KEY) {
+    throw new Error('Brak API_KEY w .env. Ustaw wpis: API_KEY=twoj_klucz_gemini');
+}
+
+const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+console.log('[ENV] Używam klucza Gemini z: API_KEY');
 
 app.use(bodyParser.json());
 app.use(cors({ origin: "*" })); 
 
-const REACT_COMPONENTS_DIR = path.join(__dirname, 'src', 'views');
-
-const MODEL_NAME = 'gemini-2.5-flash'; 
+const REACT_COMPONENTS_DIR = path.join(__dirname, 'src', 'views'); 
 
 // PROMPTY - troche crazzyy
 
@@ -137,17 +143,17 @@ function saveComponents(responseText) {
     if (savedCount === 0) console.warn("Nie znaleziono kodu do zapisania.");
 }
 
-async function callGemini(fullPrompt, audioPart = null) {
+async function callGemini(fullPrompt, audioPart = null, modelName = 'gemini-2.5-flash') {
     try {
         const contents = audioPart 
             ? [{ role: "user", parts: [{ text: fullPrompt }, audioPart] }]
             : [{ role: "user", parts: [{ text: fullPrompt }] }];
 
-        console.log(`\n[TIMER] Wysyłam zapytanie do modelu: ${MODEL_NAME}...`);
+        console.log(`\n[TIMER] Wysyłam zapytanie do modelu: ${modelName}`);
         const startTime = Date.now(); 
 
         const response = await ai.models.generateContent({
-            model: MODEL_NAME, 
+            model: modelName, 
             contents: contents,
             config: { temperature: 0.9, candidateCount: 1 }
         });
@@ -159,7 +165,11 @@ async function callGemini(fullPrompt, audioPart = null) {
 
         return response.text;
     } catch (error) {
-        console.error("Błąd API:", error.message);
+        if (error.message && error.message.includes('Could not load the default credentials')) {
+            console.error('Błąd API: brak poświadczeń. Ustaw API_KEY w pliku .env.');
+        } else {
+            console.error("Błąd API:", error.message);
+        }
         return null;
     }
 }
@@ -186,10 +196,11 @@ app.post('/transcribe', upload.single('audio'), async (req, res) => {
 
 // 2. Nowy Projekt
 app.post('/new', async (req, res) => {
-    const promptText = req.body.prompt;
-    console.log(`\nNowy projekt: "${promptText}"`);
-    const systemPrompt = getNewProjectPrompt(promptText);
-    const responseText = await callGemini(systemPrompt);
+    const { prompt, model } = req.body;
+    console.log(`\nNowy projekt: "${prompt}" [Model: ${model}]`);
+    
+    const systemPrompt = getNewProjectPrompt(prompt);
+    const responseText = await callGemini(systemPrompt, null, model);
     
     if (responseText) {
         saveComponents(responseText);
@@ -201,7 +212,7 @@ app.post('/new', async (req, res) => {
 
 // 3. Edycja (Tekst + Opcjonalny Obraz)
 app.post('/edit', upload.single('image'), async (req, res) => {
-    const { comment, bestViewIndex } = req.body;
+    const { comment, bestViewIndex, model } = req.body;
     const viewIndex = parseInt(bestViewIndex, 10);
     const files = ['first.jsx', 'second.jsx', 'third.jsx'];
     const selectedFile = files[viewIndex];
@@ -233,13 +244,30 @@ app.post('/edit', upload.single('image'), async (req, res) => {
 ` + finalPrompt;
     }
 
-    const responseText = await callGemini(finalPrompt, imagePart);
+    const responseText = await callGemini(finalPrompt, imagePart, model);
     
     if (responseText) {
         saveComponents(responseText);
         res.json({ status: "success", evolvedFrom: selectedFile });
     } else {
         res.status(500).json({ error: "Błąd edycji" });
+    }
+});
+
+app.get('/get-code/:index', (req, res) => {
+    const files = ['first.jsx', 'second.jsx', 'third.jsx'];
+    const index = parseInt(req.params.index, 10);
+    const fileName = files[index];
+
+    if (!fileName) return res.status(400).json({ error: "Błędny index" });
+
+    const filePath = path.join(REACT_COMPONENTS_DIR, fileName);
+
+    if (fs.existsSync(filePath)) {
+        const code = fs.readFileSync(filePath, 'utf8');
+        res.json({ code: code });
+    } else {
+        res.status(404).json({ error: "Plik nie istnieje" });
     }
 });
 

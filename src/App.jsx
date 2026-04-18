@@ -11,6 +11,13 @@ const views = [
   { name: 'Widok 3', component: ThirdView },
 ];
 
+const AVAILABLE_MODELS = [
+  { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash (Szybki)' },
+  { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro (Jakość)' },
+  { id: 'gemini-3-pro-preview', name: 'Gemini 3 Preview (Nowość)' },
+  { id: 'gemma-3-27b-it', name: 'Gemma 3 27B (Open Source)' }
+];
+
 const containerStyle = {
   height: '100vh',
   display: 'flex',
@@ -107,11 +114,51 @@ const micBtnStyle = {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
 };
 
+const copyBtnStyle = {
+    position: 'absolute',
+    top: '0px',
+    right: '55px',
+    width: '35px',
+    height: '35px',
+    borderRadius: '50%',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    color: 'white',
+    fontSize: '16px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+    backdropFilter: 'blur(2px)',
+};
+
+const fullscreenBtnStyle = {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    border: 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    color: '#333',
+    fontSize: '20px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+    zIndex: 1000
+};
+
 export default function App() {
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
   const [hasUserSelectedBest, setHasUserSelectedBest] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [comment, setComment] = useState('');
+  const [currentModel, setCurrentModel] = useState(AVAILABLE_MODELS[0].id);
   
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [newProjectPrompt, setNewProjectPrompt] = useState('');
@@ -125,6 +172,30 @@ export default function App() {
   const [isDrawMode, setIsDrawMode] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
+
+  // stan dla fullscreen
+  const [fullscreenIndex, setFullscreenIndex] = useState(null);
+  
+  // ref do kontenerów widoków
+  const viewContainerRefs = useRef([]);
+
+  // Funkcja kopiowania kodu
+  const handleCopyCode = async (index) => {
+    try {
+      const response = await fetch(`http://localhost:4000/get-code/${index}`);
+      const data = await response.json();
+      
+      if (data.code) {
+        await navigator.clipboard.writeText(data.code);
+        alert(`Skopiowano kod widoku nr ${index + 1} do schowka`);
+      } else {
+        alert("Błąd: Nie znaleziono kodu.");
+      }
+    } catch (err) {
+      console.error("Błąd kopiowania:", err);
+      alert("Nie udało się pobrać kodu.");
+    }
+  };
 
   // audio here
   const handleMicClick = async (setValueFunction) => {
@@ -185,15 +256,33 @@ export default function App() {
   };
 
   const goToNext = () => {
-    setCurrentViewIndex((prev) => (prev + 1) % views.length);
+    setCurrentViewIndex((prev) => {
+      const nextIndex = (prev + 1) % views.length;
+      // Jeśli był fullscreen, ustaw fullscreen na nowy widok
+      if (fullscreenIndex !== null) {
+        setFullscreenIndex(nextIndex);
+      }
+      return nextIndex;
+    });
   };
 
   const goToPrev = () => {
-    setCurrentViewIndex((prev) => (prev - 1 + views.length) % views.length);
+    setCurrentViewIndex((prev) => {
+      const prevIndex = (prev - 1 + views.length) % views.length;
+      // Jeśli był fullscreen, ustaw fullscreen na nowy widok
+      if (fullscreenIndex !== null) {
+        setFullscreenIndex(prevIndex);
+      }
+      return prevIndex;
+    });
   };
 
   const selectView = () => {
     setHasUserSelectedBest(true);
+  };
+
+  const toggleFullscreen = (index) => {
+    setFullscreenIndex(fullscreenIndex === index ? null : index);
   };
 
   // rysowanie
@@ -253,6 +342,7 @@ export default function App() {
     const formData = new FormData();
     formData.append('comment', comment);
     formData.append('bestViewIndex', currentViewIndex);
+    formData.append('model', currentModel);
 
     // zrzut ekranu (póki panel i rysunek są widoczne)
     if (isDrawMode) {
@@ -291,7 +381,7 @@ export default function App() {
     setIsLoading(true);
     setShowNewProjectModal(false);
     fetch("http://localhost:4000/new", {
-        body: JSON.stringify({ prompt: newProjectPrompt }),
+        body: JSON.stringify({ prompt: newProjectPrompt, model: currentModel }),
         method: "POST",
         headers: { "Content-Type": "application/json" }
       }).then(res => {
@@ -368,34 +458,111 @@ export default function App() {
         {views.map((item, index) => {
            const ViewComponent = item.component;
            const isSelected = index === currentViewIndex;
+           const isFullscreen = fullscreenIndex === index;
+           
+           // Ukryj widoki, które nie są w fullscreen, jeśli jakiś widok jest w fullscreen
+           if (fullscreenIndex !== null && !isFullscreen) {
+             return null;
+           }
+           
            return (
              <div 
                 key={index}
                 id={`view-container-${index}`} // <-- WAŻNE DLA SCREENA
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentViewIndex(index);
+                }}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  toggleFullscreen(index);
+                }}
                 style={{ 
                     flex: 1, display: 'flex', flexDirection: 'column', overflowY: "hidden",
                     border: isSelected ? '5px solid #4CAF50' : '1px solid #e0e0e0',
                     borderRadius: isSelected ? '0' : '0',
                     zIndex: isSelected ? 10 : 1,
                     boxSizing: 'border-box', transition: 'border 0.2s ease',
-                    position: 'relative'
+                    position: 'relative',
+                    cursor: isSelected ? 'default' : 'pointer'
                 }}
              >
                 <div style={{ 
                     textAlign: 'center', padding: '10px', fontSize: '13px', fontWeight: 'bold', 
                     letterSpacing: '1px', textTransform: 'uppercase',
                     backgroundColor: isSelected ? '#4CAF50' : '#f0f2f5', 
-                    color: isSelected ? 'white' : '#999', borderBottom: '1px solid #ccc'
+                    color: isSelected ? 'white' : '#999', borderBottom: '1px solid #ccc',
+                    position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
                     {item.name}
+
+                    {/* PRZYCISK KOPIOWANIA KODU */}
+                    {isSelected && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopyCode(index);
+                            }}
+                            style={copyBtnStyle}
+                            title="Kopiuj kod do schowka"
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                                e.currentTarget.style.transform = 'scale(1.1)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                                e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                        >
+                            Copy
+                        </button>
+                    )}
+                    
+                    {/* PRZYCISK FULLSCREEN */}
+                    {isSelected && (
+                        <button 
+                            onClick={() => toggleFullscreen(index)}
+                            style={{
+                                position: 'absolute',
+                                right: '10px',
+                                width: '30px',
+                                height: '30px',
+                                borderRadius: '50%',
+                                border: 'none',
+                                backgroundColor: isFullscreen ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
+                                color: 'white',
+                                fontSize: '16px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s ease',
+                                zIndex: 100
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'scale(1.15)';
+                                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'scale(1)';
+                                e.currentTarget.style.backgroundColor = isFullscreen ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)';
+                            }}
+                            title={isFullscreen ? 'Zamknij fullscreen' : 'Pokaż fullscreen'}
+                        >
+                            {isFullscreen ? '✕' : '⛶'}
+                        </button>
+                    )}
                 </div>
-                <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'white', position: 'relative' }}>
+                <div 
+                  ref={(el) => viewContainerRefs.current[index] = el}
+                  style={{ flex: 1, overflowY: 'auto', backgroundColor: 'white', position: 'relative' }}
+                >
                     
                     {/* 6. WARSTWA RYSOWANIA */}
                     {isSelected && isDrawMode && (
                         <canvas 
                             ref={canvasRef} 
-                            width={window.innerWidth / 3} 
+                            width={isFullscreen ? window.innerWidth : window.innerWidth / 3} 
                             height={window.innerHeight}
                             onMouseDown={startDrawing} 
                             onMouseMove={draw} 
@@ -417,7 +584,40 @@ export default function App() {
       {/* --- PANEL NAWIGACYJNY --- */}
       <div style={navigationStyle}>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', width: '300px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px', width: '400px' }}> {/* Zwiększ width jeśli trzeba */}
+            
+            {/* SELECTOR MODELU */}
+            <div style={{ position: 'relative' }}>
+                <select 
+                    value={currentModel}
+                    onChange={(e) => setCurrentModel(e.target.value)}
+                    style={{
+                        appearance: 'none',
+                        backgroundColor: '#f0f2f5',
+                        border: '1px solid #ddd',
+                        padding: '10px 35px 10px 15px',
+                        borderRadius: '20px',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#333',
+                        cursor: 'pointer',
+                        outline: 'none',
+                        boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+                    }}
+                >
+                    {AVAILABLE_MODELS.map(model => (
+                        <option key={model.id} value={model.id}>
+                            {model.name}
+                        </option>
+                    ))}
+                </select>
+                {/* Strzałeczka CSS do selecta */}
+                <div style={{
+                    position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                    pointerEvents: 'none', fontSize: '10px', color: '#666'
+                }}>▼</div>
+            </div>
+
             <button onClick={() => setShowNewProjectModal(true)} style={newProjectBtnStyle}>
                 Nowy projekt
             </button>

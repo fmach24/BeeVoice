@@ -21,23 +21,17 @@ Built as a practical AI engineering project, it shows end-to-end skills in promp
 
 ## Screenshots
 
-Add your screenshots here to show recruiters the workflow in seconds.
-
-Suggested folder:
-- [uploads/screenshots](uploads/screenshots)
-
-Example section layout (replace with your files):
-
 ### 1. Prompt and Generation
-![Prompt and generation screen](uploads/screenshots/01-prompt-generation.png)
+<img width="1920" height="1168" alt="Screenshot From 2026-04-18 15-27-19" src="https://github.com/user-attachments/assets/acee7891-c90f-4bba-8cd0-df199f970955" />
 From one high-level prompt, BeeVoice generates three distinct React UI directions, showing fast ideation and structured AI-assisted output.
 
 ### 2. Screenshot-Based Edit
-![Screenshot edit flow](uploads/screenshots/02-screenshot-edit.png)
+
+<img width="1920" height="1168" alt="Screenshot From 2026-04-18 16-02-21" src="https://github.com/user-attachments/assets/7835ecd0-b79b-4141-8fc2-5d3863c8a078" />
 The user highlights a specific area on a screenshot and applies a targeted instruction, proving practical multimodal editing instead of full regeneration.
 
 ### 3. Generated React Result
-![Generated React view](uploads/screenshots/03-generated-view.png)
+<img width="1920" height="1168" alt="Screenshot From 2026-04-18 16-12-57" src="https://github.com/user-attachments/assets/83e15405-8990-407e-a1fd-473da6036e96" />
 The final view is production-like JSX saved directly into project files, demonstrating a complete loop from idea to editable frontend code.
 
 ## Quick Start

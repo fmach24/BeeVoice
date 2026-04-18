@@ -31,7 +31,7 @@ From one high-level prompt, BeeVoice generates three distinct React UI direction
 The user highlights a specific area on a screenshot and applies a targeted instruction, proving practical multimodal editing instead of full regeneration.
 
 ### 3. Generated React Result
-<img width="1920" height="1168" alt="Screenshot From 2026-04-18 16-12-57" src="https://github.com/user-attachments/assets/83e15405-8990-407e-a1fd-473da6036e96" />
+<img width="1920" height="1168" alt="Screenshot From 2026-04-18 16-31-26" src="https://github.com/user-attachments/assets/87a1b241-123e-4508-bc17-7ccb0c8d0f33" />
 The final view is production-like JSX saved directly into project files, demonstrating a complete loop from idea to editable frontend code.
 
 ## Quick Start

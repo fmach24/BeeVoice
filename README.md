@@ -2,14 +2,7 @@
 
 BeeVoice is a multimodal React UI generator that turns voice instructions and screenshot annotations into working interface code.
 
-Built as a practical AI engineering project, it shows end-to-end skills in prompt design, backend integration, and frontend prototyping speed.
-
-## Why This Project Stands Out
-
-- Solves a real product problem: faster UI prototyping from natural input.
-- Uses multimodal AI workflow: text + image context in one generation flow.
-- Demonstrates production-style thinking: API handling, upload flow, and generated code persistence.
-- Focuses on iteration: users can evolve selected views instead of regenerating from scratch.
+Built as a practical AI engineering project for faster UI prototyping from natural input, where users can evolve selected views instead of regenerating from scratch.
 
 ## What BeeVoice Does
 
@@ -65,7 +58,6 @@ cd src && npm start
 - Backend: [generator.js](generator.js) (Express + Multer + Gemini integration)
 - Frontend: React app in [src](src)
 - Generated output: [src/views](src/views)
-- Temporary uploads: [uploads](uploads)
 
 ## Tech Stack
 
@@ -73,12 +65,3 @@ cd src && npm start
 - Backend: Node.js, Express
 - AI: Google Gemini API
 - File handling: Multer
-
-## Recruiter Notes
-
-This project was built to demonstrate internship-ready capabilities:
-
-- building an AI-powered feature end-to-end,
-- translating user intent into usable UI code,
-- handling multimodal inputs and iterative UX feedback,
-- keeping the implementation practical and demo-friendly.
